@@ -1,0 +1,6 @@
+DataType,DataType,DataType,...,DataType
+FieldName_1,FieldName_2,FieldName_3,...,FieldName_n
+value_1_1,value_1_2,value_1_3,...,value_1_n
+value_2_1,value_2_2,value_2_3,...,value_2_n
+...
+value_m_1,value_m_2,value_m_3,...,value_m_n
