@@ -1,10 +1,18 @@
+#pragma once
 #include <iostream>
+#include <string>
 
 class DataType{
 
+    private:
+        std::string stringValue;
+
     public:
 
-        getValue();
+        virtual std::string getTypeName()=0;
 
-        friend std::ostream& operator<<(std::ostream&, const DataType&);
+        std::string getStringValue() const;
+
+        void setStringValue(const std::string&);
+
 };
