@@ -5,11 +5,17 @@
 class DataType{
 
     private:
+        //има ли смисъл?
         std::string stringValue;
 
     public:
 
-        virtual std::string getTypeName()=0;
+
+        //Да се добави без да поражда грешки
+        //
+        //virtual std::string getTypeName()=0;
+        //
+        //
 
         std::string getStringValue() const;
 

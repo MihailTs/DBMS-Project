@@ -23,6 +23,6 @@ class TableRow{
         //adds another value to the end of the row
         void addFieldValue(const DataType&);
 
-        friend std::ostream& operator<<(std::ostream&, const TableRow&);
+        // friend std::ostream& operator<<(std::ostream&, const TableRow&);
 
 };

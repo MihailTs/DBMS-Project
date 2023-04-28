@@ -1,8 +1,7 @@
 #pragma once
 #include <string>
-#include "NumericType.h"
 
-class Double : public NumericType{
+class Double{
 
     private:
         double value;

@@ -1,11 +1,16 @@
 #include <iostream>
+#include <string>
+#include "DataType.h"
 #include "String.h"
+#include "Integer.h"
+
 
 int main(){
 
-    String s("Mihail");
+    Integer i = "-123";
 
-    std::cout << s;
+    std::cout << i;
+
 
     return 0;
 }

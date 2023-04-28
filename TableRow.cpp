@@ -23,7 +23,7 @@ void TableRow::addFieldValue(const DataType& fieldValue){
     setFieldsCount(getFieldsCount()+1);
 }
 
-std::ostream& operator<<(std::ostream& file, const TableRow& row){
-    ////
-}
+// std::ostream& operator<<(std::ostream& file, const TableRow& row){
+//     ////
+// }
 
