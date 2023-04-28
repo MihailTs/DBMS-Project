@@ -8,14 +8,31 @@ String::String(const std::string& str){
     setStringValue(str);
 }
 
-std::string String::getTypeName() const{
+std::string String::getTypeName() {
     return "string";
 }
 
-
-
-
-
-std::ostream& operator<<(std::ostream& out, const String& str){
-    out << str.getStringValue();
+String& String::operator=(const String& str){
+    setStringValue(str.getStringValue());
+    return *this;
 }
+
+String& String::operator=(const char* str){
+    setStringValue(str);
+    return *this;
+}
+
+
+std::fstream& operator<<(std::fstream& out, const String& str){
+    //.c_str() е защото операторът << на std::fstream 
+    //не приема std::string аргументи
+    out << str.getStringValue().c_str();
+    return out;
+}
+
+
+// std::ostream& operator<<(std::ostream& out, const String& str){
+//     out << str.getStringValue();
+//     return out;
+// }
+
