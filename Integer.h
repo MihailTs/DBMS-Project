@@ -12,10 +12,6 @@ class Integer : public DataType{
 
         bool isValid(const std::string&);
 
-        int myPower(int, int);
-
-        int stringToInt(const std::string&);
-
     public:
 
         Integer();
@@ -31,8 +27,6 @@ class Integer : public DataType{
         void setValue(int);
 
         Integer& operator=(const Integer&);
-
-        Integer& operator=(const std::string&);
 
         friend std::ostream& operator<<(std::ostream&, const Integer&);
 

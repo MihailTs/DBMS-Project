@@ -9,7 +9,11 @@ Integer::Integer(int _value){
 }
 
 Integer::Integer(const std::string& _strValue){
-    setValue(stringToInt(_strValue));
+    //std::stoi няма подходяща проверка за валидност
+    if(!isValid(_strValue)) 
+        throw std::invalid_argument(_strValue + " is not a valid int number!");
+    
+    setValue(std::stoi(_strValue));
 }
 
 std::string Integer::getTypeName(){
@@ -60,29 +64,4 @@ bool Integer::isValid(const std::string& _strValue){
         if(_strValue[i] < '0' || _strValue[i] > '9') return false;
 
     return true;
-}
-
-int Integer::myPower(int number, int power){
-    int product = 1;
-    for(int i = 1; i <= power; i++)
-        product *= number;
-    return product;
-}
-
-int Integer::stringToInt(const std::string& _strValue){
-    
-    if(!isValid(_strValue)) 
-        throw std::invalid_argument(_strValue + " is not a valid int number!");
-    
-    int numValue = 0;
-    
-    int power = 0;
-    for(int i = _strValue.size()-1; i > 0; i--)
-        numValue += (_strValue[i]-'0') * myPower(10, power++);
-
-    if(_strValue[0] == '+') return numValue;
-    if(_strValue[0] == '-') return -1*numValue;
-    numValue += (_strValue[0]-'0') * myPower(10, power++);
-
-    return numValue;
 }

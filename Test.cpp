@@ -3,13 +3,16 @@
 #include "DataType.h"
 #include "String.h"
 #include "Integer.h"
+#include "Double.h"
 
 
 int main(){
 
-    Integer i = "-123";
+    std::string t;
+    std::cin >> t;
+    Double d(t);
 
-    std::cout << i;
+    std::cout << d;
 
 
     return 0;
