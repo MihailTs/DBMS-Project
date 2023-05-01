@@ -8,12 +8,9 @@ class Table{
         //Име на таблицата
         std::string tableName;        
 
-        /*
-            Типове на полетата
-        */
-
-        //Имена на полетата (колоните) и броят им
+        //Имена, типове и брой на колоните
         std::string* fieldsNames;
+        std::vector<std::string> fieldsTypes;
         unsigned fieldsCount;
 
         //Записи (редове)
@@ -28,7 +25,7 @@ class Table{
         //void setFieldsCount(unsigned);
         //?
 
-        void setRows(const std::vector<TableRow>&);
+        //void setCols(const std::vector<TableCol>&);
 
 
     public:
@@ -43,11 +40,15 @@ class Table{
 
         std::string* getFieldsNames() const;
 
+        std::vector<std::string>& getFieldsTypes() const;
+
         unsigned getFieldsCount() const;
+
+
 
         std::vector<TableRow>& getTableRows();
 
-        std::vector<TableRow> getTableRowsCopy() const;
+        std::vector<TableRow> getTableRowsCopy();
 
         unsigned getRowsCount() const;
 

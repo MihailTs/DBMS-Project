@@ -24,9 +24,9 @@ void Table::setFieldsNames(std::string* newFieldsNames, unsigned count){
 //     fieldsCount = newFieldsCount;
 // }
 
-void Table::setRows(const std::vector<TableRow>& newRows){
-    tableRows = newRows;
-}
+// void Table::setRows(const std::vector<TableRow>& newRows){
+//     tableRows = newRows;
+// }
 
 
 
@@ -56,13 +56,17 @@ std::vector<TableRow>& Table::getTableRows() {
     return tableRows;
 }
 
-std::vector<TableRow> Table::getTableRowsCopy() const{
-    return tableRows;
-}
+// std::vector<TableRow> Table::getTableRowsCopy() const{
+//     return tableRows;
+// }
 
 unsigned Table::getRowsCount() const{
     return tableRows.size();
 }
+
+std::vector<std::string> getFieldsTypes(){
+    return fieldsTypes;
+} 
 
 Table::~Table(){
     delete []getFieldsNames();
