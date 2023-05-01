@@ -16,7 +16,7 @@ class Table{
         std::string* fieldsNames;
         unsigned fieldsCount;
 
-        //Записи (редове) и броят им
+        //Записи (редове)
         std::vector<TableRow> tableRows; 
 
 

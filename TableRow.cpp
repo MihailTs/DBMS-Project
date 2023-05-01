@@ -1,15 +1,14 @@
 #include "TableRow.h"
 
-
 TableRow::TableRow(){
-    fieldsCount = 0;
+    setFieldsCount(0);
 }
 
 void TableRow::setFieldsCount(unsigned cnt){
     fieldsCount = cnt;
 }
 
-std::vector<DataType> TableRow::getFieldsValues() const{
+std::vector<DataType*> TableRow::getFieldsValues() const{
     return fieldsValues;
 }
 
@@ -17,8 +16,8 @@ unsigned TableRow::getFieldsCount(){
     return fieldsCount;
 }
 
-//adds another value to the end of the row
-void TableRow::addFieldValue(const DataType& fieldValue){
+//Добавя нова стойност в края на реда
+void TableRow::addFieldValue(DataType* fieldValue){
     getFieldsValues().push_back(fieldValue);
     setFieldsCount(getFieldsCount()+1);
 }

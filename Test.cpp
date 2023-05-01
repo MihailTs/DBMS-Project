@@ -1,19 +1,21 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 #include "DataType.h"
+#include "Double.h"
 #include "String.h"
 #include "Integer.h"
-#include "Double.h"
-
 
 int main(){
 
-    std::string t;
-    std::cin >> t;
-    Double d(t);
+    std::ifstream file("Help.txt");
+    char fileRow[1024];
 
-    std::cout << d;
+    while(file.getline(fileRow, 1024)){
+        std::cout << fileRow << "\n";
+    }
 
+    file.close();
 
     return 0;
 }

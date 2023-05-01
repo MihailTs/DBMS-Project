@@ -24,15 +24,15 @@ String& String::operator=(const char* str){
 
 
 std::fstream& operator<<(std::fstream& out, const String& str){
-    //.c_str() е защото операторът << на std::fstream 
+    //.c_str() е защото операторът << на fstream 
     //не приема std::string аргументи
     out << str.getStringValue().c_str();
     return out;
 }
 
 
-// std::ostream& operator<<(std::ostream& out, const String& str){
-//     out << str.getStringValue();
-//     return out;
-// }
+std::ostream& operator<<(std::ostream& out, const String& str){
+    out << str.getStringValue();
+    return out;
+}
 

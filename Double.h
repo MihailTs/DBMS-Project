@@ -1,5 +1,4 @@
 #pragma once
-#include <string>
 #include "DataType.h"
 
 class Double : public DataType{

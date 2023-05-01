@@ -1,0 +1,7 @@
+List of all client commands:
+open <file>    Open a database\table for modification
+close          Close the opened table or database if no table is opened
+save           Save changes made to the currently opened table (or database if no table is opened)
+saveas <file>  Save changes made to the currently opened table (or database if no table is opened) at given addres
+help           Display this help
+exit           Exit the program

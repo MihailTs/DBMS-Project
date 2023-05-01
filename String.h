@@ -18,7 +18,7 @@ class String : public DataType{
 
         String& operator=(const char*);
 
-        //friend std::ostream& operator<<(std::ostream&, const String&);
+        friend std::ostream& operator<<(std::ostream&, const String&);
 
         friend std::fstream& operator<<(std::fstream&, const String&);
 };
