@@ -1,50 +1,39 @@
 #include "Table.h"
 
-//private методи
+Table::Table(const std::string& fileAddres){
+    std::ifstream file(fileAddres);
+    if(!file.is_open()) throw std::runtime_error("Could not open file");
 
-void Table::setTableName(std::string newName){
-    tableName = newName;
+    std::string line;
+    if(file.good()){
+
+        //Задаване на типовете
+        std::getline(file, line);
+        setFieldsTypes(splitLine(line));
+
+        //Задаване на имената на полетата
+        std::getline(file, line);
+        setFieldsNames(splitLine(line));
+
+        if(getFieldsNames().size() != getFieldsTypes().size())
+            throw "Error! Number of types and field names does not match!";
+
+
+        //Добавяне на стойностите към колоните
+
+    }
+
 }
 
-
-//Информацията в fieldsNames трябва да е предварително изтрита
-void Table::setFieldsNames(std::string* newFieldsNames, unsigned count){ 
-    
-    if(count != getFieldsCount()) throw "Changing the number of fields is illegal";
-    
-    fieldsNames = new std::string[getFieldsCount()];
-
-    for(int i = 0; i < getFieldsCount(); i++)
-        fieldsNames[i] = newFieldsNames[i];
+void Table::setFieldsNames(const std::vector<std::string>& _newNames){
+    fieldsNames = _newNames;
 }
 
-
-//Да се разреши ли промяна броя на полетата???
-// void Table::setFieldsCount(unsigned newFieldsCount){
-//     fieldsCount = newFieldsCount;
-// }
-
-// void Table::setRows(const std::vector<TableRow>& newRows){
-//     tableRows = newRows;
-// }
-
-
-
-//public методи
-
-Table::Table(std::string _tableName){
-    setTableName(_tableName);
+void Table::setFieldsTypes(const std::vector<std::string>& _newTypes){
+    fieldsTypes = _newTypes;
 }
 
-Table::Table(std::fstream inputFile){
-    
-}
-
-std::string Table::getTableName() const{
-    return tableName;
-}
-
-std::string* Table::getFieldsNames() const{
+std::vector<std::string>& Table::getFieldsNames(){
     return fieldsNames;
 }
 
@@ -52,22 +41,31 @@ unsigned Table::getFieldsCount() const{
     return fieldsCount;
 }
 
-std::vector<TableRow>& Table::getTableRows() {
-    return tableRows;
+const std::vector<std::string>& Table::getFieldsTypes() const{
+    return fieldsTypes;
 }
-
-// std::vector<TableRow> Table::getTableRowsCopy() const{
-//     return tableRows;
-// }
 
 unsigned Table::getRowsCount() const{
-    return tableRows.size();
+    return fieldsCount;
 }
 
-std::vector<std::string> getFieldsTypes(){
-    return fieldsTypes;
-} 
+std::vector<TableCol> &Table::getTableColumns(){
+    return columns;
+}
 
-Table::~Table(){
-    delete []getFieldsNames();
+std::vector<std::string> Table::splitLine(const std::string& line){
+    std::vector<std::string> splLine;
+    std::string currentString;
+
+    for(char c : line){
+        if(c == ',') {
+            splLine.push_back(currentString);
+            currentString = "";   
+            continue;
+        }
+        currentString += c;
+    }
+
+    splLine.push_back(currentString);
+    return splLine;
 }

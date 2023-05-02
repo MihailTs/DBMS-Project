@@ -1,56 +1,40 @@
 #include <string>
 #include <vector>
-#include "TableRow.h"
+#include <stdexcept>
+#include <fstream>
+#include "TableCol.h"
 
 class Table{
 
-    private:
-        //Име на таблицата
-        std::string tableName;        
+    private:    
 
         //Имена, типове и брой на колоните
-        std::string* fieldsNames;
+        std::vector<std::string> fieldsNames;
         std::vector<std::string> fieldsTypes;
         unsigned fieldsCount;
 
-        //Записи (редове)
-        std::vector<TableRow> tableRows; 
+        std::vector<TableCol> columns;
 
+        void setFieldsNames(const std::vector<std::string>&);
 
-        void setTableName(std::string);
+        void setFieldsTypes(const std::vector<std::string>&);
 
-        void setFieldsNames(std::string*, unsigned);
-
-        //?
-        //void setFieldsCount(unsigned);
-        //?
-
-        //void setCols(const std::vector<TableCol>&);
-
+        //Връща вектор от низове, разделяйки реда според ','
+        std::vector<std::string> splitLine(const std::string&);
 
     public:
     
-        //Празна таблица само с име
-        Table(std::string);
+        //Таблица по адрес на файл
+        Table(const std::string&);
 
-        //Таблица по файл
-        Table(std::fstream);
+        std::vector<std::string>& getFieldsNames();
 
-        std::string getTableName() const;
-
-        std::string* getFieldsNames() const;
-
-        std::vector<std::string>& getFieldsTypes() const;
+        const std::vector<std::string>& getFieldsTypes() const;
 
         unsigned getFieldsCount() const;
 
-
-
-        std::vector<TableRow>& getTableRows();
-
-        std::vector<TableRow> getTableRowsCopy();
+        std::vector<TableCol>& getTableColumns();
 
         unsigned getRowsCount() const;
 
-        ~Table();
 };
