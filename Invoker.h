@@ -1,28 +1,28 @@
 #pragma once
 #include <string>
 #include "ICommand.h"
+#include "TableMenager.h"
 
 
 class Invoker{
 
     private:
 
+        //Така ще достъпваме таблиците, за да изпълняваме команди
+        TableMenager* tableMenager;
+
         //Съхранява се като указател, защото ICommand е просто интерфейс(абстрактен)
         ICommand* command;
 
     public:
 
-        Invoker();
+        Invoker(TableMenager*);
 
-        Invoker(const ICommand&);
+        Invoker(TableMenager*, const std::string&);
 
-        // Invoker(std::string);
+        void setCommand(const std::string&);
+        
+        ICommand* getCommand();
 
-
-        void setCommand(const ICommand&);
-
-        // void setCommand(std::string);
-
-        ICommand& getCommand();
-
+        ~Invoker();
 };

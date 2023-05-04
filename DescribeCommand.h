@@ -7,10 +7,11 @@
 class DescribeCommand{
 
     private:
-        Table* table;
+        TableMenager* tableMenager;
+        std::string tableName;
 
     public:
-        DescribeCommand(Table*);
+        DescribeCommand(TableMenager*, const std::string&);
 
         void execute();
 

@@ -21,6 +21,10 @@ Table::Table(const std::string& fileAddres){
 
         //Добавяне на стойностите към колоните
 
+
+
+
+
     }
 
 }
