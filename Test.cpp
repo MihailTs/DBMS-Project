@@ -6,13 +6,13 @@
 #include "Double.h"
 #include "String.h"
 #include "Integer.h"
-
-
+#include "Table.h"
 
 int main(){
 
-    std::string str = "describeksjdsg";
-    std::cout << str.substr(0, 8);
+    Table t("table", "TableTemplate.csv");
+    
+    t.describe();
 
     return 0;
 }

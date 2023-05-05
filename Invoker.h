@@ -1,6 +1,9 @@
 #pragma once
 #include <string>
 #include "ICommand.h"
+#include "HelpCommand.h"
+#include "ExitCommand.h"
+#include "DescribeCommand.h"
 #include "TableMenager.h"
 
 
