@@ -14,7 +14,7 @@ void TableCol::setValues(const std::vector<DataType*>& _values){
     setValuesCount(_values.size());
 }
 
-std::vector<DataType*> TableCol::getValues(){
+std::vector<DataType*>& TableCol::getValues(){
     return values;
 }
 

@@ -6,7 +6,7 @@
 #include "Table.h"
 #include "TableMenager.h"
 
-class DescribeCommand{
+class DescribeCommand : public ICommand{
 
     private:
         TableMenager* tableMenager;

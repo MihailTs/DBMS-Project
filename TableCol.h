@@ -21,7 +21,7 @@ class TableCol{
 
         TableCol(const std::vector<DataType*>&);
 
-        std::vector<DataType*> getValues();
+        std::vector<DataType*>& getValues();
 
         //На практика връща броят на редовете в таблицата
         unsigned getValuesCount();

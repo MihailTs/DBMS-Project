@@ -16,10 +16,9 @@ void Invoker::setCommand(const std::string& strCommand){
     //Няма нужда от Factory, защото командите ще се строят по единствен начин тук
     if(strCommand == "exit") command = new ExitCommand;
     else if(strCommand == "help") command = new HelpCommand;
-    // else if(strCommand.substr(0, 8) == "describe"){
-    //     //Вика метода describe(име на таблицата) на tableMenager
-    //     command = new DescribeCommand(tableMenager, strCommand.substr(9));
-    // }
+    else if(strCommand.substr(0, 8) == "describe"){
+        command = new DescribeCommand(tableMenager, strCommand.substr(9));
+    }
     // else if(strCommand == "showTables"){
     //     //Вика метода showTables на tableMenager
     //     command = new ShowTablesCommand(tableMenager);
