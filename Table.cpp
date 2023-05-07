@@ -39,14 +39,14 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
 
             for(std::string str : rowValues){
                 
-                if(colType == "int")
+                if(str == "") value = new Null(colType);
+                else if(colType == "int")
                     value = new Integer(str);
                 else if(colType == "double")
                     value = new Double(str);
                 else if(colType == "string")
                     value = new String(str);
-                // else if(getFieldsTypes().at(col) == "")
-                //     value = new Null;
+                
 
                 columns[col]->addValue(value);
                 /////////////////

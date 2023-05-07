@@ -9,6 +9,7 @@
 #include "String.h"
 #include "Integer.h"
 #include "Double.h"
+#include "Null.h"
 
 
 class Table{

@@ -7,7 +7,13 @@ TableMenager::TableMenager(const std::string& _archive){
 void TableMenager::openTable(const std::string& tableName){
     //Проверява дали таблицата вече е отворена
     //Ако е - return
-    //Ако не е зарежда таблицата и я добавя в списъка с отворените
+    for(Table* table : getOpenedTables()){
+        if(table->getTableName() == tableName) return;
+    }
+
+
+    //Ако не - я зарежда и я добавя в списъка с отворените
+
 }
 
 void TableMenager::setArchiveName(const std::string& _archive){
@@ -16,11 +22,15 @@ void TableMenager::setArchiveName(const std::string& _archive){
 
 Table* TableMenager::getTable(const std::string& tableName){
     openTable(tableName);
-    for(Table* table: openedTables){
+    for(Table* table: getOpenedTables()){
         if(table->getTableName() == tableName) return table;
     }
     throw "Getting table failed!";
     return nullptr;
+}
+
+std::vector<Table*>& TableMenager::getOpenedTables(){
+    return openedTables;
 }
 
 TableMenager::~TableMenager(){

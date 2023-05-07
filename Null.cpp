@@ -9,7 +9,7 @@ void Null::setTypeName(const std::string& _typeName){
     typeName = _typeName;
 }
 
-std::string getTypeName(){
+std::string Null::getTypeName(){
     return "null";
 }
 

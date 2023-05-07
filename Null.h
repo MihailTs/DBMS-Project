@@ -15,6 +15,6 @@ class Null : public DataType{
 
         std::string getTypeName();
 
-        Null& operator=(DataType*);
+        //Null& operator=(DataType*);
 
 };

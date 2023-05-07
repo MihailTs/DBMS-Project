@@ -23,6 +23,8 @@ class TableMenager{
 
         Table* getTable(const std::string&);
 
+        std::vector<Table*>& getOpenedTables();
+
         ~TableMenager();
 
 };
