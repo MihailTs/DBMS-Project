@@ -5,6 +5,7 @@
 #include "ExitCommand.h"
 #include "DescribeCommand.h"
 #include "TableMenager.h"
+#include "PrintTableCommand.h"
 
 
 class Invoker{

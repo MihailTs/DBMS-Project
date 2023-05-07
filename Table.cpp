@@ -34,14 +34,16 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
         while(std::getline(file, line)){
             std::vector<std::string> rowValues = splitLine(line);
             int col = 0;
+            std::string colType = getFieldsTypes()[col];
             DataType* value;
+
             for(std::string str : rowValues){
                 
-                if(getFieldsTypes()[col] == "int")
+                if(colType == "int")
                     value = new Integer(str);
-                else if(getFieldsTypes()[col] == "double")
+                else if(colType == "double")
                     value = new Double(str);
-                else if(getFieldsTypes()[col] == "string")
+                else if(colType == "string")
                     value = new String(str);
                 // else if(getFieldsTypes().at(col) == "")
                 //     value = new Null;
@@ -102,7 +104,7 @@ std::vector<TableCol*>& Table::getTableColumns(){
 
 std::vector<std::string> Table::splitLine(const std::string& line){
     std::vector<std::string> splLine;
-    std::string currentString;
+    std::string currentString = "";
 
     for(char c : line){
         if(c == ',') {
