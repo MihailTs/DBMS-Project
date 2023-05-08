@@ -25,6 +25,9 @@ class Table{
 
         std::vector<TableCol*> columns;
 
+        //Най-дългите стойности в колоните
+        std::vector<int> columnLongest;
+
         void setFieldsNames(const std::vector<std::string>&);
 
         void setFieldsTypes(const std::vector<std::string>&);
@@ -35,6 +38,8 @@ class Table{
 
         //Връща вектор от низове, разделяйки реда според ','
         std::vector<std::string> splitLine(const std::string&);
+
+        std::string align(const std::string&, unsigned);
 
     public:
     

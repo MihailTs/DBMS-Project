@@ -1,3 +1,5 @@
+#define underline "\033[4m"
+#define nounderline "\033[24m"
 #include "Table.h"
 
 Table::Table(const std::string& _tableName, const std::string& fileAddres){
@@ -18,15 +20,18 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
         std::getline(file, line);
         setFieldsNames(splitLine(line));        
 
+        //Проверка дали броят на подадените имена е различен от броя на типовете
         unsigned tempFieldsCount = getFieldsNames().size();
         if(tempFieldsCount != getFieldsTypes().size())
             throw "Error! Number of types and field names does not match!";
 
         setFieldsCount(tempFieldsCount);
 
+        //Добавяне на колоните и добавяне на дължините на имената на колоните
         for(int i = 0; i < tempFieldsCount; i++){
             TableCol* tC = new TableCol;
             columns.push_back(tC);
+            columnLongest.push_back(getFieldsNames().at(i).size());
         }
 
         //Добавяне на стойностите към колоните
@@ -36,7 +41,7 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
             DataType* value;
 
             for(std::string str : rowValues){
-
+                
                 std::string colType = getFieldsTypes()[col];
 
                 if(str == "") value = new Null(colType);
@@ -49,6 +54,11 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
                 
 
                 columns[col]->addValue(value);
+                
+                //Проверка дали дължината на стойността в колоната е най-голямата досега
+                //това е с цел принтиране на таблицата по по-естетичен начин
+                int length = value->getStringValue().size();
+                if(length > columnLongest.at(col)) columnLongest.at(col) = length;
 
                 /////////////////
                 //getTableColumns()=.at(col).addValue(value);
@@ -129,17 +139,37 @@ void Table::describe(){
 }
 
 void Table::printTable(){
-    for(std::string name : getFieldsNames())
-        std::cout << name << " ";
+    int i = 0;
+    for(std::string name : getFieldsNames()){
+        std::cout << underline << align(name, i) << nounderline;
+        i++;
+    }
 
-    std::cout << "\n________________________________________\n";
-    for(int i = 0; i < getRowsCount(); i++){
+    std::cout << "\n";
+    for(i = 0; i < getRowsCount(); i++){
         for(int j = 0; j < getFieldsCount(); j++){
-            std::cout << getTableColumns().at(j)->getValues().at(i)->getStringValue() << " ";
+            std::cout << align(getTableColumns().at(j)->getValues().at(i)->getStringValue(), j);
         }
         std::cout << "\n";
     }
 }
+
+
+std::string Table::align(const std::string& str, unsigned colNumber){
+    std::string aligned = "|";
+    unsigned spacesToAdd = columnLongest.at(colNumber) - str.size();
+    int i = 0;
+    for(; i < spacesToAdd/2; i++)
+        aligned += " ";
+    
+    aligned += str;
+
+    for(; i < spacesToAdd; i++)
+        aligned += " ";
+    
+    return aligned + "|";
+}
+
 
 Table::~Table(){
     for(TableCol* col : getTableColumns()){
