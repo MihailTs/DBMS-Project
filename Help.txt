@@ -1,7 +1,28 @@
 List of all client commands:
-open <file>    Open a database\table for modification
-close          Close the opened table or database if no table is opened
-save           Save changes made to the currently opened table (or database if no table is opened)
-saveas <file>  Save changes made to the currently opened table (or database if no table is opened) at given addres
-help           Display this help
-exit           Exit the program
+open <file>  -  Opens a table for modification;
+close     -     Closes the opened table;
+save      -     Saves changes made to the currently opened table;
+saveas <file> - Saves changes made to the currently opened table at the specified location;
+help      -     Display this help;
+exit      -     Exit the program;
+import <file name>  -  Adds the table from the location to the database;
+showtables   -   Shows a list of all the tables in the database;
+describe <name>   -   Shows the types and the names of the attributes of the specified table;
+print <name>  -  Prints the content of the tabe to the screen;
+export <name> <file name>  -  Saves the table to the specified location;
+select <column-n> <value> <table name>  -  Shows all the touples containing <value> as their n-th attribute;
+addcolumn <table name> <column name> <column type>  -  Adds a new attribute with the given name and type;
+update <table name> <search column n> <searct value> <target column n> <target value>  - 
+All records in the table whose n-th attribute <search column n> contains the value <search column value> 
+are changed so that their n-th attribute <target column n> is given the value <target value>;
+delete <table name> <search column n> <search value>   -   
+Deletes all records in the table whose n-th attribute contains the given value;
+insert <table name> <column 1> ... <column n>  -  Adds a new record with the given attribute values to the table;
+innerjoin <table 1> <column n1> <table 2> <column n2>  -  
+Performs an Inner Join to the tables according to the attribute of the first and second table and creates a new table then prints its identifier;
+rename <old name> <new name>  -  Renames a table with the new name given;
+count <table name> <search column n> <search value>  -  
+Finds the number of records whose attributes contain the given value;
+aggregate <table name> <search column n> <search value> <target column n> <operation>   -  
+Performs a given operation on the attribute values <target column n> on all rows whose 
+attributes numbered <search column n> contain the value <search value>. Possible operations are sum, product, maximum, minimum;
