@@ -9,7 +9,6 @@ Integer::Integer(int _value){
 }
 
 Integer::Integer(const std::string& _strValue){
-    //std::stoi няма подходяща проверка за валидност
     if(!isValid(_strValue)) 
         throw std::invalid_argument(_strValue + " is not a valid int number!");
     

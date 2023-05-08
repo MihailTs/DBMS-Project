@@ -28,17 +28,17 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
             TableCol* tC = new TableCol;
             columns.push_back(tC);
         }
-            
 
         //Добавяне на стойностите към колоните
         while(std::getline(file, line)){
             std::vector<std::string> rowValues = splitLine(line);
             int col = 0;
-            std::string colType = getFieldsTypes()[col];
             DataType* value;
 
             for(std::string str : rowValues){
-                
+
+                std::string colType = getFieldsTypes()[col];
+
                 if(str == "") value = new Null(colType);
                 else if(colType == "int")
                     value = new Integer(str);
@@ -49,13 +49,13 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
                 
 
                 columns[col]->addValue(value);
+
                 /////////////////
                 //getTableColumns()=.at(col).addValue(value);
                 /////////////////
                 
                 col++;
             }   
-            std::cout << "\n";
         }
     }
     //std::cout << (columns[0]->getValues().at(0))->getStringValue();
@@ -146,5 +146,6 @@ Table::~Table(){
         for(DataType* t : col->getValues()){
             delete t;
         }
+        delete col;
     }
 }   

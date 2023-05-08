@@ -1,3 +1,4 @@
+#pragma once
 #include "ICommand.h"
 #include "TableMenager.h"
 
