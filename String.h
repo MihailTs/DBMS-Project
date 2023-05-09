@@ -6,6 +6,10 @@
 
 class String : public DataType{
 
+    private:
+
+        bool isValid(const std::string&);
+
     public:
 
         String();

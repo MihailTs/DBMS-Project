@@ -113,11 +113,13 @@ std::vector<TableCol*>& Table::getTableColumns(){
 }
 
 std::vector<std::string> Table::splitLine(const std::string& line){
+    bool quotes = false;
     std::vector<std::string> splLine;
     std::string currentString = "";
 
     for(char c : line){
-        if(c == ',') {
+        if(c == '\"') quotes = !quotes;
+        if(c == ',' && !quotes) {
             splLine.push_back(currentString);
             currentString = "";   
             continue;

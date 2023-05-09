@@ -6,28 +6,30 @@
 #include <vector>
 #include "Table.h"
 
-// std::string align(const std::string& str, unsigned cnt){
-//     std::string aligned;
-//     unsigned spacesToAdd = str.size() - cnt;
-//     int i = 0;
-//     for(int i = 0; i < spacesToAdd/2; i++)
-//         aligned += " ";
-    
-//     aligned += str;
+bool isValid(std::string str){
+    unsigned length = str.size();
+    //Проверка дали стрингът е ограден в кавички
+    if(str.at(0) != '\"' || str.at(length-1) != '\"') return false;
 
-//     for(; i < spacesToAdd; i++)
-//         aligned += " ";
-    
-//     return aligned;
-// }
-
+    //Проверка за валидност на останалата част
+    for(int i = 1; i < length-1; i++){
+        if(str.at(i) == '\\'){
+            if((str.at(i+1) != '\\' && str.at(i+1) != '\"') || i == length-2) return false;
+            i++;
+        } 
+        else if(str.at(i) == '\"'){
+            return false;
+        }
+    }
+    return true;
+}
 
 int main(){
     Table t("table", "ExampleTable.csv");
 
     t.printTable();
-
-     _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG); 
+    
+    _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG); 
     _CrtDumpMemoryLeaks();
 }
 
