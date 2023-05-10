@@ -3,8 +3,6 @@
 #include <string>
 #include <fstream>
 #include "ICommand.h"
-#include "Table.h"
-#include "TableMenager.h"
 
 class DescribeCommand : public ICommand{
 

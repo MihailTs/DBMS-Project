@@ -1,6 +1,5 @@
 #pragma once
 #include "ICommand.h"
-#include "TableMenager.h"
 
 class PrintTableCommand : public ICommand{
 

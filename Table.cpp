@@ -156,7 +156,6 @@ void Table::printTable(){
     }
 }
 
-
 std::string Table::align(const std::string& str, unsigned colNumber){
     std::string aligned = "|";
     unsigned spacesToAdd = columnLongest.at(colNumber) - str.size();
@@ -171,7 +170,6 @@ std::string Table::align(const std::string& str, unsigned colNumber){
     
     return aligned + "|";
 }
-
 
 Table::~Table(){
     for(TableCol* col : getTableColumns()){

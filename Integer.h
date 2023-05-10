@@ -1,11 +1,7 @@
 #pragma once
 #include <fstream>
 #include <iostream>
-#include <string>
-#include <stdexcept>
 #include "DataType.h"
-#include "ExitCommand.h"
-#include "HelpCommand.h"
 
 class Integer : public DataType{
 

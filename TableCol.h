@@ -2,9 +2,6 @@
 #include <vector>
 #include <fstream>
 #include "DataType.h"
-#include "String.h"
-#include "Integer.h"
-#include "Double.h"
 
 class TableCol{
 
