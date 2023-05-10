@@ -9,7 +9,7 @@ class TableMenager{
         
         struct Touple{
             std::string tableName;
-            std::string tableAddres;
+            std::string tableAddress;
         };
 
 
@@ -24,12 +24,14 @@ class TableMenager{
 
         void removeTableInfo(const std::string&);
 
+        void setArchiveName(const std::string&);
+
+        std::string getArchiveName() const;
+
     public:
 
         //Приема името на архивния файл
         TableMenager(const std::string&);
-
-        void setArchiveName(const std::string&);
 
         //име на таблица
         void openTable(const std::string&);

@@ -4,7 +4,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 #include "Table.h"
+#include "TableMenager.h"
 
 int main(){
     Table t("table", "ExampleTable.csv");
