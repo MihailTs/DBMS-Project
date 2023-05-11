@@ -1,3 +1,2 @@
-Ivan Ivan.txt
-Petko C:\\Patkan\\Dragan
-Coco Boco.xlsx
+table1 ExampleTable.csv
+table2 ExampleTable.csv

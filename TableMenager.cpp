@@ -58,6 +58,15 @@ std::string TableMenager::getArchiveName() const{
     return archive;
 }
 
+void TableMenager::showTables(){
+    int elementIndex = 0;
+    for(Touple t : tablesInfo){
+        std::cout << t.tableName;
+        if(elementIndex != tablesInfo.size()-1) std::cout << "\n";
+        elementIndex++;
+    }
+}
+
 void TableMenager::addTableInfo(const std::string& _name, const std::string& _addres){
     Touple t = {_name, _addres};
     tablesInfo.push_back(t);

@@ -36,6 +36,8 @@ class TableMenager{
         //име на таблица
         void openTable(const std::string&);
 
+        void showTables();
+
         Table* getTable(const std::string&);
 
         std::vector<Table*>& getOpenedTables();

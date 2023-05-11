@@ -1,5 +1,3 @@
-#define underline "\033[4m"
-#define nounderline "\033[24m"
 #include "Table.h"
 
 Table::Table(const std::string& _tableName, const std::string& fileAddres){
@@ -141,19 +139,32 @@ void Table::describe(){
 }
 
 void Table::printTable(){
+
+    int width = 0;
+    for(int l : columnLongest){
+        width += l+2;
+    }
+
+    std::string lineSeparator(width, '-');
+    
+    std::cout << lineSeparator << "\n";
+
     int i = 0;
     for(std::string name : getFieldsNames()){
-        std::cout << underline << align(name, i) << nounderline;
+        std::cout << align(name, i);
         i++;
     }
 
-    std::cout << "\n";
-    for(i = 0; i < getRowsCount(); i++){
-        for(int j = 0; j < getFieldsCount(); j++){
-            std::cout << align(getTableColumns().at(j)->getValues().at(i)->getStringValue(), j);
+    std::cout << "\n" << lineSeparator << "\n";
+
+    for(int j = 0; j < getRowsCount(); j++){
+        for(int k = 0; k < getFieldsCount(); k++){
+            std::cout << align(getTableColumns().at(k)->getValues().at(j)->getStringValue(), k);
         }
         std::cout << "\n";
     }
+
+    std::cout << lineSeparator;
 }
 
 std::string Table::align(const std::string& str, unsigned colNumber){
