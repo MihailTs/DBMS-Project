@@ -1,5 +1,6 @@
 #include "TableMenager.h"
 #include <fstream>
+#include <algorithm>
 
 TableMenager::TableMenager(const std::string& _archive){
     setArchiveName(_archive);
@@ -59,12 +60,48 @@ std::string TableMenager::getArchiveName() const{
 }
 
 void TableMenager::showTables(){
+    
+    if(tablesInfo.empty()) return;
+
+    unsigned longest = 0;
+    for(Touple t : tablesInfo){
+        unsigned len = t.tableName.size();
+        if(len > longest) longest = len;
+    }
+
+    
+    std::string lineSeparator = "+";
+    std::string temp(longest, '-');
+    lineSeparator += temp + "+";
+    
+    std::cout << lineSeparator << "\n";
+
+    std::cout << align("Tables", std::max(6, (int)longest)) << "\n";
+
+    std::cout << lineSeparator << "\n";
+
     int elementIndex = 0;
     for(Touple t : tablesInfo){
-        std::cout << t.tableName;
-        if(elementIndex != tablesInfo.size()-1) std::cout << "\n";
+        std::cout << align(t.tableName, longest) << "\n";
         elementIndex++;
     }
+
+    std::cout << lineSeparator;
+}
+
+std::string TableMenager::align(const std::string& str, unsigned longest){
+    std::string aligned = "|";
+    unsigned spacesToAdd = longest - str.size();
+    int i = 0;
+    for(; i < spacesToAdd/2; i++)
+        aligned += " ";
+    
+    aligned += str;
+
+    for(; i < spacesToAdd; i++)
+        aligned += " ";
+    
+    return aligned + "|";
 }
 
 void TableMenager::addTableInfo(const std::string& _name, const std::string& _addres){

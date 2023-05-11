@@ -13,8 +13,10 @@ int main(){
     Table t1("table1", "ExampleTable.csv");
     Table t2("table2", "ExampleTable.csv");
 
-    //t.printTable();
+    t1.printTable();
+    //t1.describe();
 
+    std::cout << "\n";
 
     TableMenager tm("archive.txt");
     tm.openTable(t1.getTableName());

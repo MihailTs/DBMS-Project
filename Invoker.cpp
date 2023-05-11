@@ -22,12 +22,10 @@ void Invoker::setCommand(const std::string& strCommand){
     else if(strCommand.substr(0, 5) == "print"){
         command = new PrintTableCommand(tableMenager, strCommand.substr(6));
     }
-    // else if(strCommand.substr(0, 5) == "print"){
-    //     //Вика метода print(име на таблицата) на tableMenager
-    //     command = new PrintCommand(tableMenager, getTable(strCommand.substr(6)));
-    // }
-
-
+    else if(strCommand == "showtables"){
+        command = new ShowTablesCommand(tableMenager);
+    }
+    
 
 }
 

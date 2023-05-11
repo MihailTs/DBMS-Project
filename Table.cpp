@@ -49,6 +49,7 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
                     value = new Double(str);
                 else if(colType == "string")
                     value = new String(str);
+                else throw std::invalid_argument("One of the attribute types is not a valid type");
                 
 
                 columns[col]->addValue(value);
@@ -130,23 +131,59 @@ std::vector<std::string> Table::splitLine(const std::string& line){
 }
 
 void Table::describe(){
-    for(std::string type : getFieldsTypes())
-        std::cout << type << " ";
-    std::cout << "\n";
-    for(std::string name : getFieldsNames())
-        std::cout << name << " ";
-    std::cout << "\n";
+
+    if(getFieldsCount() == 0) return;
+
+    //Подобно на printTable()
+
+    //В началото на редовете се добавят "Field" и "Type"
+
+    std::string lineSeparator = "+-------";
+
+    for(int len : columnLongest){
+        lineSeparator += "+";
+        std::string temp(len+2, '-');
+        lineSeparator += temp;
+    }
+    lineSeparator += "+";
+
+    std::cout << lineSeparator << "\n";
+    
+    std::cout << "| Type  ";
+
+    int colNumber = 0;
+    for(std::string type : getFieldsTypes()){
+        std::cout << align(type, colNumber);
+        colNumber++;
+    }
+
+    std::cout << "|\n" << lineSeparator << "\n";
+    
+    std::cout << "| Field ";
+
+    colNumber = 0;
+    for(std::string name : getFieldsNames()){
+        std::cout << align(name, colNumber);
+        colNumber++;
+    }
+    
+    std::cout << "|\n" << lineSeparator << "\n";
 }
 
 void Table::printTable(){
 
-    int width = 0;
-    for(int l : columnLongest){
-        width += l+2;
-    }
+    //Първо се изгражда разделителя за редове
+    //Извеждат се имената на полетата, а после и един по един - редовете
+    //В края на всеки ред се добавя |
 
-    std::string lineSeparator(width, '-');
-    
+    std::string lineSeparator;
+    for(int len : columnLongest){
+        lineSeparator += "+";
+        std::string temp(len+2, '-');
+        lineSeparator += temp;
+    }
+    lineSeparator += "+";
+
     std::cout << lineSeparator << "\n";
 
     int i = 0;
@@ -154,6 +191,8 @@ void Table::printTable(){
         std::cout << align(name, i);
         i++;
     }
+    if(i != 0) std::cout << "|";
+    else return;
 
     std::cout << "\n" << lineSeparator << "\n";
 
@@ -161,15 +200,16 @@ void Table::printTable(){
         for(int k = 0; k < getFieldsCount(); k++){
             std::cout << align(getTableColumns().at(k)->getValues().at(j)->getStringValue(), k);
         }
-        std::cout << "\n";
+        std::cout << "|\n";
     }
 
     std::cout << lineSeparator;
 }
 
 std::string Table::align(const std::string& str, unsigned colNumber){
-    std::string aligned = "|";
+    std::string aligned = "| ";
     unsigned spacesToAdd = columnLongest.at(colNumber) - str.size();
+    
     int i = 0;
     for(; i < spacesToAdd/2; i++)
         aligned += " ";
@@ -179,7 +219,7 @@ std::string Table::align(const std::string& str, unsigned colNumber){
     for(; i < spacesToAdd; i++)
         aligned += " ";
     
-    return aligned + "|";
+    return aligned + " ";
 }
 
 Table::~Table(){

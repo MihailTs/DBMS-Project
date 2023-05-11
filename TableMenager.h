@@ -28,6 +28,8 @@ class TableMenager{
 
         std::string getArchiveName() const;
 
+        std::string align(const std::string&, unsigned);
+
     public:
 
         //Приема името на архивния файл

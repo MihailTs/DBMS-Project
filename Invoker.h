@@ -6,6 +6,7 @@
 #include "DescribeCommand.h"
 #include "TableMenager.h"
 #include "PrintTableCommand.h"
+#include "ShowTablesCommand.h"
 
 
 class Invoker{

@@ -6,7 +6,6 @@ DescribeCommand::DescribeCommand(TableMenager* _tableMenager, const std::string&
 }
 
 void DescribeCommand::execute(){
-    getTableMenager()->openTable(getTableName());
     getTableMenager()->getTable(getTableName())->describe();
 }
 
