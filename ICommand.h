@@ -1,5 +1,5 @@
 #pragma once
-#include "TableMenager.h"
+#include "TableManager.h"
 #include "Table.h"
 
 class ICommand{

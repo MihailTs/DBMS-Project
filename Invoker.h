@@ -19,6 +19,11 @@ class Invoker{
         //Съхранява се като указател, защото ICommand е просто интерфейс(абстрактен)
         ICommand* command;
 
+        //Някои функциии за обработка на командите, представени като низ
+        std::string trim(const std::string&);
+
+        std::string toLower(const std::string&);
+
     public:
 
         Invoker(TableMenager*);

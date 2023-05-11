@@ -1,18 +1,18 @@
 #include "DescribeCommand.h"
 
-DescribeCommand::DescribeCommand(TableMenager* _tableMenager, const std::string& _tableName){
-    tableMenager = _tableMenager;
+DescribeCommand::DescribeCommand(TableManager* _tableManager, const std::string& _tableName){
+    tableManager = _tableManager;
     tableName = _tableName;
 }
 
 void DescribeCommand::execute(){
-    getTableMenager()->getTable(getTableName())->describe();
+    getTableManager()->getTable(getTableName())->describe();
 }
 
 std::string DescribeCommand::getTableName(){
     return tableName;
 }
 
-TableMenager* DescribeCommand::getTableMenager(){
-    return tableMenager;
+TableMenager* DescribeCommand::getTableManager(){
+    return tableManager;
 }

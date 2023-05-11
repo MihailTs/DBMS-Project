@@ -4,17 +4,17 @@
 class PrintTableCommand : public ICommand{
 
     private:
-        TableMenager* tableMenager;
+        TableManager* tableManager;
         std::string tableName;
 
     public:
-        PrintTableCommand(TableMenager*, const std::string&);
+        PrintTableCommand(TableManager*, const std::string&);
 
         void execute();
 
         std::string getTableName();
 
-        TableMenager* getTableMenager();
+        TableManager* getTableManager();
 
 
 

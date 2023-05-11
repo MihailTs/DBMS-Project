@@ -4,11 +4,11 @@
 class ShowTablesCommand : public ICommand{
 
     private:
-        TableMenager* tableMenager;
+        TableManager* tableManager;
 
     public:
 
-        ShowTablesCommand(TableMenager*);
+        ShowTablesCommand(TableManager*);
 
         void execute();
 

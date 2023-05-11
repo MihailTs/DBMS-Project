@@ -7,16 +7,16 @@
 class DescribeCommand : public ICommand{
 
     private:
-        TableMenager* tableMenager;
+        TableManager* tableManager;
         std::string tableName;
 
     public:
-        DescribeCommand(TableMenager*, const std::string&);
+        DescribeCommand(TableManager*, const std::string&);
 
         void execute();
 
         std::string getTableName();
 
-        TableMenager* getTableMenager();
+        TableMenager* getTableManager();
 
 };

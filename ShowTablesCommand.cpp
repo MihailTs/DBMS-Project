@@ -1,9 +1,9 @@
 #include "ShowTablesCommand.h"
 
-ShowTablesCommand::ShowTablesCommand(TableMenager* _tableMenager){
-    tableMenager = _tableMenager;
+ShowTablesCommand::ShowTablesCommand(TableManager* _tableManager){
+    tableManager = _tableManager;
 }
 
 void ShowTablesCommand::execute(){
-    tableMenager->showTables();
+    tableManager->showTables();
 }

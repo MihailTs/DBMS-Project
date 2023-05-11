@@ -6,7 +6,7 @@
 #include <vector>
 #include <fstream>
 #include "Table.h"
-#include "TableMenager.h"
+#include "TableManager.h"
 
 int main(){
     
@@ -18,13 +18,11 @@ int main(){
 
     std::cout << "\n";
 
-    TableMenager tm("archive.txt");
+    TableManager tm("archive.txt");
     tm.openTable(t1.getTableName());
     tm.openTable(t2.getTableName());
 
     tm.showTables();
-
-
     
     _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG); 
     _CrtDumpMemoryLeaks();
