@@ -4,8 +4,9 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
 
     setTableName(_tableName);
 
+    //отвряне на файла
     std::ifstream file(fileAddres);
-    if(!file.is_open()) throw std::runtime_error("Could not open file");
+    if(!file.is_open()) throw std::runtime_error("Could not open file!");
 
     std::string line;
     if(file.good()){
@@ -32,43 +33,18 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
             columnLongest.push_back(getFieldsNames().at(i).size());
         }
 
+        for(int i : columnLongest){
+            std::cout << i << " ";
+        }
+        std::cout << "\n";
+
         //Добавяне на стойностите към колоните
         while(std::getline(file, line)){
             std::vector<std::string> rowValues = splitLine(line);
-            int col = 0;
-            DataType* value;
-
-
-
-            /////
-            /////
-            /////
-            /////ДА СЕ ЗАМЕНИ С insertRecord
-            /////
-            /////
-            /////
-            for(std::string str : rowValues){
-                
-                std::string colType = getFieldsTypes()[col];
-
-                value = factory(str, colType);
-
-                columns[col]->addValue(value);
-                
-                //Проверка дали дължината на стойността в колоната е най-голямата досега
-                //това е с цел принтиране на таблицата по по-естетичен начин
-                int length = value->getStringValue().size();
-                if(length > columnLongest.at(col)) columnLongest.at(col) = length;
-
-                /////////////////
-                //getTableColumns()=.at(col).addValue(value);
-                /////////////////
-                
-                col++;
-            }   
-        }
+            insertRecord(rowValues);    
+        }   
     }
-    //std::cout << (columns[0]->getValues().at(0))->getStringValue();
+
     file.close();
 }
 
@@ -141,8 +117,9 @@ void Table::describe(){
 
     std::string lineSeparator = "+-------";
 
-    for(int len : columnLongest){
+    for(int i = 0; i < getFieldsCount(); i++){
         lineSeparator += "+";
+        int len = std::max(getFieldsNames().at(i).size(), getFieldsTypes().at(i).size());
         std::string temp(len+2, '-');
         lineSeparator += temp;
     }
@@ -154,7 +131,7 @@ void Table::describe(){
 
     int colNumber = 0;
     for(std::string type : getFieldsTypes()){
-        std::cout << align(type, colNumber);
+        std::cout << align(type, std::max(type.size(), getFieldsNames().at(colNumber).size()));
         colNumber++;
     }
 
@@ -164,11 +141,11 @@ void Table::describe(){
 
     colNumber = 0;
     for(std::string name : getFieldsNames()){
-        std::cout << align(name, colNumber);
+        std::cout << align(name, std::max(getFieldsTypes().at(colNumber).size(), name.size()));
         colNumber++;
     }
     
-    std::cout << "|\n" << lineSeparator << "\n";
+    std::cout << "|\n" << lineSeparator;
 }
 
 void Table::printTable(){
@@ -189,7 +166,7 @@ void Table::printTable(){
 
     int i = 0;
     for(std::string name : getFieldsNames()){
-        std::cout << align(name, i);
+        std::cout << align(name, columnLongest.at(i));
         i++;
     }
     if(i != 0) std::cout << "|";
@@ -197,9 +174,10 @@ void Table::printTable(){
 
     std::cout << "\n" << lineSeparator << "\n";
 
+
     for(int j = 0; j < getRowsCount(); j++){
         for(int k = 0; k < getFieldsCount(); k++){
-            std::cout << align(getTableColumns().at(k)->getValues().at(j)->getStringValue(), k);
+            std::cout << align(getTableColumns().at(k)->getValues().at(j)->getStringValue(), columnLongest.at(k));
         }
         std::cout << "|\n";
     }
@@ -207,10 +185,9 @@ void Table::printTable(){
     std::cout << lineSeparator;
 }
 
-std::string Table::align(const std::string& str, unsigned colNumber){
+std::string Table::align(const std::string& str, unsigned maxLength){
     std::string aligned = "| ";
-    unsigned spacesToAdd = columnLongest.at(colNumber) - str.size();
-    
+    unsigned spacesToAdd = maxLength - str.size();
     int i = 0;
     for(; i < spacesToAdd/2; i++)
         aligned += " ";
@@ -224,9 +201,13 @@ std::string Table::align(const std::string& str, unsigned colNumber){
 }
 
 void Table::insertRecord(const std::vector<std::string>& values){
+    //ТОЗИ МЕТОД ДА НЕ СЕ ПРОМЕНЯ!!!
     int i = 0;
     for(std::string value : values){
-        columns[i]->addValue(factory(value, getFieldsTypes().at(i)));
+        DataType* temp = factory(value, getFieldsTypes().at(i));
+        columns[i]->addValue(temp); 
+        //ТУК Е ВАЖНО ДА Е ТОЧНО temp->getStringValue().size(), а не value.size()!       
+        if(temp->getStringValue().size() > columnLongest.at(i)) columnLongest.at(i) = temp->getStringValue().size();
         i++;
     }
 }
@@ -234,14 +215,14 @@ void Table::insertRecord(const std::vector<std::string>& values){
 DataType* Table::factory(const std::string& value, const std::string& type){
     DataType* product;
     
-    if(type == "") product = new Null(type);
+    if(value == "") product = new Null(type);
     else if(type == "int")
         product = new Integer(value);
     else if(type == "double")
         product = new Double(value);
     else if(type == "string")
         product = new String(value);
-    else throw std::invalid_argument("One of the attribute types is not a valid type");
+    else throw std::invalid_argument(type + " is not a data valid type!");
     
     return product;
 }
