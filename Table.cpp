@@ -33,11 +33,6 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
             columnLongest.push_back(getFieldsNames().at(i).size());
         }
 
-        for(int i : columnLongest){
-            std::cout << i << " ";
-        }
-        std::cout << "\n";
-
         //Добавяне на стойностите към колоните
         while(std::getline(file, line)){
             std::vector<std::string> rowValues = splitLine(line);
