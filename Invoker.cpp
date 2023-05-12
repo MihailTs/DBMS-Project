@@ -1,12 +1,12 @@
 #include "Invoker.h"
 
-Invoker::Invoker(TableMenager* _tableMenager){
-    tableMenager = _tableMenager;
+Invoker::Invoker(TableManager* _tableManager){
+    tableManager = _tableManager;
     setCommand("exit");
 }
 
-Invoker::Invoker(TableMenager* _tableMenager, const std::string& strCommand){
-    tableMenager = _tableMenager;
+Invoker::Invoker(TableManager* _tableManager, const std::string& strCommand){
+    tableManager = _tableManager;
     setCommand(strCommand);
 }
 
@@ -19,13 +19,13 @@ void Invoker::setCommand(const std::string& strCommand){
     if(toLower(strCommand) == "exit") command = new ExitCommand;
     else if(toLower(strCommand) == "help") command = new HelpCommand;
     else if(toLower(strCommand.substr(0, 8)) == "describe"){
-        command = new DescribeCommand(tableMenager, strCommand.substr(9));
+        command = new DescribeCommand(tableManager, strCommand.substr(9));
     }
     else if(toLower(strCommand.substr(0, 5)) == "print"){
-        command = new PrintTableCommand(tableMenager, strCommand.substr(6));
+        command = new PrintTableCommand(tableManager, strCommand.substr(6));
     }
     else if(toLower(strCommand) == "showtables"){
-        command = new ShowTablesCommand(tableMenager);
+        command = new ShowTablesCommand(tableManager);
     }
     //else if(toLower(strCommand.substr) == "insert into")
 

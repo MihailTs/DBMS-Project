@@ -13,6 +13,6 @@ std::string DescribeCommand::getTableName(){
     return tableName;
 }
 
-TableMenager* DescribeCommand::getTableManager(){
+TableManager* DescribeCommand::getTableManager(){
     return tableManager;
 }

@@ -7,6 +7,11 @@ class TableCol{
 
     private:
 
+        ///////
+        //ДА СЕ ДОБАВИ И ТИП НА КОЛОНАТА!!!
+        ///////
+        
+        
         std::vector<DataType*> values;
         unsigned valuesCount;
 

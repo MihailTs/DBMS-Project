@@ -3,7 +3,7 @@
 #include <string>
 #include "Table.h"
 
-class TableMenager{
+class TableManager{
 
     private:
         
@@ -33,7 +33,7 @@ class TableMenager{
     public:
 
         //Приема името на архивния файл
-        TableMenager(const std::string&);
+        TableManager(const std::string&);
 
         //име на таблица
         void openTable(const std::string&);
@@ -44,6 +44,6 @@ class TableMenager{
 
         std::vector<Table*>& getOpenedTables();
 
-        ~TableMenager();
+        ~TableManager();
 
 };

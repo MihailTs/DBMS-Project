@@ -1,8 +1,8 @@
-#include "TableMenager.h"
+#include "TableManager.h"
 #include <fstream>
 #include <algorithm>
 
-TableMenager::TableMenager(const std::string& _archive){
+TableManager::TableManager(const std::string& _archive){
     setArchiveName(_archive);
     
     //зареждане на информацията от архива
@@ -25,7 +25,7 @@ TableMenager::TableMenager(const std::string& _archive){
     readArchive.close();
 }
 
-void TableMenager::openTable(const std::string& tableName){
+void TableManager::openTable(const std::string& tableName){
     //Проверява дали таблицата вече е отворена
     //Ако е - return
     for(Table* table : getOpenedTables()){
@@ -51,15 +51,15 @@ void TableMenager::openTable(const std::string& tableName){
 
 }
 
-void TableMenager::setArchiveName(const std::string& _archive){
+void TableManager::setArchiveName(const std::string& _archive){
     archive = _archive;
 }
 
-std::string TableMenager::getArchiveName() const{
+std::string TableManager::getArchiveName() const{
     return archive;
 }
 
-void TableMenager::showTables(){
+void TableManager::showTables(){
     
     if(tablesInfo.empty()) return;
 
@@ -89,7 +89,7 @@ void TableMenager::showTables(){
     std::cout << lineSeparator;
 }
 
-std::string TableMenager::align(const std::string& str, unsigned longest){
+std::string TableManager::align(const std::string& str, unsigned longest){
     std::string aligned = "|";
     unsigned spacesToAdd = longest - str.size();
     int i = 0;
@@ -104,12 +104,12 @@ std::string TableMenager::align(const std::string& str, unsigned longest){
     return aligned + "|";
 }
 
-void TableMenager::addTableInfo(const std::string& _name, const std::string& _addres){
+void TableManager::addTableInfo(const std::string& _name, const std::string& _addres){
     Touple t = {_name, _addres};
     tablesInfo.push_back(t);
 }
 
-void TableMenager::removeTableInfo(const std::string& _name){
+void TableManager::removeTableInfo(const std::string& _name){
     //Разменя изтриваната с последната
     unsigned i = 0;
     unsigned size = tablesInfo.size();
@@ -125,7 +125,7 @@ void TableMenager::removeTableInfo(const std::string& _name){
     }
 }
 
-Table* TableMenager::getTable(const std::string& tableName){
+Table* TableManager::getTable(const std::string& tableName){
     openTable(tableName);
     for(Table* table: getOpenedTables()){
         if(table->getTableName() == tableName) return table;
@@ -134,11 +134,11 @@ Table* TableMenager::getTable(const std::string& tableName){
     return nullptr;
 }
 
-std::vector<Table*>& TableMenager::getOpenedTables(){
+std::vector<Table*>& TableManager::getOpenedTables(){
     return openedTables;
 }
 
-TableMenager::~TableMenager(){
+TableManager::~TableManager(){
     for(Table* t: openedTables)
         delete t;
 }

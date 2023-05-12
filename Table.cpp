@@ -38,19 +38,20 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
             int col = 0;
             DataType* value;
 
+
+
+            /////
+            /////
+            /////
+            /////ДА СЕ ЗАМЕНИ С insertRecord
+            /////
+            /////
+            /////
             for(std::string str : rowValues){
                 
                 std::string colType = getFieldsTypes()[col];
 
-                if(str == "") value = new Null(colType);
-                else if(colType == "int")
-                    value = new Integer(str);
-                else if(colType == "double")
-                    value = new Double(str);
-                else if(colType == "string")
-                    value = new String(str);
-                else throw std::invalid_argument("One of the attribute types is not a valid type");
-                
+                value = factory(str, colType);
 
                 columns[col]->addValue(value);
                 
@@ -220,6 +221,29 @@ std::string Table::align(const std::string& str, unsigned colNumber){
         aligned += " ";
     
     return aligned + " ";
+}
+
+void Table::insertRecord(const std::vector<std::string>& values){
+    int i = 0;
+    for(std::string value : values){
+        columns[i]->addValue(factory(value, getFieldsTypes().at(i)));
+        i++;
+    }
+}
+
+DataType* Table::factory(const std::string& value, const std::string& type){
+    DataType* product;
+    
+    if(type == "") product = new Null(type);
+    else if(type == "int")
+        product = new Integer(value);
+    else if(type == "double")
+        product = new Double(value);
+    else if(type == "string")
+        product = new String(value);
+    else throw std::invalid_argument("One of the attribute types is not a valid type");
+    
+    return product;
 }
 
 Table::~Table(){

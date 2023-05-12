@@ -4,7 +4,7 @@
 #include "HelpCommand.h"
 #include "ExitCommand.h"
 #include "DescribeCommand.h"
-#include "TableMenager.h"
+#include "TableManager.h"
 #include "PrintTableCommand.h"
 #include "ShowTablesCommand.h"
 
@@ -14,7 +14,7 @@ class Invoker{
     private:
 
         //Така ще достъпваме таблиците, за да изпълняваме команди
-        TableMenager* tableMenager;
+        TableManager* tableManager;
 
         //Съхранява се като указател, защото ICommand е просто интерфейс(абстрактен)
         ICommand* command;
@@ -26,9 +26,9 @@ class Invoker{
 
     public:
 
-        Invoker(TableMenager*);
+        Invoker(TableManager*);
 
-        Invoker(TableMenager*, const std::string&);
+        Invoker(TableManager*, const std::string&);
 
         void setCommand(const std::string&);
         

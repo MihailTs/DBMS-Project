@@ -36,6 +36,8 @@ class Table{
 
         void setFieldsCount(unsigned);
 
+        DataType* factory(const std::string&, const std::string&);
+
         //Връща вектор от низове, разделяйки реда според ','
         std::vector<std::string> splitLine(const std::string&);
 
@@ -61,7 +63,9 @@ class Table{
         void printTable();
 
         void describe();
-        
+
+        void insertRecord(const std::vector<std::string>&);
+
         ~Table();
         
 

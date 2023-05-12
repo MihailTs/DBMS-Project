@@ -13,6 +13,6 @@ std::string PrintTableCommand::getTableName(){
     return tableName;
 }
 
-TableMenager* PrintTableCommand::getTableManager(){
+TableManager* PrintTableCommand::getTableManager(){
     return tableManager;
 }

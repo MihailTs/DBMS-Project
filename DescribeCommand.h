@@ -17,6 +17,6 @@ class DescribeCommand : public ICommand{
 
         std::string getTableName();
 
-        TableMenager* getTableManager();
+        TableManager* getTableManager();
 
 };
