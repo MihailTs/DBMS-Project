@@ -24,7 +24,7 @@ double Double::getValue() const{
 
 void Double::setValue(double newVal){
     value = newVal;
-    setStringValue(std::to_string(newVal));
+    setStringValue(trimRight(std::to_string(newVal)));
 }
 
 Double& Double::operator=(const Double& other){
@@ -72,4 +72,13 @@ bool Double::isValid(const std::string& _strValue){
     }
 
     return true;
+}
+
+std::string Double::trimRight(const std::string& _strValue){
+    std::string trimmed;
+    int i;
+    for(i = _strValue.size()-1; i > 0 && _strValue.at(i) == '0'; i--){}
+
+    trimmed = _strValue.substr(0, i+1);
+    return trimmed;
 }

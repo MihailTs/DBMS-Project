@@ -8,6 +8,8 @@ class Double : public DataType{
 
         bool isValid(const std::string&);
 
+        std::string trimRight(const std::string&);
+
     public:
 
         Double();
