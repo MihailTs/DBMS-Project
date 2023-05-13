@@ -66,6 +66,9 @@ class Table{
 
         void insertRecord(const std::vector<std::string>&);
 
+        //име, тип
+        void addField(const std::string&, const std::string&);
+
         ~Table();
         
 

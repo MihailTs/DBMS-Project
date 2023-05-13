@@ -1,4 +1,9 @@
 int,int,double,string
-cnt1,cnt2,smthCnt,name
--1,22,,"aasass"
-2,+3323,-3.444,"Jordan, Ivan"
+ID,BrainCells,Pace,name
+1,+2000000000,3.5,"Mihail Tsvetkov"
+2,2,4,"Bojan Goranov"
+3,1,6,"Kaloyan Tsvetkov"
+4,+696969,4.5,"Alex Artinian - \"Bat Sali\""
+5,10000,5,"Chavdar Chukov"
+6,-8,5,"Alexander Bojchev"
+7,100,4.5,"Yoan Yordanov"

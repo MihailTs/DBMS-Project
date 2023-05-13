@@ -7,7 +7,7 @@ String::String(){
 String::String(const std::string& _strValue){
     if(!isValid(_strValue)) throw std::invalid_argument(_strValue + " is not a valid string!");
     //Премахва кавичките
-    setStringValue(_strValue.substr(1, _strValue.size()-2));
+    setStringValue(format(_strValue.substr(1, _strValue.size()-2)));
 }
 
 std::string String::getTypeName() {
@@ -55,3 +55,15 @@ std::ostream& operator<<(std::ostream& out, const String& str){
     return out;
 }
 
+//Премахва '\' използвани за специални символи
+std::string String::format(const std::string& str){
+    std::string formatted;
+    bool dash = false;
+    for(int i = 0; i < str.size(); i++){
+        if(str.at(i) == '\\' && !dash) {dash = true; continue;}
+        else dash = false;
+
+        formatted += str.at(i);
+    }
+    return formatted;
+}

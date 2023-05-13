@@ -7,6 +7,8 @@
 #include "TableManager.h"
 #include "PrintTableCommand.h"
 #include "ShowTablesCommand.h"
+#include "InsertIntoCommand.h"
+#include "AddColumnCommand.h"
 
 
 class Invoker{

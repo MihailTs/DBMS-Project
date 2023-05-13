@@ -74,10 +74,11 @@ bool Double::isValid(const std::string& _strValue){
     return true;
 }
 
+//Оставя нула след запетаята ако числото е цяло
 std::string Double::trimRight(const std::string& _strValue){
     std::string trimmed;
     int i;
-    for(i = _strValue.size()-1; i > 0 && _strValue.at(i) == '0'; i--){}
+    for(i = _strValue.size()-1; i > 0 && _strValue.at(i) == '0' && _strValue.at(i-1) != '.'; i--){}
 
     trimmed = _strValue.substr(0, i+1);
     return trimmed;

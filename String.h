@@ -10,6 +10,8 @@ class String : public DataType{
 
         bool isValid(const std::string&);
 
+        std::string format(const std::string&);
+
     public:
 
         String();

@@ -200,7 +200,7 @@ void Table::insertRecord(const std::vector<std::string>& values){
     int i = 0;
     for(std::string value : values){
         DataType* temp = factory(value, getFieldsTypes().at(i));
-        columns[i]->addValue(temp); 
+        getTableColumns().at(i)->addValue(temp); 
         //ТУК Е ВАЖНО ДА Е ТОЧНО temp->getStringValue().size(), а не value.size()!       
         if(temp->getStringValue().size() > columnLongest.at(i)) columnLongest.at(i) = temp->getStringValue().size();
         i++;
@@ -220,6 +220,23 @@ DataType* Table::factory(const std::string& value, const std::string& type){
     else throw std::invalid_argument(type + " is not a data valid type!");
     
     return product;
+}
+
+void Table::addField(const std::string& _name, const std::string& _type){
+    getFieldsNames().push_back(_name);
+    getFieldsTypes().push_back(_type);
+    columnLongest.push_back(_name.size());
+    TableCol* newColumn = new TableCol;
+
+    DataType* value;
+    for(int i = 0; i < getRowsCount(); i++){
+        value = factory("", _type);
+        newColumn->addValue(value);
+        if(value->getStringValue().size() > columnLongest.at(i)) columnLongest.at(i) = value->getStringValue().size();
+    }
+
+    getTableColumns().push_back(newColumn);
+    fieldsCount++;
 }
 
 Table::~Table(){

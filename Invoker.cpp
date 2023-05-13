@@ -13,21 +13,24 @@ Invoker::Invoker(TableManager* _tableManager, const std::string& strCommand){
 void Invoker::setCommand(const std::string& strCommand){
     delete []getCommand();
 
+    std::string finalCommand = trim(strCommand);
     //strCommand = stripSpaces(strCommand);
 
     //Няма нужда от Factory, защото командите ще се строят по единствен начин тук
-    if(toLower(strCommand) == "exit") command = new ExitCommand;
-    else if(toLower(strCommand) == "help") command = new HelpCommand;
-    else if(toLower(strCommand.substr(0, 8)) == "describe"){
-        command = new DescribeCommand(tableManager, strCommand.substr(9));
+    if(toLower(finalCommand) == "exit") command = new ExitCommand;
+    else if(toLower(finalCommand) == "help") command = new HelpCommand;
+    else if(toLower(finalCommand.substr(0, 8)) == "describe"){
+        command = new DescribeCommand(tableManager, finalCommand.substr(9));
     }
-    else if(toLower(strCommand.substr(0, 5)) == "print"){
-        command = new PrintTableCommand(tableManager, strCommand.substr(6));
+    else if(toLower(finalCommand.substr(0, 5)) == "print"){
+        command = new PrintTableCommand(tableManager, finalCommand.substr(6));
     }
-    else if(toLower(strCommand) == "showtables"){
+    else if(toLower(finalCommand) == "showtables"){
         command = new ShowTablesCommand(tableManager);
-    }
-    //else if(toLower(strCommand.substr) == "insert into")
+    } 
+    // else if(toLower(finalCommand.substr(0, 11)) == "insert into"){
+    //     command = new InsertIntoCommand();
+    // }
 
 
 
