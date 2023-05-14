@@ -17,7 +17,7 @@ All records in the table whose n-th attribute <search column n> contains the val
 are changed so that their n-th attribute <target column n> is given the value <target value>;
 delete <table name> <search column n> <search value>   -   
 Deletes all records in the table whose n-th attribute contains the given value;
-insert <table name> <column 1> ... <column n>  -  Adds a new record with the given attribute values to the table;
+insert into <table name> <column 1> ... <column n>  -  Adds a new record with the given attribute values to the table;
 innerjoin <table 1> <column n1> <table 2> <column n2>  -  
 Performs an Inner Join to the tables according to the attribute of the first and second table and creates a new table then prints its identifier;
 rename <old name> <new name>  -  Renames a table with the new name given;

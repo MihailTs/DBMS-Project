@@ -9,6 +9,7 @@
 #include "ShowTablesCommand.h"
 #include "InsertIntoCommand.h"
 #include "AddColumnCommand.h"
+#include "RenameCommand.h"
 
 
 class Invoker{
@@ -25,6 +26,8 @@ class Invoker{
         std::string trim(const std::string&);
 
         std::string toLower(const std::string&);
+
+        std::vector<std::string> splitLine(const std::string&);
 
     public:
 

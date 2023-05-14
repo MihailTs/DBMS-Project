@@ -20,17 +20,37 @@ void Invoker::setCommand(const std::string& strCommand){
     if(toLower(finalCommand) == "exit") command = new ExitCommand;
     else if(toLower(finalCommand) == "help") command = new HelpCommand;
     else if(toLower(finalCommand.substr(0, 8)) == "describe"){
-        command = new DescribeCommand(tableManager, finalCommand.substr(9));
+        command = new DescribeCommand(tableManager, trim(finalCommand.substr(9)));
     }
     else if(toLower(finalCommand.substr(0, 5)) == "print"){
-        command = new PrintTableCommand(tableManager, finalCommand.substr(6));
+        command = new PrintTableCommand(tableManager, trim(finalCommand.substr(6)));
     }
     else if(toLower(finalCommand) == "showtables"){
         command = new ShowTablesCommand(tableManager);
     } 
-    // else if(toLower(finalCommand.substr(0, 11)) == "insert into"){
-    //     command = new InsertIntoCommand();
-    // }
+    else if(toLower(finalCommand.substr(0, 11)) == "insert into"){
+        finalCommand = trim(finalCommand.substr(11));
+        std::string tableName = finalCommand.substr(0, finalCommand.find(' '));
+
+        std::vector<std::string> data = splitLine(trim(finalCommand.substr(finalCommand.find(' ')+1)));
+        command = new InsertIntoCommand(tableManager, tableName, data);
+    }
+    else if(toLower(finalCommand.substr(0, 6)) == "rename"){
+        finalCommand = trim(finalCommand.substr(6));
+        //няма нужда от trim
+        std::string newName = finalCommand.substr(0, finalCommand.find(" "));
+        std::string oldName = trim(finalCommand.substr(finalCommand.find(" ")));
+        command = new RenameCommand(tableManager, newName, oldName);
+    }
+    else if(toLower(finalCommand.substr(0, 8)) == "addcolumn"){
+        finalCommand = trim(finalCommand.substr(9));
+        //няма нужда от trim
+        std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
+        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+        std::string fieldName = finalCommand.substr(0, finalCommand.find(" "));
+        std::string fieldType = trim(finalCommand.substr(finalCommand.find(" ")));
+        command = new AddColumnCommand(tableManager, tableName, fieldName, fieldType);
+    }
 
 
 
@@ -42,6 +62,25 @@ ICommand* Invoker::getCommand(){
 
 Invoker::~Invoker(){
     delete []getCommand();
+}
+
+std::vector<std::string> Invoker::splitLine(const std::string& line){
+    bool quotes = false;
+    std::vector<std::string> splLine;
+    std::string currentString = "";
+
+    for(char c : line){
+        if(c == '\"') quotes = !quotes;
+        if(c == ',' && !quotes) {
+            splLine.push_back(currentString);
+            currentString = "";   
+            continue;
+        }
+        currentString += c;
+    }
+
+    splLine.push_back(currentString);
+    return splLine;
 }
 
 std::string Invoker::trim(const std::string& str){

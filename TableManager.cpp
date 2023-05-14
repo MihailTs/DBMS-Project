@@ -138,6 +138,13 @@ std::vector<Table*>& TableManager::getOpenedTables(){
     return openedTables;
 }
 
+bool TableManager::contains(const std::string& _tableName){
+    for(Touple t : tablesInfo){
+        if(t.tableName == _tableName) return true;
+    }
+    return false;
+}
+
 TableManager::~TableManager(){
     for(Table* t: openedTables)
         delete t;

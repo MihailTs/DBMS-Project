@@ -40,6 +40,9 @@ class TableManager{
 
         void showTables();
 
+        //Име на таблица
+        bool contains(const std::string&);
+
         Table* getTable(const std::string&);
 
         std::vector<Table*>& getOpenedTables();

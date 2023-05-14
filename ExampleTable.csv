@@ -1,7 +1,7 @@
 int,int,double,string
 ID,BrainCells,Pace,name
 1,+2000000000,3.5,"Mihail Tsvetkov"
-2,2,4,"Bojan Goranov"
+2,-9,6,"Bojan Goranov"
 3,1,6,"Kaloyan Tsvetkov"
 4,+696969,4.5,"Alex Artinian - \"Bat Sali\""
 5,10000,5,"Chavdar Chukov"

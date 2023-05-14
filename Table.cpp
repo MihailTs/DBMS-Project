@@ -29,7 +29,7 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
         //Добавяне на колоните и добавяне на дължините на имената на колоните
         for(int i = 0; i < tempFieldsCount; i++){
             TableCol* tC = new TableCol;
-            columns.push_back(tC);
+            getTableColumns().push_back(tC);
             columnLongest.push_back(getFieldsNames().at(i).size());
         }
 
@@ -72,7 +72,7 @@ std::vector<std::string>& Table::getFieldsTypes(){
 }
 
 unsigned Table::getRowsCount(){
-    return columns[0]->getValuesCount();
+    return getTableColumns().at(0)->getValuesCount();
 }
 
 std::string Table::getTableName(){
@@ -196,6 +196,8 @@ std::string Table::align(const std::string& str, unsigned maxLength){
 }
 
 void Table::insertRecord(const std::vector<std::string>& values){
+    if(values.size() < getFieldsCount()) throw std::invalid_argument("Invalid number of arguments!");
+
     //ТОЗИ МЕТОД ДА НЕ СЕ ПРОМЕНЯ!!!
     int i = 0;
     for(std::string value : values){

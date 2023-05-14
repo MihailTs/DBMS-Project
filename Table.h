@@ -32,8 +32,6 @@ class Table{
 
         void setFieldsTypes(const std::vector<std::string>&);
 
-        void setTableName(const std::string&);
-
         void setFieldsCount(unsigned);
 
         DataType* factory(const std::string&, const std::string&);
@@ -60,6 +58,8 @@ class Table{
 
         std::string getTableName();
 
+        void setTableName(const std::string&);
+
         void printTable();
 
         void describe();
@@ -70,6 +70,4 @@ class Table{
         void addField(const std::string&, const std::string&);
 
         ~Table();
-        
-
 };
