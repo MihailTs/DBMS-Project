@@ -11,7 +11,7 @@ Invoker::Invoker(TableManager* _tableManager, const std::string& strCommand){
 }
 
 void Invoker::setCommand(const std::string& strCommand){
-    delete []getCommand();
+    delete getCommand();
 
     std::string finalCommand = trim(strCommand);
     //strCommand = stripSpaces(strCommand);
@@ -38,9 +38,9 @@ void Invoker::setCommand(const std::string& strCommand){
     else if(toLower(finalCommand.substr(0, 6)) == "rename"){
         finalCommand = trim(finalCommand.substr(6));
         //няма нужда от trim
-        std::string newName = finalCommand.substr(0, finalCommand.find(" "));
-        std::string oldName = trim(finalCommand.substr(finalCommand.find(" ")));
-        command = new RenameCommand(tableManager, newName, oldName);
+        std::string oldName = finalCommand.substr(0, finalCommand.find(" "));
+        std::string newName = trim(finalCommand.substr(finalCommand.find(" ")));
+        command = new RenameCommand(tableManager, oldName, newName);
     }
     else if(toLower(finalCommand.substr(0, 8)) == "addcolumn"){
         finalCommand = trim(finalCommand.substr(9));
@@ -51,17 +51,12 @@ void Invoker::setCommand(const std::string& strCommand){
         std::string fieldType = trim(finalCommand.substr(finalCommand.find(" ")));
         command = new AddColumnCommand(tableManager, tableName, fieldName, fieldType);
     }
-
-
+    //else throw std::invalid_argument("The command you entered is not a valid command!");
 
 }
 
 ICommand* Invoker::getCommand(){
     return command;
-}
-
-Invoker::~Invoker(){
-    delete []getCommand();
 }
 
 std::vector<std::string> Invoker::splitLine(const std::string& line){
@@ -71,7 +66,8 @@ std::vector<std::string> Invoker::splitLine(const std::string& line){
 
     for(char c : line){
         if(c == '\"') quotes = !quotes;
-        if(c == ',' && !quotes) {
+        //Тук е разликата със splitLine на Table
+        if(c == ' ' && !quotes) {
             splLine.push_back(currentString);
             currentString = "";   
             continue;
@@ -111,4 +107,8 @@ std::string Invoker::toLower(const std::string& str){
         else lowerStr += str.at(i);
     }
     return lowerStr;
+}
+
+Invoker::~Invoker(){
+    delete []getCommand();
 }

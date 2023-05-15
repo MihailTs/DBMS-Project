@@ -125,6 +125,36 @@ void TableManager::removeTableInfo(const std::string& _name){
     }
 }
 
+void TableManager::renameInArchive(const std::string& oldName, const std::string& newName){
+    
+    std::fstream readArchive(getArchiveName());
+    if(!readArchive.is_open()) throw std::runtime_error("Could not open file");
+
+    std::string line;
+    if(readArchive.good()){
+        while(std::getline(readArchive, line)){
+            if(line == "") continue;
+
+            //Възможен бъдещ проблем, ако м/у името и адреса има повече от един интервал
+            unsigned spacePosition = line.find(" ");
+            std::string fileName = line.substr(0, spacePosition);
+            if(fileName == oldName) //Заменя fileName с newName
+
+        }
+    }
+
+    readArchive.close();
+}
+
+void TableManager::renameTable(const std::string& oldName, const std::string& newName){
+    for(Touple t : tablesInfo){
+        if(t.tableName == oldName) {
+            t.tableName = newName;
+            renameInArchive(oldName, newName);
+        }
+    }
+}
+
 Table* TableManager::getTable(const std::string& tableName){
     openTable(tableName);
     for(Table* table: getOpenedTables()){

@@ -28,6 +28,8 @@ class TableManager{
 
         std::string getArchiveName() const;
 
+        void renameInArchive(const std::string&, const std::string&);
+
         std::string align(const std::string&, unsigned);
 
     public:
@@ -46,6 +48,8 @@ class TableManager{
         Table* getTable(const std::string&);
 
         std::vector<Table*>& getOpenedTables();
+
+        void renameTable(const std::string&, const std::string&);
 
         ~TableManager();
 
