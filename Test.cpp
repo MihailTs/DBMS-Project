@@ -1,7 +1,7 @@
-#define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 #include <fstream>
@@ -24,9 +24,12 @@ int main(){
 
         if(command == "") {continue;}
 
-
-        invoker.setCommand(command);
-        invoker.getCommand()->execute();
+        //try{
+            invoker.setCommand(command);
+            invoker.getCommand()->execute();//}
+        // }catch(const std::invalid_argument& ia){
+        //     std::cout << "The command you entered is either not a valid command or has a sintax error! Type \"help\" to check the sintax of your command.";
+        // }
 
 
         std::cout << "\n";
@@ -34,27 +37,6 @@ int main(){
 
 
     delete tableManager;
-
-
-
-
-    // Table t1("table1", "ExampleTable.csv");
-    // //Table t2("table2", "ExampleTable.csv");
-
-    // t1.printTable();
-    // //t1.describe();
-
-    // std::cout << "\n";
-
-
-    // // TableManager tm("archive.txt");
-    // // tm.openTable(t1.getTableName());
-    // // //tm.openTable(t2.getTableName());
-
-    // // tm.showTables();
-    
-    // _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG); 
-    // _CrtDumpMemoryLeaks();
 }
 
 

@@ -127,32 +127,55 @@ void TableManager::removeTableInfo(const std::string& _name){
 
 void TableManager::renameInArchive(const std::string& oldName, const std::string& newName){
     
-    std::fstream readArchive(getArchiveName());
+    std::ifstream readArchive(getArchiveName());
     if(!readArchive.is_open()) throw std::runtime_error("Could not open file");
-
+    	
+    //Записване на старите данни от архива
+    std::vector<std::string> contents;
     std::string line;
     if(readArchive.good()){
+
+        std::string line;
+
         while(std::getline(readArchive, line)){
-            if(line == "") continue;
-
-            //Възможен бъдещ проблем, ако м/у името и адреса има повече от един интервал
-            unsigned spacePosition = line.find(" ");
-            std::string fileName = line.substr(0, spacePosition);
-            if(fileName == oldName) //Заменя fileName с newName
-
+            contents.push_back(line);
         }
     }
 
     readArchive.close();
+
+    std::ofstream writeArchive(getArchiveName());
+    if(!writeArchive.is_open()) throw std::runtime_error("Could not open file");
+
+    if(writeArchive.good()){
+
+        for(std::string fline : contents){
+            if(fline.substr(0, fline.find(" ")) == oldName){
+                writeArchive << newName << " " << fline.substr(fline.find(" ")+1) << "\n";
+            }
+            else writeArchive << fline << "\n";
+        }
+    }
+    writeArchive.close();
 }
 
 void TableManager::renameTable(const std::string& oldName, const std::string& newName){
-    for(Touple t : tablesInfo){
+
+    //Преименуване в списъка с файловете
+    //и в архива
+    //Референция, за да се запази промяната в оригиналния списък
+    for(Touple& t : tablesInfo){
         if(t.tableName == oldName) {
             t.tableName = newName;
             renameInArchive(oldName, newName);
         }
     }
+
+    //Преименуване в списъка с отворените таблици
+    for(Table* table : openedTables){
+        if(table->getTableName() == oldName) table->setTableName(newName);
+    }
+
 }
 
 Table* TableManager::getTable(const std::string& tableName){
@@ -160,7 +183,6 @@ Table* TableManager::getTable(const std::string& tableName){
     for(Table* table: getOpenedTables()){
         if(table->getTableName() == tableName) return table;
     }
-    throw "Getting table failed!";
     return nullptr;
 }
 

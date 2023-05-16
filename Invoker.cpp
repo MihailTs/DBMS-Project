@@ -42,8 +42,8 @@ void Invoker::setCommand(const std::string& strCommand){
         std::string newName = trim(finalCommand.substr(finalCommand.find(" ")));
         command = new RenameCommand(tableManager, oldName, newName);
     }
-    else if(toLower(finalCommand.substr(0, 8)) == "addcolumn"){
-        finalCommand = trim(finalCommand.substr(9));
+    else if(toLower(finalCommand.substr(0, 9)) == "addcolumn"){
+        finalCommand = trim(finalCommand.substr(10));
         //няма нужда от trim
         std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
         finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
@@ -51,7 +51,8 @@ void Invoker::setCommand(const std::string& strCommand){
         std::string fieldType = trim(finalCommand.substr(finalCommand.find(" ")));
         command = new AddColumnCommand(tableManager, tableName, fieldName, fieldType);
     }
-    //else throw std::invalid_argument("The command you entered is not a valid command!");
+    
+    else throw std::invalid_argument("The command you entered is not a valid command!");
 
 }
 

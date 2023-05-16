@@ -1,2 +1,2 @@
-table1 ExampleTable.csv
+table20 ExampleTable.csv
 table2 ExampleTable.csv

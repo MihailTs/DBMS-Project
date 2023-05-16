@@ -230,12 +230,14 @@ void Table::addField(const std::string& _name, const std::string& _type){
     columnLongest.push_back(_name.size());
     TableCol* newColumn = new TableCol;
 
+
     DataType* value;
     for(int i = 0; i < getRowsCount(); i++){
         value = factory("", _type);
         newColumn->addValue(value);
-        if(value->getStringValue().size() > columnLongest.at(i)) columnLongest.at(i) = value->getStringValue().size();
+        if(value->getStringValue().size() > columnLongest.at(getFieldsCount()-1)) columnLongest.at(getFieldsCount()-1) = value->getStringValue().size();
     }
+
 
     getTableColumns().push_back(newColumn);
     fieldsCount++;
