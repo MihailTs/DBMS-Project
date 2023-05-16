@@ -14,16 +14,6 @@ std::string String::getTypeName() {
     return "string";
 }
 
-String& String::operator=(const String& str){
-    setStringValue(str.getStringValue());
-    return *this;
-}
-
-String& String::operator=(const char* str){
-    setStringValue(str);
-    return *this;
-}
-
 bool String::isValid(const std::string& str){
     unsigned length = str.size();
     //Проверка дали стрингът е ограден в кавички
@@ -42,19 +32,6 @@ bool String::isValid(const std::string& str){
     return true;
 }
 
-std::fstream& operator<<(std::fstream& out, const String& str){
-    //.c_str() е защото операторът << на fstream 
-    //не приема std::string аргументи
-    out << str.getStringValue().c_str();
-    return out;
-}
-
-
-std::ostream& operator<<(std::ostream& out, const String& str){
-    out << str.getStringValue();
-    return out;
-}
-
 //Премахва '\' използвани за специални символи
 std::string String::format(const std::string& str){
     std::string formatted;
@@ -66,4 +43,8 @@ std::string String::format(const std::string& str){
         formatted += str.at(i);
     }
     return formatted;
+}
+
+bool String::equals(const std::string& _value){
+    return getStringValue() == _value;
 }

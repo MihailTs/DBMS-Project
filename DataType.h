@@ -16,4 +16,5 @@ class DataType{
 
         void setStringValue(const std::string&);
 
+        virtual bool equals(const std::string&)=0;
 };

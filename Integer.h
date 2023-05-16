@@ -26,7 +26,6 @@ class Integer : public DataType{
 
         Integer& operator=(const Integer&);
 
-        friend std::ostream& operator<<(std::ostream&, const Integer&);
+        bool equals(const std::string&);
 
-        friend std::fstream& operator<<(std::fstream&, const Integer&);
 };

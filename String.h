@@ -1,7 +1,5 @@
 #pragma once
 #include <string>
-//#include <iostream>
-#include <fstream>
 #include "DataType.h"
 
 class String : public DataType{
@@ -20,11 +18,6 @@ class String : public DataType{
 
         std::string getTypeName();
 
-        String& operator=(const String&);
+        bool equals(const std::string&);
 
-        String& operator=(const char*);
-
-        friend std::ostream& operator<<(std::ostream&, const String&);
-
-        friend std::fstream& operator<<(std::fstream&, const String&);
 };

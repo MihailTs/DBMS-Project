@@ -38,6 +38,7 @@ int main(){
 
 
     delete tableManager;
+
 }
 
 

@@ -278,7 +278,7 @@ void Table::select(const std::string& fieldName, const std::string& value){
         //Да се прави проверка дали value е съвместим с типа на полето
         //
         //Проверява за равнство на полетата и отпечатва реда
-        if(getTableFields().at(fNum)->getValues().at(i)->getStringValue() == value){
+        if(getTableFields().at(fNum)->getValues().at(i)->equals(value)){
             int colN = 0;
             for(TableCol* tc : getTableFields()){
                 std::cout << align(tc->getValues().at(i)->getStringValue(), columnLongest.at(colN));    

@@ -13,7 +13,6 @@ std::string Null::getTypeName(){
     return "null";
 }
 
-// Null& operator=(DataType* other){
-//     if(getTypeName() != other->getTypeName())
-//         throw "Illegal use of operator '='";
-// }
+bool Null::equals(const std::string& _value){
+    return _value == "";
+}

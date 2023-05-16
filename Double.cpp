@@ -27,21 +27,6 @@ void Double::setValue(double newVal){
     setStringValue(trimRight(std::to_string(newVal)));
 }
 
-Double& Double::operator=(const Double& other){
-    setValue(other.getValue());
-    return *this;
-}
-
-std::ostream& operator<<(std::ostream& out, const Double& number){
-    out << number.getValue();
-    return out;
-}
-
-std::fstream& operator<<(std::fstream& out, const Double& number){
-    out << number.getValue();
-    return out;
-}
-
 bool Double::isValid(const std::string& _strValue){
     unsigned size = _strValue.size();
     char firstChar = _strValue[0];
@@ -82,4 +67,8 @@ std::string Double::trimRight(const std::string& _strValue){
 
     trimmed = _strValue.substr(0, i+1);
     return trimmed;
+}
+
+bool Double::equals(const std::string& _value){
+    return std::stod(_value) == getValue();
 }

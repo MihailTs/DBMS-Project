@@ -24,10 +24,5 @@ class Double : public DataType{
 
         void setValue(double);
 
-        Double& operator=(const Double&);
-
-        friend std::ostream& operator<<(std::ostream&, const Double&);
-
-        friend std::fstream& operator<<(std::fstream&, const Double&);
-
+        bool equals(const std::string&);
 };
