@@ -10,6 +10,7 @@
 #include "InsertIntoCommand.h"
 #include "AddColumnCommand.h"
 #include "RenameCommand.h"
+#include "SelectCommand.h"
 
 
 class Invoker{
@@ -28,6 +29,10 @@ class Invoker{
         std::string toLower(const std::string&);
 
         std::vector<std::string> splitLine(const std::string&);
+
+        std::string getFirstValue(const std::string&, int*);
+
+        std::string removeParentheses(const std::string&);
 
     public:
 

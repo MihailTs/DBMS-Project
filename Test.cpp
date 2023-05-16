@@ -8,6 +8,7 @@
 #include "TableManager.h"
 #include "Invoker.h"
 
+
 int main(){
     
     TableManager* tableManager = new TableManager("archive.txt");

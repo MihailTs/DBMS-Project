@@ -29,7 +29,7 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
         //Добавяне на колоните и добавяне на дължините на имената на колоните
         for(int i = 0; i < tempFieldsCount; i++){
             TableCol* tC = new TableCol;
-            getTableColumns().push_back(tC);
+            getTableFields().push_back(tC);
             columnLongest.push_back(getFieldsNames().at(i).size());
         }
 
@@ -72,14 +72,14 @@ std::vector<std::string>& Table::getFieldsTypes(){
 }
 
 unsigned Table::getRowsCount(){
-    return getTableColumns().at(0)->getValuesCount();
+    return getTableFields().at(0)->getValuesCount();
 }
 
 std::string Table::getTableName(){
     return tableName;
 }
 
-std::vector<TableCol*>& Table::getTableColumns(){
+std::vector<TableCol*>& Table::getTableFields(){
     return columns;
 }
 
@@ -149,13 +149,7 @@ void Table::printTable(){
     //Извеждат се имената на полетата, а после и един по един - редовете
     //В края на всеки ред се добавя |
 
-    std::string lineSeparator;
-    for(int len : columnLongest){
-        lineSeparator += "+";
-        std::string temp(len+2, '-');
-        lineSeparator += temp;
-    }
-    lineSeparator += "+";
+    std::string lineSeparator = makeLineSeparator();
 
     std::cout << lineSeparator << "\n";
 
@@ -172,12 +166,25 @@ void Table::printTable(){
 
     for(int j = 0; j < getRowsCount(); j++){
         for(int k = 0; k < getFieldsCount(); k++){
-            std::cout << align(getTableColumns().at(k)->getValues().at(j)->getStringValue(), columnLongest.at(k));
+            std::cout << align(getTableFields().at(k)->getValues().at(j)->getStringValue(), columnLongest.at(k));
         }
         std::cout << "|\n";
     }
 
     std::cout << lineSeparator;
+}
+
+std::string Table::makeLineSeparator(){
+    std::string lineSeparator;
+
+    for(int len : columnLongest){
+        lineSeparator += "+";
+        std::string temp(len+2, '-');
+        lineSeparator += temp;
+    }
+    lineSeparator += "+";
+
+    return lineSeparator;
 }
 
 std::string Table::align(const std::string& str, unsigned maxLength){
@@ -202,7 +209,7 @@ void Table::insertRecord(const std::vector<std::string>& values){
     int i = 0;
     for(std::string value : values){
         DataType* temp = factory(value, getFieldsTypes().at(i));
-        getTableColumns().at(i)->addValue(temp); 
+        getTableFields().at(i)->addValue(temp); 
         //ТУК Е ВАЖНО ДА Е ТОЧНО temp->getStringValue().size(), а не value.size()!       
         if(temp->getStringValue().size() > columnLongest.at(i)) columnLongest.at(i) = temp->getStringValue().size();
         i++;
@@ -239,12 +246,52 @@ void Table::addField(const std::string& _name, const std::string& _type){
     }
 
 
-    getTableColumns().push_back(newColumn);
+    getTableFields().push_back(newColumn);
     fieldsCount++;
 }
 
+void Table::select(const std::string& fieldName, const std::string& value){
+    unsigned fNum = 0;
+    //Намира номера на полето, за да имаме директен достъп до това поле
+    for(std::string field : getFieldsNames()){
+        if(fieldName == field) break;
+        fNum++;
+    }
+    if(fNum >= getFieldsCount()) throw std::invalid_argument(fieldName + " is not a name of a field in " + tableName);
+
+    std::string lineSeparator = makeLineSeparator();
+    
+    std::cout << lineSeparator << "\n";
+
+    int i = 0;
+    for(std::string name : getFieldsNames()){
+        std::cout << align(name, columnLongest.at(i));
+        i++;
+    }
+    if(i != 0) std::cout << "|";
+    else return;
+
+    std::cout << "\n" << lineSeparator << "\n";
+
+    for(int i = 0; i < getRowsCount(); i++){
+        //
+        //Да се прави проверка дали value е съвместим с типа на полето
+        //
+        //Проверява за равнство на полетата и отпечатва реда
+        if(getTableFields().at(fNum)->getValues().at(i)->getStringValue() == value){
+            int colN = 0;
+            for(TableCol* tc : getTableFields()){
+                std::cout << align(tc->getValues().at(i)->getStringValue(), columnLongest.at(colN));    
+                colN++;
+            }
+            std::cout << "|\n" << lineSeparator << "\n";
+        }
+    }
+
+}
+
 Table::~Table(){
-    for(TableCol* col : getTableColumns()){
+    for(TableCol* col : getTableFields()){
         for(DataType* t : col->getValues()){
             delete t;
         }

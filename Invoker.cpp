@@ -20,7 +20,9 @@ void Invoker::setCommand(const std::string& strCommand){
     if(toLower(finalCommand) == "exit") command = new ExitCommand;
     else if(toLower(finalCommand) == "help") command = new HelpCommand;
     else if(toLower(finalCommand.substr(0, 8)) == "describe"){
-        command = new DescribeCommand(tableManager, trim(finalCommand.substr(9)));
+        try{
+            command = new DescribeCommand(tableManager, trim(finalCommand.substr(9)));
+        }catch(const std::runtime_error& re){std::cout << "No arguments specified!\n";}
     }
     else if(toLower(finalCommand.substr(0, 5)) == "print"){
         command = new PrintTableCommand(tableManager, trim(finalCommand.substr(6)));
@@ -50,6 +52,18 @@ void Invoker::setCommand(const std::string& strCommand){
         std::string fieldName = finalCommand.substr(0, finalCommand.find(" "));
         std::string fieldType = trim(finalCommand.substr(finalCommand.find(" ")));
         command = new AddColumnCommand(tableManager, tableName, fieldName, fieldType);
+    }
+    else if(toLower(finalCommand.substr(0, 6)) == "select"){
+        finalCommand = trim(finalCommand.substr(7));
+        //няма нужда от trim
+        std::string fieldName = finalCommand.substr(0, finalCommand.find(" "));
+        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+        //Ако value е стринг с кавички и възможен интервал м/у тях се налага
+        //по-точна обработка
+        int index = 0;
+        std::string value = removeParentheses(getFirstValue(trim(finalCommand), &index));
+        std::string tableName = trim(finalCommand.substr(index+1));
+        command = new SelectCommand(tableManager, tableName, fieldName, value);
     }
     
     else throw std::invalid_argument("The command you entered is not a valid command!");
@@ -108,6 +122,29 @@ std::string Invoker::toLower(const std::string& str){
         else lowerStr += str.at(i);
     }
     return lowerStr;
+}
+
+std::string Invoker::getFirstValue(const std::string& str, int* index){
+    std::string value = "";
+    bool par = false;
+    for(int i = 0; i < str.size(); i++){
+        *index = i;
+        if(str.at(i) == '\"' && !par) par = true;
+        else if(str.at(i) == '\"' && par) {
+            value += str.at(i);
+            break;
+        } 
+        else if(str.at(i) == ' ' && !par) break;
+
+        value += str.at(i);
+    }
+
+    return value;
+}
+
+std::string Invoker::removeParentheses(const std::string& str){
+    if(str.at(0) == '\"') return str.substr(1, str.size()-2);
+    else return str;
 }
 
 Invoker::~Invoker(){

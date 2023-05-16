@@ -41,6 +41,8 @@ class Table{
 
         std::string align(const std::string&, unsigned);
 
+        std::string makeLineSeparator();
+
     public:
     
         //Таблица по име и адрес на файл
@@ -54,7 +56,7 @@ class Table{
 
         unsigned getRowsCount();
 
-        std::vector<TableCol*>& getTableColumns();
+        std::vector<TableCol*>& getTableFields();
 
         std::string getTableName();
 
@@ -68,6 +70,9 @@ class Table{
 
         //име, тип
         void addField(const std::string&, const std::string&);
+
+        //име на полето желана стойност
+        void select(const std::string&, const std::string&);
 
         ~Table();
 };
