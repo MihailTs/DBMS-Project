@@ -11,6 +11,7 @@
 #include "AddColumnCommand.h"
 #include "RenameCommand.h"
 #include "SelectCommand.h"
+#include "ExportCommand.h"
 
 
 class Invoker{

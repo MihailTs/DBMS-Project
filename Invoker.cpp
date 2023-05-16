@@ -69,7 +69,7 @@ void Invoker::setCommand(const std::string& strCommand){
         finalCommand = trim(finalCommand.substr(7));
         std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
         std::string fileAddress = removeParentheses(trim(finalCommand));
-
+        command = new ExportCommand(tableManager, tableName, fileAddress);
     }
 
     else throw std::invalid_argument("The command you entered is not a valid command!");

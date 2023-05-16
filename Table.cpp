@@ -252,7 +252,7 @@ void Table::addField(const std::string& _name, const std::string& _type){
 
 void Table::select(const std::string& fieldName, const std::string& value){
     unsigned fNum = 0;
-    //Намира номера на полето, за да имаме директен достъп до това поле
+    //Намира номера на полето, за да имаме директен достъп до това поле (fNum)
     for(std::string field : getFieldsNames()){
         if(fieldName == field) break;
         fNum++;
@@ -263,6 +263,7 @@ void Table::select(const std::string& fieldName, const std::string& value){
     
     std::cout << lineSeparator << "\n";
 
+    //Принтира горната част на таблицата
     int i = 0;
     for(std::string name : getFieldsNames()){
         std::cout << align(name, columnLongest.at(i));
@@ -287,6 +288,14 @@ void Table::select(const std::string& fieldName, const std::string& value){
             std::cout << "|\n" << lineSeparator << "\n";
         }
     }
+
+}
+
+void Table::writeToFile(const std::string& fileName){
+
+    
+
+
 
 }
 

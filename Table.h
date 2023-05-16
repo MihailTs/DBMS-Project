@@ -74,5 +74,7 @@ class Table{
         //име на полето желана стойност
         void select(const std::string&, const std::string&);
 
+        void writeToFile(const std::string&);
+
         ~Table();
 };
