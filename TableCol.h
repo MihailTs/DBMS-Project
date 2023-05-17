@@ -7,21 +7,17 @@ class TableCol{
 
     private:
 
-        ///////
-        //ДА СЕ ДОБАВИ И ТИП НА КОЛОНАТА!!!
-        ///////
-        
+        std::string type;
+        std::string name;
         
         std::vector<DataType*> values;
-        unsigned valuesCount;
+        unsigned valuesCount = 0;
 
         void setValuesCount(unsigned);
 
     public:
 
-        TableCol();
-
-        TableCol(const std::vector<DataType*>&);
+        TableCol(const std::string&, const std::string&);
 
         std::vector<DataType*>& getValues();
 
@@ -32,5 +28,15 @@ class TableCol{
         void addValue(DataType*);
 
         void setValues(const std::vector<DataType*>&);
+
+        std::string getType() const;
+
+        std::string getName() const;
+
+        void setType(const std::string&);
+
+        void setName(const std::string&);
+
+        ~TableCol();
 
 };

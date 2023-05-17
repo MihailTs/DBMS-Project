@@ -18,9 +18,6 @@ class Table{
 
         std::string tableName;
 
-        //Имена, типове и брой на колоните
-        std::vector<std::string> fieldsNames;
-        std::vector<std::string> fieldsTypes;
         unsigned fieldsCount;
 
         std::vector<TableCol*> columns;
@@ -42,6 +39,10 @@ class Table{
         std::string align(const std::string&, unsigned);
 
         std::string makeLineSeparator();
+
+        //Превръща стринг обратно в прочетения вид (прочетен файл)
+        //на всяка \ или " добавя отпред "\"(символът)
+        std::string toWritable(const std::string&);
 
     public:
     

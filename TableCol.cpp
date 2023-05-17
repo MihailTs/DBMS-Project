@@ -1,12 +1,9 @@
 #include "TableCol.h"
 
-TableCol::TableCol(){
+TableCol::TableCol(const std::string& _type, const std::string& _name){
+    setType(_type);
+    setName(_name);
     setValuesCount(0);
-}
-
-TableCol::TableCol(const std::vector<DataType*>& _values){
-    setValues(_values);
-    setValuesCount(_values.size());
 }
 
 void TableCol::setValues(const std::vector<DataType*>& _values){
@@ -19,7 +16,7 @@ std::vector<DataType*>& TableCol::getValues(){
 }
 
 unsigned TableCol::getValuesCount(){
-    return getValues().size();
+    return valuesCount;
 }
 
 void TableCol::setValuesCount(unsigned count){
@@ -28,4 +25,26 @@ void TableCol::setValuesCount(unsigned count){
 
 void TableCol::addValue(DataType* _value){
     getValues().push_back(_value);
+    valuesCount++;
+}
+
+std::string TableCol::getType() const{
+    return type;
+}
+
+std::string TableCol::getName() const{
+    return name;
+}
+
+void TableCol::setType(const std::string& _type){
+    type = _type;
+}
+
+void TableCol::setName(const std::string& _name){
+    name = _name;
+}
+
+TableCol::~TableCol(){
+    for(DataType* dt : getValues())
+        delete dt;
 }

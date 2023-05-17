@@ -68,7 +68,7 @@ void Invoker::setCommand(const std::string& strCommand){
     else if(toLower(finalCommand.substr(0, 6)) == "export"){
         finalCommand = trim(finalCommand.substr(7));
         std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
-        std::string fileAddress = removeParentheses(trim(finalCommand));
+        std::string fileAddress = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
         command = new ExportCommand(tableManager, tableName, fileAddress);
     }
 
