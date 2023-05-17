@@ -3,7 +3,7 @@
 #include <fstream>
 #include "DataType.h"
 
-class TableCol{
+class TableField{
 
     private:
 
@@ -17,7 +17,7 @@ class TableCol{
 
     public:
 
-        TableCol(const std::string&, const std::string&);
+        TableField(const std::string&, const std::string&);
 
         std::vector<DataType*>& getValues();
 
@@ -37,6 +37,6 @@ class TableCol{
 
         void setName(const std::string&);
 
-        ~TableCol();
+        ~TableField();
 
 };

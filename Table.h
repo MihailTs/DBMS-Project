@@ -4,7 +4,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <fstream>
-#include "TableCol.h"
+#include "TableField.h"
 #include "DataType.h"
 #include "String.h"
 #include "Integer.h"
@@ -20,7 +20,7 @@ class Table{
 
         unsigned fieldsCount;
 
-        std::vector<TableCol*> columns;
+        std::vector<TableField*> columns;
 
         //Най-дългите стойности в колоните
         std::vector<int> columnLongest;
@@ -57,7 +57,7 @@ class Table{
 
         unsigned getRowsCount();
 
-        std::vector<TableCol*>& getTableFields();
+        std::vector<TableField*>& getTableFields();
 
         std::string getTableName();
 

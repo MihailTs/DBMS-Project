@@ -30,7 +30,7 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
 
         //Добавяне на колоните и добавяне на дължините на имената на колоните
         for(int i = 0; i < tempFieldsCount; i++){
-            TableCol* tC = new TableCol(types.at(i), names.at(i));
+            TableField* tC = new TableField(types.at(i), names.at(i));
             getTableFields().push_back(tC);
             columnLongest.push_back(names.at(i).size());
         }
@@ -55,7 +55,7 @@ void Table::setFieldsCount(unsigned _fieldsCount){
 
 void Table::setFieldsNames(const std::vector<std::string>& _newNames){
     int i = 0;
-    for(TableCol* tc : getTableFields()){
+    for(TableField* tc : getTableFields()){
         tc->setType(_newNames.at(i));
         i++;
     }
@@ -63,7 +63,7 @@ void Table::setFieldsNames(const std::vector<std::string>& _newNames){
 
 void Table::setFieldsTypes(const std::vector<std::string>& _newTypes){
     int i = 0;
-    for(TableCol* tc : getTableFields()){
+    for(TableField* tc : getTableFields()){
         tc->setType(_newTypes.at(i));
         i++;
     }
@@ -81,7 +81,7 @@ std::string Table::getTableName(){
     return tableName;
 }
 
-std::vector<TableCol*>& Table::getTableFields(){
+std::vector<TableField*>& Table::getTableFields(){
     return columns;
 }
 
@@ -126,7 +126,7 @@ void Table::describe(){
     
     std::cout << "| Type  ";
 
-    for(TableCol* field : getTableFields()){
+    for(TableField* field : getTableFields()){
         std::cout << align(field->getType(), std::max(field->getType().size(), field->getName().size()));
     }
 
@@ -135,7 +135,7 @@ void Table::describe(){
     std::cout << "| Field ";
 
     int colNumber = 0;
-    for(TableCol* field : getTableFields()){
+    for(TableField* field : getTableFields()){
         std::cout << align(field->getName(), std::max(getTableFields().at(colNumber)->getType().size(), field->getName().size()));
         colNumber++;
     }
@@ -154,7 +154,7 @@ void Table::printTable(){
     std::cout << lineSeparator << "\n";
 
     int i = 0;
-    for(TableCol* field : getTableFields()){
+    for(TableField* field : getTableFields()){
         std::cout << align(field->getName(), columnLongest.at(i));
         i++;
     }
@@ -233,7 +233,7 @@ DataType* Table::factory(const std::string& value, const std::string& type){
 
 void Table::addField(const std::string& _name, const std::string& _type){
     columnLongest.push_back(_name.size());
-    TableCol* newColumn = new TableCol(_type, _name);
+    TableField* newColumn = new TableField(_type, _name);
 
     DataType* value;
     for(int i = 0; i < getRowsCount(); i++){
@@ -250,7 +250,7 @@ void Table::addField(const std::string& _name, const std::string& _type){
 void Table::select(const std::string& fieldName, const std::string& value){
     unsigned fNum = 0;
     //Намира номера на полето, за да имаме директен достъп до това поле (fNum)
-    for(TableCol* field : getTableFields()){
+    for(TableField* field : getTableFields()){
         if(fieldName == field->getName()) break;
         fNum++;
     }
@@ -262,7 +262,7 @@ void Table::select(const std::string& fieldName, const std::string& value){
 
     //Принтира горната част на таблицата
     int i = 0;
-    for(TableCol* field : getTableFields()){
+    for(TableField* field : getTableFields()){
         std::cout << align(field->getName(), columnLongest.at(i));
         i++;
     }
@@ -278,7 +278,7 @@ void Table::select(const std::string& fieldName, const std::string& value){
         //Проверява за равнство на полетата и отпечатва реда
         if(getTableFields().at(fNum)->getValues().at(i)->equals(value)){
             int colN = 0;
-            for(TableCol* tc : getTableFields()){
+            for(TableField* tc : getTableFields()){
                 std::cout << align(tc->getValues().at(i)->getStringValue(), columnLongest.at(colN));    
                 colN++;
             }
@@ -331,7 +331,7 @@ std::string Table::toWritable(const std::string& str){
 }
 
 Table::~Table(){
-    for(TableCol* col : getTableFields()){
+    for(TableField* col : getTableFields()){
         delete col;
     }
 }   
