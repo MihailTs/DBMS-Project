@@ -20,10 +20,10 @@ class Table{
 
         unsigned fieldsCount;
 
-        std::vector<TableField*> columns;
+        std::vector<TableField*> fields;
 
         //Най-дългите стойности в колоните
-        std::vector<int> columnLongest;
+        std::vector<int> fieldLongest;
 
         void setFieldsNames(const std::vector<std::string>&);
 

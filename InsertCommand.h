@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-class InsertIntoCommand : public ICommand{
+class InsertCommand : public ICommand{
 
     private:
         TableManager* tableManager;
@@ -11,7 +11,7 @@ class InsertIntoCommand : public ICommand{
         std::vector<std::string> values;
 
     public:
-        InsertIntoCommand(TableManager*, const std::string&, const std::vector<std::string>&);
+        InsertCommand(TableManager*, const std::string&, const std::vector<std::string>&);
 
         void execute();
 

@@ -49,7 +49,13 @@ class TableManager{
 
         std::vector<Table*>& getOpenedTables();
 
+        std::vector<Touple>& getTablesInfo();
+
+        //ново име, старо име
         void renameTable(const std::string&, const std::string&);
+
+        //име на таблицата
+        void saveTable(const std::string&);
 
         ~TableManager();
 

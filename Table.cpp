@@ -32,7 +32,7 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
         for(int i = 0; i < tempFieldsCount; i++){
             TableField* tC = new TableField(types.at(i), names.at(i));
             getTableFields().push_back(tC);
-            columnLongest.push_back(names.at(i).size());
+            fieldLongest.push_back(names.at(i).size());
         }
 
         //Добавяне на стойностите към колоните
@@ -82,7 +82,7 @@ std::string Table::getTableName(){
 }
 
 std::vector<TableField*>& Table::getTableFields(){
-    return columns;
+    return fields;
 }
 
 std::vector<std::string> Table::splitLine(const std::string& line){
@@ -155,7 +155,7 @@ void Table::printTable(){
 
     int i = 0;
     for(TableField* field : getTableFields()){
-        std::cout << align(field->getName(), columnLongest.at(i));
+        std::cout << align(field->getName(), fieldLongest.at(i));
         i++;
     }
     if(i != 0) std::cout << "|";
@@ -166,7 +166,7 @@ void Table::printTable(){
 
     for(int j = 0; j < getRowsCount(); j++){
         for(int k = 0; k < getFieldsCount(); k++){
-            std::cout << align(getTableFields().at(k)->getValues().at(j)->getStringValue(), columnLongest.at(k));
+            std::cout << align(getTableFields().at(k)->getValues().at(j)->getStringValue(), fieldLongest.at(k));
         }
         std::cout << "|\n";
     }
@@ -177,7 +177,7 @@ void Table::printTable(){
 std::string Table::makeLineSeparator(){
     std::string lineSeparator;
 
-    for(int len : columnLongest){
+    for(int len : fieldLongest){
         lineSeparator += "+";
         std::string temp(len+2, '-');
         lineSeparator += temp;
@@ -211,7 +211,7 @@ void Table::insertRecord(const std::vector<std::string>& values){
         DataType* temp = factory(value, getTableFields().at(i)->getType());
         getTableFields().at(i)->addValue(temp); 
         //ТУК Е ВАЖНО ДА Е ТОЧНО temp->getStringValue().size(), а не value.size()!       
-        if(temp->getStringValue().size() > columnLongest.at(i)) columnLongest.at(i) = temp->getStringValue().size();
+        if(temp->getStringValue().size() > fieldLongest.at(i)) fieldLongest.at(i) = temp->getStringValue().size();
         i++;
     }
 }
@@ -232,14 +232,14 @@ DataType* Table::factory(const std::string& value, const std::string& type){
 }
 
 void Table::addField(const std::string& _name, const std::string& _type){
-    columnLongest.push_back(_name.size());
+    fieldLongest.push_back(_name.size());
     TableField* newColumn = new TableField(_type, _name);
 
     DataType* value;
     for(int i = 0; i < getRowsCount(); i++){
         value = factory("", _type);
         newColumn->addValue(value);
-        if(value->getStringValue().size() > columnLongest.at(getFieldsCount()-1)) columnLongest.at(getFieldsCount()-1) = value->getStringValue().size();
+        if(value->getStringValue().size() > fieldLongest.at(getFieldsCount()-1)) fieldLongest.at(getFieldsCount()-1) = value->getStringValue().size();
     }
 
 
@@ -263,7 +263,7 @@ void Table::select(const std::string& fieldName, const std::string& value){
     //Принтира горната част на таблицата
     int i = 0;
     for(TableField* field : getTableFields()){
-        std::cout << align(field->getName(), columnLongest.at(i));
+        std::cout << align(field->getName(), fieldLongest.at(i));
         i++;
     }
     if(i != 0) std::cout << "|";
@@ -279,7 +279,7 @@ void Table::select(const std::string& fieldName, const std::string& value){
         if(getTableFields().at(fNum)->getValues().at(i)->equals(value)){
             int colN = 0;
             for(TableField* tc : getTableFields()){
-                std::cout << align(tc->getValues().at(i)->getStringValue(), columnLongest.at(colN));    
+                std::cout << align(tc->getValues().at(i)->getStringValue(), fieldLongest.at(colN));    
                 colN++;
             }
             std::cout << "|\n" << lineSeparator << "\n";

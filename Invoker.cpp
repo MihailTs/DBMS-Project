@@ -30,12 +30,12 @@ void Invoker::setCommand(const std::string& strCommand){
     else if(toLower(finalCommand) == "showtables"){
         command = new ShowTablesCommand(tableManager);
     } 
-    else if(toLower(finalCommand.substr(0, 11)) == "insert into"){
-        finalCommand = trim(finalCommand.substr(11));
+    else if(toLower(finalCommand.substr(0, 6)) == "insert"){
+        finalCommand = trim(finalCommand.substr(7));
         std::string tableName = finalCommand.substr(0, finalCommand.find(' '));
 
         std::vector<std::string> data = splitLine(trim(finalCommand.substr(finalCommand.find(' ')+1)));
-        command = new InsertIntoCommand(tableManager, tableName, data);
+        command = new InsertCommand(tableManager, tableName, data);
     }
     else if(toLower(finalCommand.substr(0, 6)) == "rename"){
         finalCommand = trim(finalCommand.substr(6));
@@ -71,6 +71,10 @@ void Invoker::setCommand(const std::string& strCommand){
         std::string fileAddress = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
         command = new ExportCommand(tableManager, tableName, fileAddress);
     }
+    else if(toLower(finalCommand.substr(0, 4)) == "save"){
+
+    }
+
 
     else throw std::invalid_argument("The command you entered is not a valid command!");
 

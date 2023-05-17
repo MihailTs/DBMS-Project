@@ -7,7 +7,7 @@
 #include "TableManager.h"
 #include "PrintTableCommand.h"
 #include "ShowTablesCommand.h"
-#include "InsertIntoCommand.h"
+#include "InsertCommand.h"
 #include "AddColumnCommand.h"
 #include "RenameCommand.h"
 #include "SelectCommand.h"

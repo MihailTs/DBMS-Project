@@ -36,9 +36,7 @@ int main(){
         std::cout << "\n";
     }
 
-
     delete tableManager;
-
 }
 
 
