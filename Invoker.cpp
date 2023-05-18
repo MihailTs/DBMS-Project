@@ -78,6 +78,13 @@ void Invoker::setCommand(const std::string& strCommand){
         std::string fileAddress = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
         command = new SaveAsCommand(tableManager, tableName, fileAddress);
     }
+    else if(toLower(finalCommand.substr(0, 6)) == "import"){
+        finalCommand = trim(finalCommand.substr(7));
+        std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
+        std::string fileAddress = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
+        command = new ImportCommand(tableManager, tableName, fileAddress);
+    }
+
 
     else throw std::invalid_argument("The command you entered is not a valid command!");
 

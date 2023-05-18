@@ -7,17 +7,19 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
 
     //отвряне на файла
     std::ifstream file(fileAddres);
-    if(!file.is_open()) throw std::runtime_error("Could not open file!");
+    if(!file.is_open()) throw std::runtime_error("Could not open the table!");
 
     std::string line;
     if(file.good()){
         
         //Задаване на типовете
         std::getline(file, line);
+        if(line.empty()) throw std::runtime_error("Error! Can not read table data!");
         std::vector<std::string> types = splitLine(line);
 
         //Задаване на имената на полетата
         std::getline(file, line);
+        if(line.empty()) throw std::runtime_error("Error! Can not read table data!");
         std::vector<std::string> names = splitLine(line);
 
         //Проверка дали броят на подадените имена е различен от броя на типовете

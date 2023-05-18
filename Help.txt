@@ -11,7 +11,7 @@ help      -     Display this help;
 
 exit      -     Exit the program;
 
-import <file name>  -  Adds the table from the location to the database;
+import <table name> <file name>  -  Adds the table from the location to the database with the given name;
 
 showtables   -   Shows a list of all the tables in the database;
 
@@ -19,7 +19,7 @@ describe <name>   -   Shows the types and the names of the attributes of the spe
 
 print <name>  -  Prints the content of the tabe to the screen;
 
-export <name> <file name>  -  Saves the table to the specified location;
+export <table name> <file name>  -  Saves the table to the specified location;
 
 select <column-n> <value> <table name>  -  Shows all the touples containing <value> as their n-th attribute;
 

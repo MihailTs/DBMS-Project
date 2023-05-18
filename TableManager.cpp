@@ -104,6 +104,7 @@ std::string TableManager::align(const std::string& str, unsigned longest){
     return aligned + "|";
 }
 
+
 //Име и адрес
 void TableManager::addTableInfo(const std::string& _name, const std::string& _addres){
     Touple t = {_name, _addres};
@@ -225,6 +226,76 @@ void TableManager::saveTable(const std::string& _tableName){
         if(table->getTableName() == _tableName) table->writeToFile(tableAddress);
     }
 
+}
+
+void TableManager::addTableToArchive(const std::string& _tableName, const std::string& _tableAddress){
+    std::ofstream archive(getArchiveName());
+    for(Touple t : getTablesInfo())
+        archive << t.tableName << " " << t.tableAddress << "\n";
+
+    archive << _tableName << " " << _tableAddress;
+    archive.close();
+}
+
+//Създава се локално копие на подадения файл в папката с таблици на проекта
+//Приема се че файлът е текстов с подходящия формат (.txt или .csv)
+void TableManager::importTable(const std::string& _tableName, const std::string& _tableAddress){
+
+    std::ifstream readFile(_tableAddress);
+
+    std::string fileName = extractName(_tableAddress);
+    fileName = "Tables/" + fileName;
+    //Ако това име за файл вече е заето се генерира ново
+
+    fileName = generateUniqueFileName(fileName);
+
+    addTableToArchive(_tableName, fileName);
+    addTableInfo(_tableName, fileName);
+
+    std::ofstream writeFile(fileName); 
+
+    std::string line;
+    while(std::getline(readFile, line)){
+        writeFile << line << "\n";
+    }
+
+    writeFile.close();
+    readFile.close();
+}
+
+std::string TableManager::generateUniqueFileName(const std::string& fileNamePref){
+
+    std::string fileName;
+
+    std::string extension = ".csv";
+    int extra = -1;
+
+    bool uniqueName = false;    
+    while(!uniqueName){
+        int i = 0;
+        extra++;
+        for(Touple t : getTablesInfo()){
+            if(extra == 0)
+                if((fileNamePref + extension) == t.tableAddress) break;
+            else if((fileNamePref + "(" + std::to_string(extra) + ")" + extension) == t.tableAddress) break;
+            if(i == getTablesInfo().size()-1) uniqueName = true;
+            i++;
+        }
+    }
+
+    fileName = fileNamePref + ((extra==0)? "":("(" + std::to_string(extra) + ")")) + extension;
+    return fileName;
+}
+
+std::string TableManager::extractName(const std::string& _fileAddress){
+    std::string fileName;
+    bool toAppend = false;
+    for(int i = _fileAddress.size()-1; i >= 0; i--){
+        if(_fileAddress.at(i) == '\\') break;
+        if(toAppend) fileName = _fileAddress.at(i) + fileName;
+        if(_fileAddress.at(i) == '.') toAppend = true;
+    }
+    return fileName;
 }
 
 TableManager::~TableManager(){

@@ -7,9 +7,9 @@
 #include "TableField.h"
 #include "DataType.h"
 #include "String.h"
-#include "Integer.h"
-#include "Double.h"
 #include "Null.h"
+#include "Double.h"
+#include "Integer.h"
 
 
 class Table{

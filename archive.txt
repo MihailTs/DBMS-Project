@@ -1,2 +1,3 @@
-table1 ExampleTable.csv
-table2 ExampleTable.csv
+table1 Tables/ExampleTable.csv
+table2 Tables/ExampleTable.csv
+table333 Tables/InsertBooks.csv

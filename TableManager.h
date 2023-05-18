@@ -30,6 +30,12 @@ class TableManager{
 
         std::string align(const std::string&, unsigned);
 
+        //Връща името на файл (без разширението) по подаден адрес
+        //Пример - "D:\Data\Table.csv" -> "Table"
+        std::string extractName(const std::string&);
+
+        std::string generateUniqueFileName(const std::string&);
+
     public:
 
         //Приема името на архивния файл
@@ -57,7 +63,9 @@ class TableManager{
 
         void addTableInfo(const std::string&, const std::string&);
 
-        //void addTableToArchive(const std::string&, const std::string&);
+        void addTableToArchive(const std::string&, const std::string&);
+
+        void importTable(const std::string&, const std::string&);
 
         ~TableManager();
 
