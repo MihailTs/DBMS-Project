@@ -20,8 +20,6 @@ class TableManager{
         //Съхраняваме данните от архива, за да не се налага многократно четене
         std::vector<Touple> tablesInfo;
 
-        void addTableInfo(const std::string&, const std::string&);
-
         void removeTableInfo(const std::string&);
 
         void setArchiveName(const std::string&);
@@ -56,6 +54,10 @@ class TableManager{
 
         //име на таблицата
         void saveTable(const std::string&);
+
+        void addTableInfo(const std::string&, const std::string&);
+
+        //void addTableToArchive(const std::string&, const std::string&);
 
         ~TableManager();
 

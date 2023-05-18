@@ -288,9 +288,8 @@ void Table::select(const std::string& fieldName, const std::string& value){
 
 }
 
-void Table::writeToFile(const std::string& fileName){
-    std::cout << "Savin " << getTableName() << " to " << fileName << "\n";
-    std::ofstream file(fileName);
+void Table::writeToFile(const std::string& fileAddress){
+    std::ofstream file(fileAddress);
     for(int i = 0; i < getFieldsCount(); i++)
         file << getTableFields().at(i)->getType() << ((i != getFieldsCount()-1)? ",":"");
 

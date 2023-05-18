@@ -5,7 +5,7 @@ close     -     Closes the opened table;
 
 save <table name>    -     Saves changes made to the currently opened table;
 
-saveas <file> - Saves changes made to the currently opened table at the specified location;
+saveas <table name> <file> - Saves changes made to the currently opened table at the specified location;
 
 help      -     Display this help;
 

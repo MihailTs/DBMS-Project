@@ -104,6 +104,7 @@ std::string TableManager::align(const std::string& str, unsigned longest){
     return aligned + "|";
 }
 
+//Име и адрес
 void TableManager::addTableInfo(const std::string& _name, const std::string& _addres){
     Touple t = {_name, _addres};
     getTablesInfo().push_back(t);
@@ -213,13 +214,15 @@ void TableManager::saveTable(const std::string& _tableName){
     if(!opened) return;
 
 
-    std::string tableAddres;
+    std::string tableAddress;
     for(Touple t : getTablesInfo()){
-        if(t.tableName == _tableName) tableAddres == t.tableAddress;
+        if(t.tableName == _tableName) {
+            tableAddress = t.tableAddress;
+        }
     }
 
     for(Table* table : getOpenedTables()){
-        if(table->getTableName() == _tableName) table->writeToFile(tableAddres);
+        if(table->getTableName() == _tableName) table->writeToFile(tableAddress);
     }
 
 }
