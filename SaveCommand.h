@@ -1,15 +1,15 @@
 #pragma once
 #include "ICommand.h"
 
-class ExportCommand : public ICommand{
+class SaveCommand : public ICommand{
 
     private:
         TableManager* tableManager;
         std::string tableName;
-        std::string fileAddress;
 
     public:
-        ExportCommand(TableManager*, const std::string&, const std::string&);
+        //Име на таблица
+        SaveCommand(TableManager*, const std::string&);
 
         void execute();
 };

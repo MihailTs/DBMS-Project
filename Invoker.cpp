@@ -20,9 +20,7 @@ void Invoker::setCommand(const std::string& strCommand){
     if(toLower(finalCommand) == "exit") command = new ExitCommand;
     else if(toLower(finalCommand) == "help") command = new HelpCommand;
     else if(toLower(finalCommand.substr(0, 8)) == "describe"){
-        try{
-            command = new DescribeCommand(tableManager, trim(finalCommand.substr(9)));
-        }catch(const std::runtime_error& re){std::cout << "No arguments specified!\n";}
+        command = new DescribeCommand(tableManager, trim(finalCommand.substr(9)));
     }
     else if(toLower(finalCommand.substr(0, 5)) == "print"){
         command = new PrintTableCommand(tableManager, trim(finalCommand.substr(6)));
@@ -72,7 +70,7 @@ void Invoker::setCommand(const std::string& strCommand){
         command = new ExportCommand(tableManager, tableName, fileAddress);
     }
     else if(toLower(finalCommand.substr(0, 4)) == "save"){
-
+        command = new SaveCommand(tableManager, trim(finalCommand.substr(5)));
     }
 
 

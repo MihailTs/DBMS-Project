@@ -12,6 +12,7 @@
 #include "RenameCommand.h"
 #include "SelectCommand.h"
 #include "ExportCommand.h"
+#include "SaveCommand.h"
 
 
 class Invoker{

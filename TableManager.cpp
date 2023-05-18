@@ -215,9 +215,12 @@ void TableManager::saveTable(const std::string& _tableName){
 
     std::string tableAddres;
     for(Touple t : getTablesInfo()){
-        if(t.tableName == _tableName) tableAddres == tableAddres;
+        if(t.tableName == _tableName) tableAddres == t.tableAddress;
     }
 
+    for(Table* table : getOpenedTables()){
+        if(table->getTableName() == _tableName) table->writeToFile(tableAddres);
+    }
 
 }
 
