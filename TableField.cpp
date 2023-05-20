@@ -24,6 +24,7 @@ void TableField::setValuesCount(unsigned count){
 }
 
 void TableField::addValue(DataType* _value){
+    if(_value->getTypeName() != getType()) throw std::invalid_argument(_value->getStringValue() + " is not of the proper type for field " + getName());
     getValues().push_back(_value);
     valuesCount++;
 }

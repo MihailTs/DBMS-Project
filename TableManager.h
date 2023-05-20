@@ -28,6 +28,7 @@ class TableManager{
 
         void renameInArchive(const std::string&, const std::string&);
 
+        //Форматира стринга така, че да има опреената дължина
         std::string align(const std::string&, unsigned);
 
         //Връща името на файл (без разширението) по подаден адрес
@@ -66,6 +67,10 @@ class TableManager{
         void addTableToArchive(const std::string&, const std::string&);
 
         void importTable(const std::string&, const std::string&);
+
+        void closeTable(const std::string&);
+
+        bool isOpened(const std::string&);
 
         ~TableManager();
 

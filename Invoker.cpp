@@ -17,7 +17,15 @@ void Invoker::setCommand(const std::string& strCommand){
     //strCommand = stripSpaces(strCommand);
 
     //Няма нужда от Factory, защото командите ще се строят по единствен начин тук
-    if(toLower(finalCommand) == "exit") command = new ExitCommand;
+    if(toLower(finalCommand).substr(0, 5) == "open "){
+        std::string tableName = trim(finalCommand.substr(5));
+        command = new OpenCommand(tableManager, tableName);
+    }
+    else if(toLower(finalCommand).substr(0, 6) == "close "){
+        std::string tableName = trim(finalCommand.substr(6));
+        command = new CloseCommand(tableManager, tableName);
+    }
+    else if(toLower(finalCommand) == "exit") command = new ExitCommand;
     else if(toLower(finalCommand) == "help") command = new HelpCommand;
     else if(toLower(finalCommand.substr(0, 8)) == "describe "){
         command = new DescribeCommand(tableManager, trim(finalCommand.substr(9)));

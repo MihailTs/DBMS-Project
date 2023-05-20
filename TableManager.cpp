@@ -104,7 +104,6 @@ std::string TableManager::align(const std::string& str, unsigned longest){
     return aligned + "|";
 }
 
-
 //Име и адрес
 void TableManager::addTableInfo(const std::string& _name, const std::string& _addres){
     Touple t = {_name, _addres};
@@ -240,6 +239,9 @@ void TableManager::addTableToArchive(const std::string& _tableName, const std::s
 //Създава се локално копие на подадения файл в папката с таблици на проекта
 //Приема се че файлът е текстов с подходящия формат (.txt или .csv)
 void TableManager::importTable(const std::string& _tableName, const std::string& _tableAddress){
+    for(Touple t : getTablesInfo()){
+        if(t.tableName == _tableName) throw std::invalid_argument("The name " + _tableName + " is already taken!");
+    }
 
     std::ifstream readFile(_tableAddress);
 
@@ -296,6 +298,24 @@ std::string TableManager::extractName(const std::string& _fileAddress){
         if(_fileAddress.at(i) == '.') toAppend = true;
     }
     return fileName;
+}
+
+void TableManager::closeTable(const std::string& _tableName){
+    int i = 0;
+    for(Table* t : getOpenedTables()){
+        if(t->getTableName() == _tableName){
+            delete t;
+            getOpenedTables().erase(getOpenedTables().begin()+i);
+        }
+        i++;
+    }
+}
+
+bool TableManager::isOpened(const std::string& _tableName){
+    for(Table* t : getOpenedTables()){
+        if(t->getTableName() == _tableName) return true;
+    }
+    return false;
 }
 
 TableManager::~TableManager(){

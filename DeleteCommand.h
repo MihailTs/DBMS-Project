@@ -1,3 +1,4 @@
+#pragma once
 #include "ICommand.h"
 
 class DeleteCommand : public ICommand{
