@@ -165,7 +165,6 @@ void Table::printTable(){
 
     std::cout << "\n" << lineSeparator << "\n";
 
-
     for(int j = 0; j < getRowsCount(); j++){
         for(int k = 0; k < getFieldsCount(); k++){
             std::cout << align(getTableFields().at(k)->getValues().at(j)->getStringValue(), fieldLongest.at(k));
@@ -330,6 +329,35 @@ std::string Table::toWritable(const std::string& str){
     copyStr = "\"" + copyStr + "\"";
 
     return copyStr;
+}
+
+void Table::deleteValues(const std::string& searchColumn, const std::string& value){
+    int fieldIndex = 0;
+    for(TableField* tf : getTableFields()){
+        if(tf->getName() == searchColumn) break;
+        fieldIndex++;
+    }
+    if(fieldIndex >= getFieldsCount()) throw std::invalid_argument("No field called " + searchColumn + " found in the table!");
+
+    std::string newValue = value;
+    if(getTableFields().at(fieldIndex)->getType() == "string") newValue = removeParentheses(value);
+    
+
+    for(int i = 0; i < getRowsCount(); i++){
+        if(i >= getTableFields().at(fieldIndex)->getValuesCount()) break;
+        if(getTableFields().at(fieldIndex)->getValues().at(i)->getStringValue() == newValue){
+            for(TableField* tf : getTableFields()){
+                tf->getValues().erase(tf->getValues().begin()+i);
+    	        tf->setValuesCount(tf->getValuesCount()-1);
+            }
+            i++;
+        }
+    }
+}
+
+std::string Table::removeParentheses(const std::string& str){
+    if(str.at(0) == '\"') return str.substr(1, str.size()-2);
+    else return str;
 }
 
 Table::~Table(){

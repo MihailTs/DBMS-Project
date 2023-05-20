@@ -15,6 +15,7 @@
 #include "SaveCommand.h"
 #include "SaveAsCommand.h"
 #include "ImportCommand.h"
+#include "DeleteCommand.h"
 
 class Invoker{
 

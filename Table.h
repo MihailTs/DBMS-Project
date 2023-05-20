@@ -44,6 +44,8 @@ class Table{
         //на всяка \ или " добавя отпред "\"(символът)
         std::string toWritable(const std::string&);
 
+        std::string removeParentheses(const std::string&);
+
     public:
     
         //Таблица по име и адрес на файл
@@ -76,6 +78,9 @@ class Table{
         void select(const std::string&, const std::string&);
 
         void writeToFile(const std::string&);
+
+        //Изтрива всички записи в които полето (първи аргумент) има дадената стойност (втори аргумент)
+        void deleteValues(const std::string&, const std::string&);
 
         ~Table();
 };

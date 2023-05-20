@@ -19,30 +19,30 @@ void Invoker::setCommand(const std::string& strCommand){
     //Няма нужда от Factory, защото командите ще се строят по единствен начин тук
     if(toLower(finalCommand) == "exit") command = new ExitCommand;
     else if(toLower(finalCommand) == "help") command = new HelpCommand;
-    else if(toLower(finalCommand.substr(0, 8)) == "describe"){
+    else if(toLower(finalCommand.substr(0, 8)) == "describe "){
         command = new DescribeCommand(tableManager, trim(finalCommand.substr(9)));
     }
-    else if(toLower(finalCommand.substr(0, 5)) == "print"){
+    else if(toLower(finalCommand.substr(0, 6)) == "print "){
         command = new PrintTableCommand(tableManager, trim(finalCommand.substr(6)));
     }
     else if(toLower(finalCommand) == "showtables"){
         command = new ShowTablesCommand(tableManager);
     } 
-    else if(toLower(finalCommand.substr(0, 6)) == "insert"){
+    else if(toLower(finalCommand.substr(0, 7)) == "insert "){
         finalCommand = trim(finalCommand.substr(7));
         std::string tableName = finalCommand.substr(0, finalCommand.find(' '));
 
         std::vector<std::string> data = splitLine(trim(finalCommand.substr(finalCommand.find(' ')+1)));
         command = new InsertCommand(tableManager, tableName, data);
     }
-    else if(toLower(finalCommand.substr(0, 6)) == "rename"){
+    else if(toLower(finalCommand.substr(0, 7)) == "rename "){
         finalCommand = trim(finalCommand.substr(6));
         //няма нужда от trim
         std::string oldName = finalCommand.substr(0, finalCommand.find(" "));
         std::string newName = trim(finalCommand.substr(finalCommand.find(" ")));
         command = new RenameCommand(tableManager, oldName, newName);
     }
-    else if(toLower(finalCommand.substr(0, 9)) == "addcolumn"){
+    else if(toLower(finalCommand.substr(0, 10)) == "addcolumn "){
         finalCommand = trim(finalCommand.substr(10));
         //няма нужда от trim
         std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
@@ -51,7 +51,7 @@ void Invoker::setCommand(const std::string& strCommand){
         std::string fieldType = trim(finalCommand.substr(finalCommand.find(" ")));
         command = new AddColumnCommand(tableManager, tableName, fieldName, fieldType);
     }
-    else if(toLower(finalCommand.substr(0, 6)) == "select"){
+    else if(toLower(finalCommand.substr(0, 7)) == "select "){
         finalCommand = trim(finalCommand.substr(7));
         //няма нужда от trim
         std::string fieldName = finalCommand.substr(0, finalCommand.find(" "));
@@ -63,7 +63,7 @@ void Invoker::setCommand(const std::string& strCommand){
         std::string tableName = trim(finalCommand.substr(index+1));
         command = new SelectCommand(tableManager, tableName, fieldName, value);
     }
-    else if(toLower(finalCommand.substr(0, 6)) == "export"){
+    else if(toLower(finalCommand.substr(0, 7)) == "export "){
         finalCommand = trim(finalCommand.substr(7));
         std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
         std::string fileAddress = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
@@ -72,19 +72,27 @@ void Invoker::setCommand(const std::string& strCommand){
     else if(toLower(finalCommand.substr(0, 5)) == "save "){
         command = new SaveCommand(tableManager, trim(finalCommand.substr(5)));
     }
-    else if(toLower(finalCommand.substr(0, 6)) == "saveas"){
+    else if(toLower(finalCommand.substr(0, 7)) == "saveas "){
         finalCommand = trim(finalCommand.substr(7));
         std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
         std::string fileAddress = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
         command = new SaveAsCommand(tableManager, tableName, fileAddress);
     }
-    else if(toLower(finalCommand.substr(0, 6)) == "import"){
+    else if(toLower(finalCommand.substr(0, 7)) == "import "){
         finalCommand = trim(finalCommand.substr(7));
         std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
         std::string fileAddress = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
         command = new ImportCommand(tableManager, tableName, fileAddress);
     }
-
+    else if(toLower(finalCommand.substr(0, 7)) == "delete "){
+        finalCommand = trim(finalCommand.substr(7));
+        std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
+        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+        std::string searchColumn = finalCommand.substr(0, finalCommand.find(" "));
+        std::string value = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
+        command = new DeleteCommand(tableManager, tableName, searchColumn, value);
+        
+    }
 
     else throw std::invalid_argument("The command you entered is not a valid command!");
 

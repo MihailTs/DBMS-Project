@@ -13,8 +13,6 @@ class TableField{
         std::vector<DataType*> values;
         unsigned valuesCount = 0;
 
-        void setValuesCount(unsigned);
-
     public:
 
         TableField(const std::string&, const std::string&);
@@ -23,6 +21,8 @@ class TableField{
 
         //На практика връща броят на редовете в таблицата
         unsigned getValuesCount();
+
+        void setValuesCount(unsigned);
 
         //Добавя нова стойност към колоната
         void addValue(DataType*);
