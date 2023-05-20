@@ -116,6 +116,20 @@ ICommand* Invoker::factory(std::string& finalCommand){
         std::string value = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
         command = new CountCommand(tableManager, tableName, searchField, value);
     }
+    else if(toLower(finalCommand.substr(0, 7)) == "update "){
+        finalCommand = trim(finalCommand.substr(7));
+        std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
+        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+        std::string searchField = finalCommand.substr(0, finalCommand.find(" "));
+        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+        int ind = 0;
+        std::string searchValue = removeParentheses(getFirstValue(trim(finalCommand), &ind));
+        finalCommand = trim(finalCommand.substr(ind+1));  
+        std::string targetField = finalCommand.substr(0, finalCommand.find(" "));
+        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+        std::string targetValue = removeParentheses(finalCommand);
+        command = new UpdateCommand(tableManager, tableName, searchField, searchValue, targetField, targetValue);
+    }
 
     else throw std::invalid_argument("The command you entered is not a valid command!");
 

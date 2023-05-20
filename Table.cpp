@@ -32,6 +32,9 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
 
         //Добавяне на колоните и добавяне на дължините на имената на колоните
         for(int i = 0; i < tempFieldsCount; i++){
+            if(!isValidType(types.at(i))) throw std::invalid_argument("|" + types.at(i) + "| is not a valid type!");
+            if(names.at(i).find(" ") != std::string::npos) throw std::invalid_argument("Field names can not contain spaces!");
+
             TableField* tC = new TableField(types.at(i), names.at(i));
             getTableFields().push_back(tC);
             fieldLongest.push_back(names.at(i).size());
@@ -95,14 +98,14 @@ std::vector<std::string> Table::splitLine(const std::string& line){
     for(char c : line){
         if(c == '\"') quotes = !quotes;
         if(c == ',' && !quotes) {
-            splLine.push_back(currentString);
+            splLine.push_back(trim(currentString));
             currentString = "";   
             continue;
         }
         currentString += c;
     }
 
-    splLine.push_back(currentString);
+    splLine.push_back(trim(currentString));
     return splLine;
 }
 
@@ -361,6 +364,24 @@ unsigned Table::countValues(const std::string& searchField, const std::string& v
     return count;
 }
 
+void Table::update(const std::string& searchField, const std::string& searchValue, const std::string& targetField, const std::string& targetValue){
+    unsigned searchIndex = findFieldIndex(searchField);
+    if(searchIndex >= getFieldsCount()) throw std::invalid_argument("No field called " + searchField + " found in the table!");
+
+    unsigned targetIndex = findFieldIndex(targetField);
+    if(targetIndex >= getFieldsCount()) throw std::invalid_argument("No field called " + targetField + " found in the table!");
+
+
+    for(int i = 0; i < getRowsCount(); i++){
+        if(getTableFields().at(searchIndex)->getValues().at(i)->getStringValue() == removeParentheses(searchValue)){
+            getTableFields().at(targetIndex)->getValues().at(i) = factory(targetValue, getTableFields().at(targetIndex)->getType());
+        }
+    }
+
+}
+
+
+
 unsigned Table::findFieldIndex(const std::string& fieldName){
     unsigned fieldIndex = 0;
     for(TableField* tf : getTableFields()){
@@ -373,6 +394,30 @@ unsigned Table::findFieldIndex(const std::string& fieldName){
 std::string Table::removeParentheses(const std::string& str){
     if(str.at(0) == '\"') return str.substr(1, str.size()-2);
     else return str;
+}
+
+bool Table::isValidType(const std::string& _type){
+    return _type == "string" || _type == "int" || _type == "double";
+}
+
+std::string Table::trim(const std::string& str){
+
+    std::string trim = "";
+    unsigned leftSpaces = 0;
+    unsigned rightSpaces = 0;
+    
+    int i = 0;
+    while(i < str.size() && (str.at(i) == ' ' || str.at(i) == '\t')) i++;
+    leftSpaces = i;
+
+    i = str.size()-1;
+    while(i >= 0 && (str.at(i) == ' ' || str.at(i) == '\t')) i--;
+    rightSpaces = i;
+
+    if(leftSpaces > rightSpaces) return trim;
+
+    trim = str.substr(leftSpaces, rightSpaces-leftSpaces+1);
+    return trim;
 }
 
 Table::~Table(){

@@ -48,6 +48,10 @@ class Table{
 
         unsigned findFieldIndex(const std::string&);
 
+        bool isValidType(const std::string&);
+
+        std::string trim(const std::string&);
+
     public:
     
         //Таблица по име и адрес на файл
@@ -85,6 +89,8 @@ class Table{
         void deleteValues(const std::string&, const std::string&);
 
         unsigned countValues(const std::string&, const std::string&);
+
+        void update(const std::string&, const std::string&, const std::string&, const std::string&);
 
         ~Table();
 };

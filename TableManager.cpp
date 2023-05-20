@@ -106,6 +106,10 @@ std::string TableManager::align(const std::string& str, unsigned longest){
 
 //Име и адрес
 void TableManager::addTableInfo(const std::string& _name, const std::string& _addres){
+    for(Touple t : getTablesInfo()){
+        if(t.tableName == _name) throw std::runtime_error("Table names have to be unique!");
+    }
+
     Touple t = {_name, _addres};
     getTablesInfo().push_back(t);
 }
@@ -263,6 +267,11 @@ void TableManager::importTable(const std::string& _tableName, const std::string&
 
     writeFile.close();
     readFile.close();
+
+
+    //Това служи за проверка в случай, че файлът на таблицата име невалидни данни, типове или синтаксис
+    openTable(_tableName);
+    closeTable(_tableName);
 }
 
 std::string TableManager::generateUniqueFileName(const std::string& fileNamePref){

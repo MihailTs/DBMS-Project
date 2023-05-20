@@ -19,6 +19,7 @@
 #include "OpenCommand.h"
 #include "CloseCommand.h"
 #include "CountCommand.h"
+#include "UpdateCommand.h"
 
 class Invoker{
 
