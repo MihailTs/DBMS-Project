@@ -104,10 +104,17 @@ ICommand* Invoker::factory(std::string& finalCommand){
         finalCommand = trim(finalCommand.substr(7));
         std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
         finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
-        std::string searchColumn = finalCommand.substr(0, finalCommand.find(" "));
+        std::string searchField = finalCommand.substr(0, finalCommand.find(" "));
         std::string value = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
-        command = new DeleteCommand(tableManager, tableName, searchColumn, value);
-        
+        command = new DeleteCommand(tableManager, tableName, searchField, value);
+    }
+    else if(toLower(finalCommand.substr(0, 6)) == "count "){
+        finalCommand = trim(finalCommand.substr(6));
+        std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
+        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+        std::string searchField = finalCommand.substr(0, finalCommand.find(" "));
+        std::string value = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
+        command = new CountCommand(tableManager, tableName, searchField, value);
     }
 
     else throw std::invalid_argument("The command you entered is not a valid command!");

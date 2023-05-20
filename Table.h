@@ -46,6 +46,8 @@ class Table{
 
         std::string removeParentheses(const std::string&);
 
+        unsigned findFieldIndex(const std::string&);
+
     public:
     
         //Таблица по име и адрес на файл
@@ -81,6 +83,8 @@ class Table{
 
         //Изтрива всички записи в които полето (първи аргумент) има дадената стойност (втори аргумент)
         void deleteValues(const std::string&, const std::string&);
+
+        unsigned countValues(const std::string&, const std::string&);
 
         ~Table();
 };

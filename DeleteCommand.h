@@ -6,7 +6,7 @@ class DeleteCommand : public ICommand{
     private:
         TableManager* tableManager;
         std::string tableName;
-        std::string searchColumn;
+        std::string searchField;
         std::string value;
 
     public:

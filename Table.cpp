@@ -136,10 +136,10 @@ void Table::describe(){
     
     std::cout << "| Field ";
 
-    int colNumber = 0;
+    int fieldNumber = 0;
     for(TableField* field : getTableFields()){
-        std::cout << align(field->getName(), std::max(getTableFields().at(colNumber)->getType().size(), field->getName().size()));
-        colNumber++;
+        std::cout << align(field->getName(), std::max(getTableFields().at(fieldNumber)->getType().size(), field->getName().size()));
+        fieldNumber++;
     }
     
     std::cout << "|\n" << lineSeparator;
@@ -234,17 +234,17 @@ DataType* Table::factory(const std::string& value, const std::string& type){
 
 void Table::addField(const std::string& _name, const std::string& _type){
     fieldLongest.push_back(_name.size());
-    TableField* newColumn = new TableField(_type, _name);
+    TableField* newField = new TableField(_type, _name);
 
     DataType* value;
     for(int i = 0; i < getRowsCount(); i++){
         value = factory("", _type);
-        newColumn->addValue(value);
+        newField->addValue(value);
         if(value->getStringValue().size() > fieldLongest.at(getFieldsCount()-1)) fieldLongest.at(getFieldsCount()-1) = value->getStringValue().size();
     }
 
 
-    getTableFields().push_back(newColumn);
+    getTableFields().push_back(newField);
     fieldsCount++;
 }
 
@@ -273,15 +273,12 @@ void Table::select(const std::string& fieldName, const std::string& value){
     std::cout << "\n" << lineSeparator << "\n";
 
     for(int i = 0; i < getRowsCount(); i++){
-        //
-        //Да се прави проверка дали value е съвместим с типа на полето
-        //
         //Проверява за равнство на полетата и отпечатва реда
         if(getTableFields().at(fNum)->getValues().at(i)->equals(value)){
-            int colN = 0;
+            int fieldN = 0;
             for(TableField* tc : getTableFields()){
-                std::cout << align(tc->getValues().at(i)->getStringValue(), fieldLongest.at(colN));    
-                colN++;
+                std::cout << align(tc->getValues().at(i)->getStringValue(), fieldLongest.at(fieldN));    
+                fieldN++;
             }
             std::cout << "|\n" << lineSeparator << "\n";
         }
@@ -331,13 +328,9 @@ std::string Table::toWritable(const std::string& str){
     return copyStr;
 }
 
-void Table::deleteValues(const std::string& searchColumn, const std::string& value){
-    int fieldIndex = 0;
-    for(TableField* tf : getTableFields()){
-        if(tf->getName() == searchColumn) break;
-        fieldIndex++;
-    }
-    if(fieldIndex >= getFieldsCount()) throw std::invalid_argument("No field called " + searchColumn + " found in the table!");
+void Table::deleteValues(const std::string& searchField, const std::string& value){
+    unsigned fieldIndex = findFieldIndex(searchField);
+    if(fieldIndex >= getFieldsCount()) throw std::invalid_argument("No field called " + searchField + " found in the table!");
 
     std::string newValue = value;
     if(getTableFields().at(fieldIndex)->getType() == "string") newValue = removeParentheses(value);
@@ -350,9 +343,31 @@ void Table::deleteValues(const std::string& searchColumn, const std::string& val
                 tf->getValues().erase(tf->getValues().begin()+i);
     	        tf->setValuesCount(tf->getValuesCount()-1);
             }
-            i++;
+            i--;
         }
     }
+}
+
+unsigned Table::countValues(const std::string& searchField, const std::string& value){
+    unsigned fieldIndex = findFieldIndex(searchField);
+    if(fieldIndex >= getFieldsCount()) throw std::invalid_argument("No field called " + searchField + " found in the table!");
+
+    unsigned count = 0;
+    for(int i = 0; i < getRowsCount(); i++){
+        if(getTableFields().at(fieldIndex)->getValues().at(i)->getStringValue() == removeParentheses(value))
+            count++;
+    }
+
+    return count;
+}
+
+unsigned Table::findFieldIndex(const std::string& fieldName){
+    unsigned fieldIndex = 0;
+    for(TableField* tf : getTableFields()){
+        if(tf->getName() == fieldName) break;
+        fieldIndex++;
+    }
+    return fieldIndex;
 }
 
 std::string Table::removeParentheses(const std::string& str){
@@ -361,8 +376,8 @@ std::string Table::removeParentheses(const std::string& str){
 }
 
 Table::~Table(){
-    for(TableField* col : getTableFields()){
-        delete col;
+    for(TableField* field : getTableFields()){
+        delete field;
     }
 }   
 
