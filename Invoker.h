@@ -48,6 +48,8 @@ class Invoker{
 
         void setCommand(const std::string&);
         
+        ICommand* factory(std::string&);
+
         ICommand* getCommand();
 
         ~Invoker();

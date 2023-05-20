@@ -16,7 +16,11 @@ void Invoker::setCommand(const std::string& strCommand){
     std::string finalCommand = trim(strCommand);
     //strCommand = stripSpaces(strCommand);
 
-    //Няма нужда от Factory, защото командите ще се строят по единствен начин тук
+    command = factory(finalCommand);
+}
+
+ICommand* Invoker::factory(std::string& finalCommand){
+    ICommand* command;
     if(toLower(finalCommand).substr(0, 5) == "open "){
         std::string tableName = trim(finalCommand.substr(5));
         command = new OpenCommand(tableManager, tableName);
@@ -25,8 +29,12 @@ void Invoker::setCommand(const std::string& strCommand){
         std::string tableName = trim(finalCommand.substr(6));
         command = new CloseCommand(tableManager, tableName);
     }
-    else if(toLower(finalCommand) == "exit") command = new ExitCommand;
-    else if(toLower(finalCommand) == "help") command = new HelpCommand;
+    else if(toLower(finalCommand) == "exit") {
+        command = new ExitCommand(tableManager);
+    }
+    else if(toLower(finalCommand) == "help") {
+        command = new HelpCommand;
+    }
     else if(toLower(finalCommand.substr(0, 8)) == "describe "){
         command = new DescribeCommand(tableManager, trim(finalCommand.substr(9)));
     }
@@ -104,6 +112,7 @@ void Invoker::setCommand(const std::string& strCommand){
 
     else throw std::invalid_argument("The command you entered is not a valid command!");
 
+    return command;
 }
 
 ICommand* Invoker::getCommand(){
