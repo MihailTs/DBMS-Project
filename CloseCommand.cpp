@@ -22,8 +22,12 @@ void CloseCommand::execute(){
     }while(answer != "yes" && answer != "y" && answer != "no" && answer != "n");
 
     answer = toLower(answer);
-    if(answer == "yes" || answer == "y") tableManager->saveTable(tableName); 
-    
+    if(answer == "yes" || answer == "y") {
+        tableManager->saveTable(tableName); 
+        std::cout << "changes saved successfully";
+    }
+
+
     tableManager->closeTable(tableName);
     std::cout << "table closed successfully" << "\n";
 }
