@@ -34,6 +34,8 @@ bool Double::isValid(const std::string& _strValue){
     //случаи като '+', '-', 'm',...
     if(size == 1 && (firstChar < '0' || firstChar > '9')) return false;
 
+    if(firstChar == '0' && size == 1) return true;
+
     //случаи, в които първият символ е невалиден
     if(firstChar != '-' && firstChar != '+' &&
         (firstChar <= '0' || firstChar > '9')) return false;
