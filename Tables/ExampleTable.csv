@@ -1,10 +1,10 @@
-int,string,int,int,string
-id,name,goals,assists,team
-1,"Cristiano Ronaldo",17,6,"Al Nassr"
-2,"Eden Hazard",2,3,"Real Madrid"
-4,"Harry Maguire",1,1,"Manchester United"
-3,"Mihail Tsvetkov",50,50,"Chelsea"
-6,"Heung Min Son",12,12,"Totenham hotspur"
-5,"Kiril Kirov",30,35,"Beroe"
-7,"Bojan Goranov",25,32,"PSG"
-8,"Toni Kroos",2,9,"Real Madrid"
+int,string,int,int,string,int
+id,name,goals,assists,team,rating
+1,"Cristiano Ronaldo",17,6,"Al Nassr",10
+2,"Eden Hazard",2,3,"Real Madrid",
+4,"Harry Maguire",1,1,"Manchester United",
+3,"Mihail Tsvetkov",50,50,"Chelsea",10
+6,"Heung Min Son",12,12,"Totenham hotspur",
+5,"Kiril Kirov",30,35,"Beroe",
+7,"Bojan Goranov",25,32,"PSG",
+8,"Toni Kroos",2,9,"Real Madrid",

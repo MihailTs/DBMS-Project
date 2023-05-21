@@ -20,6 +20,7 @@
 #include "CloseCommand.h"
 #include "CountCommand.h"
 #include "UpdateCommand.h"
+#include "InnerJoinCommand.h"
 
 class Invoker{
 

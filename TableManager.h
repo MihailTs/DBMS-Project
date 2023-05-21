@@ -72,6 +72,8 @@ class TableManager{
 
         bool isOpened(const std::string&);
 
+        void innerJoin(const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
+
         ~TableManager();
 
 };

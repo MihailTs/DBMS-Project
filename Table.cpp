@@ -1,6 +1,11 @@
 #include "Table.h"
 #include <stdexcept>
 
+Table::Table(const std::string& _tableName){
+    setFieldsCount(0);
+    setTableName(_tableName);
+}
+
 Table::Table(const std::string& _tableName, const std::string& fileAddres){
 
     setTableName(_tableName);
@@ -207,7 +212,7 @@ std::string Table::align(const std::string& str, unsigned maxLength){
 }
 
 void Table::insertRecord(const std::vector<std::string>& values){
-    if(values.size() < getFieldsCount()) throw std::invalid_argument("Invalid number of arguments!");
+    if(values.size() != getFieldsCount()) throw std::invalid_argument("Invalid number of arguments!");
 
     //ТОЗИ МЕТОД ДА НЕ СЕ ПРОМЕНЯ!!!
     int i = 0;
@@ -237,17 +242,19 @@ DataType* Table::factory(const std::string& value, const std::string& type){
 
 void Table::addField(const std::string& _name, const std::string& _type){
     fieldLongest.push_back(_name.size());
+
     TableField* newField = new TableField(_type, _name);
+
+
+    getTableFields().push_back(newField);
 
     DataType* value;
     for(int i = 0; i < getRowsCount(); i++){
         value = factory("", _type);
         newField->addValue(value);
-        if(value->getStringValue().size() > fieldLongest.at(getFieldsCount()-1)) fieldLongest.at(getFieldsCount()-1) = value->getStringValue().size();
+        if(value->getStringValue().size() > fieldLongest.at(getFieldsCount())) fieldLongest.at(getFieldsCount()) = value->getStringValue().size();
     }
 
-
-    getTableFields().push_back(newField);
     fieldsCount++;
 }
 
@@ -305,6 +312,7 @@ void Table::writeToFile(const std::string& fileAddress){
         for(int j = 0; j < getFieldsCount(); j++){
             if(getTableFields().at(j)->getValues().at(i)->getTypeName() == "string") 
                 file << toWritable(getTableFields().at(j)->getValues().at(i)->getStringValue());
+            else if(getTableFields().at(j)->getValues().at(i)->getTypeName() == "null") file << "";
             else file << getTableFields().at(j)->getValues().at(i)->getStringValue();
             if(j < getFieldsCount()-1) file << ",";
         }
@@ -380,14 +388,14 @@ void Table::update(const std::string& searchField, const std::string& searchValu
 
 }
 
-
-
 unsigned Table::findFieldIndex(const std::string& fieldName){
     unsigned fieldIndex = 0;
     for(TableField* tf : getTableFields()){
         if(tf->getName() == fieldName) break;
         fieldIndex++;
     }
+
+    if(fieldIndex >= getFieldsCount()) throw std::runtime_error("No field with name " + fieldName + " found!");
     return fieldIndex;
 }
 

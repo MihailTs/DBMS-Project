@@ -130,6 +130,19 @@ ICommand* Invoker::factory(std::string& finalCommand){
         std::string targetValue = removeParentheses(finalCommand);
         command = new UpdateCommand(tableManager, tableName, searchField, searchValue, targetField, targetValue);
     }
+    else if(toLower(finalCommand.substr(0, 11)) == "inner join "){
+        finalCommand = trim(finalCommand.substr(11));
+        std::string table1 = finalCommand.substr(0, finalCommand.find(" "));
+        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+        std::string field1 = finalCommand.substr(0, finalCommand.find(" "));
+        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+        std::string table2 = finalCommand.substr(0, finalCommand.find(" "));
+        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+        std::string field2 = finalCommand.substr(0, finalCommand.find(" "));
+        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+        std::string newTableName = finalCommand;
+        command = new InnerJoinCommand(tableManager, table1, field1, table2, field2, newTableName);
+    }
 
     else throw std::invalid_argument("The command you entered is not a valid command!");
 

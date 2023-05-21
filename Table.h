@@ -46,14 +46,14 @@ class Table{
 
         std::string removeParentheses(const std::string&);
 
-        unsigned findFieldIndex(const std::string&);
-
         bool isValidType(const std::string&);
 
         std::string trim(const std::string&);
 
     public:
     
+        Table(const std::string&);
+
         //Таблица по име и адрес на файл
         Table(const std::string&, const std::string&);
 
@@ -91,6 +91,8 @@ class Table{
         unsigned countValues(const std::string&, const std::string&);
 
         void update(const std::string&, const std::string&, const std::string&, const std::string&);
+
+        unsigned findFieldIndex(const std::string&);
 
         ~Table();
 };

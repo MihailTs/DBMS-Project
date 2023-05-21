@@ -43,7 +43,7 @@ void TableManager::openTable(const std::string& tableName){
         }
         counter++;
     }
-    if(fileIndex == -1)  throw std::runtime_error("No table with such name!");
+    if(fileIndex == -1)  throw std::runtime_error("No table called " + tableName + " found!");
 
     //Ако не - я зарежда и я добавя в списъка с отворените
     Table* table = new Table(tableName, getTablesInfo().at(fileIndex).tableAddress);
@@ -104,7 +104,6 @@ std::string TableManager::align(const std::string& str, unsigned longest){
     return aligned + "|";
 }
 
-//Име и адрес
 void TableManager::addTableInfo(const std::string& _name, const std::string& _addres){
     for(Touple t : getTablesInfo()){
         if(t.tableName == _name) throw std::runtime_error("Table names have to be unique!");
@@ -325,6 +324,70 @@ bool TableManager::isOpened(const std::string& _tableName){
         if(t->getTableName() == _tableName) return true;
     }
     return false;
+}
+
+void TableManager::innerJoin(const std::string& table1, const std::string& field1, const std::string& table2, const std::string& field2, const std::string& newTableName){
+    Table* t1 = getTable(table1);
+    Table* t2 = getTable(table2);
+    
+    unsigned fieldIndex1 = t1->findFieldIndex(field1);
+    unsigned fieldIndex2 = t2->findFieldIndex(field2);
+
+    if(t1->getTableFields().at(fieldIndex1)->getType() != t2->getTableFields().at(fieldIndex2)->getType())
+        throw std::invalid_argument("Can not join tables on fields of different type!");
+
+    Table* joinedTable = new Table(newTableName);
+
+
+    //Не е решен проблемът двусмислието на имената на полетата
+    //(две полета в joinedTable може да имат еднакви имена)
+    for(TableField* tf : t1->getTableFields())
+        joinedTable->addField(tf->getName(), tf->getType());
+
+
+    for(TableField* tf : t2->getTableFields())
+        joinedTable->addField(tf->getName(), tf->getType());
+
+
+    //Проверява всяка двойка редове, дали да бъде добавена в joinedTable
+    for(int i = 0; i < t1->getRowsCount(); i++){
+        for(int j = 0; j < t2->getRowsCount(); j++){
+            if(t1->getTableFields().at(fieldIndex1)->getValues().at(i)->getStringValue() == 
+                        t2->getTableFields().at(fieldIndex2)->getValues().at(j)->getStringValue()){
+                
+                std::vector<std::string> values;
+                for(TableField* tf : t1->getTableFields())
+                if(tf->getType()=="string") {
+                    values.push_back("\"" + tf->getValues().at(i)->getStringValue() + "\"");
+
+                }else if(tf->getValues().at(i)->getStringValue() == "NULL") {
+                    values.push_back("");
+                }else {
+                    values.push_back(tf->getValues().at(i)->getStringValue());
+                }
+
+                for(TableField* tf : t2->getTableFields())
+                    if(tf->getType()=="string") {
+                        values.push_back("\"" + tf->getValues().at(j)->getStringValue() + "\"");
+                    }else if(tf->getValues().at(j)->getStringValue() == "NULL") {
+                        values.push_back("");
+                    }else{
+                        values.push_back(tf->getValues().at(j)->getStringValue());
+                    }  
+
+                joinedTable->insertRecord(values);
+            }
+        }
+    }
+    
+    //Записва информацията за таблицата в архива и в нов файл
+    //Отваря таблицата за ползване
+    std::string fileAddress = "Tables/" + generateUniqueFileName(newTableName);
+    addTableInfo(newTableName, fileAddress);
+    addTableToArchive(newTableName, fileAddress);
+    openedTables.push_back(joinedTable);
+    joinedTable->writeToFile(fileAddress);
+
 }
 
 TableManager::~TableManager(){
