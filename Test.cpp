@@ -25,12 +25,12 @@ int main(){
 
         if(command == "") {continue;}
 
-        //try{
+        try{
             invoker.setCommand(command);
-            invoker.getCommand()->execute();//}
-        // }catch(const std::invalid_argument& ia){
-        //     std::cout << "The command you entered is either not a valid command or has a sintax error! Type \"help\" to check the sintax of your command.";
-        // }
+            invoker.getCommand()->execute();
+        }catch(std::exception& e){
+            std::cout << e.what() << " Check the manual for the right syntax for your command.";
+        }
 
 
         std::cout << "\n";

@@ -8,7 +8,7 @@ TableManager::TableManager(const std::string& _archive){
     
     //зареждане на информацията от архива
     std::ifstream readArchive(getArchiveName());
-    if(!readArchive.is_open()) throw std::runtime_error("Could not open file");
+    if(!readArchive.is_open()) throw std::runtime_error("Could not open archive file");
 
     std::string line;
     if(readArchive.good()){
@@ -45,7 +45,7 @@ void TableManager::openTable(const std::string& tableName){
         }
         counter++;
     }
-    if(fileIndex == -1)  throw std::runtime_error("No table called " + tableName + " found!");
+    if(fileIndex == -1)  throw std::runtime_error("No table called \"" + tableName + "\" found!");
 
     //Ако не - я зарежда и я добавя в списъка с отворените
     Table* table = new Table(tableName, getTablesInfo().at(fileIndex).tableAddress);

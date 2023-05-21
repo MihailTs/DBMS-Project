@@ -2,165 +2,277 @@
 
 Invoker::Invoker(TableManager* _tableManager){
     tableManager = _tableManager;
-
-    command = new ExitCommand(tableManager);
+    commandSuccess = false;
 }
 
 Invoker::Invoker(TableManager* _tableManager, const std::string& strCommand){
     tableManager = _tableManager;
+    commandSuccess = false;
     setCommand(strCommand);
 }
 
 void Invoker::setCommand(const std::string& strCommand){
-    delete getCommand();
+    if(commandSuccess)
+        delete getCommand();
 
     std::string finalCommand = trim(strCommand);
-    //strCommand = stripSpaces(strCommand);
 
     command = factory(finalCommand);
 }
 
 ICommand* Invoker::factory(std::string& finalCommand){
-    ICommand* command;
-    if(toLower(finalCommand).substr(0, 5) == "open "){
-        std::string tableName = trim(finalCommand.substr(5));
-        command = new OpenCommand(tableManager, tableName);
-    }
-    else if(toLower(finalCommand).substr(0, 6) == "close "){
-        std::string tableName = trim(finalCommand.substr(6));
-        command = new CloseCommand(tableManager, tableName);
-    }
-    else if(toLower(finalCommand) == "exit") {
-        command = new ExitCommand(tableManager);
-    }
-    else if(toLower(finalCommand) == "help") {
-        command = new HelpCommand;
-    }
-    else if(toLower(finalCommand.substr(0, 8)) == "describe "){
-        command = new DescribeCommand(tableManager, trim(finalCommand.substr(9)));
-    }
-    else if(toLower(finalCommand.substr(0, 6)) == "print "){
-        command = new PrintTableCommand(tableManager, trim(finalCommand.substr(6)));
-    }
-    else if(toLower(finalCommand) == "showtables"){
-        command = new ShowTablesCommand(tableManager);
-    } 
-    else if(toLower(finalCommand.substr(0, 7)) == "insert "){
-        finalCommand = trim(finalCommand.substr(7));
-        std::string tableName = finalCommand.substr(0, finalCommand.find(' '));
+        ICommand* command;
+        std::cout << finalCommand << "\n";
+        if(toLower(finalCommand).substr(0, 5) == "open "){
+            std::string tableName;
+            try{
+                tableName = trim(finalCommand.substr(5));
+            }catch(std::exception& e){
+                throw std::invalid_argument("The command you entered is not a valid command!");
+            }
+            command = new OpenCommand(tableManager, tableName);
+        }
+        else if(toLower(finalCommand).substr(0, 6) == "close "){
+            std::string tableName;
+            try{
+                tableName = trim(finalCommand.substr(6));
+            }catch(std::exception& e){
+                throw std::invalid_argument("The command you entered is not a valid command!");
+            }
+            command = new CloseCommand(tableManager, tableName);
+        }
+        else if(toLower(finalCommand) == "exit") {
+            command = new ExitCommand(tableManager);
+        }
+        else if(toLower(finalCommand) == "help") {
+            command = new HelpCommand;
+        }
+        else if(toLower(finalCommand.substr(0, 8)) == "describe "){
+            try{
+                finalCommand = trim(finalCommand.substr(9));
+            }catch(std::exception& e){
+                throw std::invalid_argument("The command you entered is not a valid command!");
+            }
+            command = new DescribeCommand(tableManager, finalCommand);
+        }
+        else if(toLower(finalCommand.substr(0, 6)) == "print "){
+            try{
+                finalCommand = trim(finalCommand.substr(6));
+            }catch(std::exception& e){
+                throw std::invalid_argument("The command you entered is not a valid command!");
+            }
+            command = new PrintTableCommand(tableManager, finalCommand);
+        }
+        else if(toLower(finalCommand) == "showtables"){
+            command = new ShowTablesCommand(tableManager);
+        } 
+        else if(toLower(finalCommand.substr(0, 7)) == "insert "){
+            std::string tableName;
+            std::vector<std::string> data;
+            try{
+                finalCommand = trim(finalCommand.substr(7));
+                tableName = finalCommand.substr(0, finalCommand.find(' '));
 
-        std::vector<std::string> data = splitLine(trim(finalCommand.substr(finalCommand.find(' ')+1)));
-        command = new InsertCommand(tableManager, tableName, data);
-    }
-    else if(toLower(finalCommand.substr(0, 7)) == "rename "){
-        finalCommand = trim(finalCommand.substr(6));
-        //няма нужда от trim
-        std::string oldName = finalCommand.substr(0, finalCommand.find(" "));
-        std::string newName = trim(finalCommand.substr(finalCommand.find(" ")));
-        command = new RenameCommand(tableManager, oldName, newName);
-    }
-    else if(toLower(finalCommand.substr(0, 10)) == "addcolumn "){
-        finalCommand = trim(finalCommand.substr(10));
-        //няма нужда от trim
-        std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
-        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
-        std::string fieldName = finalCommand.substr(0, finalCommand.find(" "));
-        std::string fieldType = trim(finalCommand.substr(finalCommand.find(" ")));
-        command = new AddColumnCommand(tableManager, tableName, fieldName, fieldType);
-    }
-    else if(toLower(finalCommand.substr(0, 7)) == "select "){
-        finalCommand = trim(finalCommand.substr(7));
-        //няма нужда от trim
-        std::string fieldName = finalCommand.substr(0, finalCommand.find(" "));
-        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
-        //Ако value е стринг с кавички и възможен интервал м/у тях се налага
-        //по-точна обработка
-        int index = 0;
-        std::string value = removeParentheses(getFirstValue(trim(finalCommand), &index));
-        std::string tableName = trim(finalCommand.substr(index+1));
-        command = new SelectCommand(tableManager, tableName, fieldName, value);
-    }
-    else if(toLower(finalCommand.substr(0, 7)) == "export "){
-        finalCommand = trim(finalCommand.substr(7));
-        std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
-        std::string fileAddress = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
-        command = new ExportCommand(tableManager, tableName, fileAddress);
-    }
-    else if(toLower(finalCommand.substr(0, 5)) == "save "){
-        command = new SaveCommand(tableManager, trim(finalCommand.substr(5)));
-    }
-    else if(toLower(finalCommand.substr(0, 7)) == "saveas "){
-        finalCommand = trim(finalCommand.substr(7));
-        std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
-        std::string fileAddress = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
-        command = new SaveAsCommand(tableManager, tableName, fileAddress);
-    }
-    else if(toLower(finalCommand.substr(0, 7)) == "import "){
-        finalCommand = trim(finalCommand.substr(7));
-        std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
-        std::string fileAddress = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
-        command = new ImportCommand(tableManager, tableName, fileAddress);
-    }
-    else if(toLower(finalCommand.substr(0, 7)) == "delete "){
-        finalCommand = trim(finalCommand.substr(7));
-        std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
-        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
-        std::string searchField = finalCommand.substr(0, finalCommand.find(" "));
-        std::string value = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
-        command = new DeleteCommand(tableManager, tableName, searchField, value);
-    }
-    else if(toLower(finalCommand.substr(0, 6)) == "count "){
-        finalCommand = trim(finalCommand.substr(6));
-        std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
-        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
-        std::string searchField = finalCommand.substr(0, finalCommand.find(" "));
-        std::string value = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
-        command = new CountCommand(tableManager, tableName, searchField, value);
-    }
-    else if(toLower(finalCommand.substr(0, 7)) == "update "){
-        finalCommand = trim(finalCommand.substr(7));
-        std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
-        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
-        std::string searchField = finalCommand.substr(0, finalCommand.find(" "));
-        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
-        int ind = 0;
-        std::string searchValue = removeParentheses(getFirstValue(trim(finalCommand), &ind));
-        finalCommand = trim(finalCommand.substr(ind+1));  
-        std::string targetField = finalCommand.substr(0, finalCommand.find(" "));
-        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
-        std::string targetValue = finalCommand;
-        command = new UpdateCommand(tableManager, tableName, searchField, searchValue, targetField, targetValue);
-    }
-    else if(toLower(finalCommand.substr(0, 11)) == "inner join "){
-        finalCommand = trim(finalCommand.substr(11));
-        std::string table1 = finalCommand.substr(0, finalCommand.find(" "));
-        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
-        std::string field1 = finalCommand.substr(0, finalCommand.find(" "));
-        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
-        std::string table2 = finalCommand.substr(0, finalCommand.find(" "));
-        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
-        std::string field2 = finalCommand.substr(0, finalCommand.find(" "));
-        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
-        std::string newTableName = finalCommand;
-        command = new InnerJoinCommand(tableManager, table1, field1, table2, field2, newTableName);
-    }
-    else if(toLower(finalCommand.substr(0, 9)) == "agregate "){
-        finalCommand = trim(finalCommand.substr(9));
-        std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
-        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
-        std::string searchField = finalCommand.substr(0, finalCommand.find(" "));
-        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
-        int ind = 0;
-        std::string searchValue = removeParentheses(getFirstValue(trim(finalCommand), &ind));
-        finalCommand = trim(finalCommand.substr(ind+1));  
-        std::string targetField = finalCommand.substr(0, finalCommand.find(" "));
-        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
-        std::string operation = finalCommand;
-        command = new AgregateCommand(tableManager, tableName, searchField, searchValue, targetField, operation);
-    }
+                data = splitLine(trim(finalCommand.substr(finalCommand.find(' ')+1)));
+            }catch(std::exception& e){
+                throw std::invalid_argument("The command you entered is not a valid command!");
+            }
+            command = new InsertCommand(tableManager, tableName, data);
+        }
+        else if(toLower(finalCommand.substr(0, 7)) == "rename "){
+            std::string oldName;
+            std::string newName;
+            try{
+                finalCommand = trim(finalCommand.substr(6));
+                //няма нужда от trim
+                oldName = finalCommand.substr(0, finalCommand.find(" "));
+                newName = trim(finalCommand.substr(finalCommand.find(" ")));
+            }catch(std::exception& e){
+                throw std::invalid_argument("The command you entered is not a valid command!");
+            }
+            command = new RenameCommand(tableManager, oldName, newName);
+        }
+        else if(toLower(finalCommand.substr(0, 10)) == "addcolumn "){
+            std::string tableName;
+            std::string fieldName;
+            std::string fieldType;
+            try{
+                finalCommand = trim(finalCommand.substr(10));
+                //няма нужда от trim
+                tableName = finalCommand.substr(0, finalCommand.find(" "));
+                finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+                fieldName = finalCommand.substr(0, finalCommand.find(" "));
+                fieldType = trim(finalCommand.substr(finalCommand.find(" ")));
+            }catch(std::exception& e){
+                throw std::invalid_argument("The command you entered is not a valid command!");
+            }
+            command = new AddColumnCommand(tableManager, tableName, fieldName, fieldType);
+        }
+        else if(toLower(finalCommand.substr(0, 7)) == "select "){
+            std::string fieldName;
+            std::string value;
+            std::string tableName;
+            try{
+                finalCommand = trim(finalCommand.substr(7));
+                //няма нужда от trim
+                fieldName = finalCommand.substr(0, finalCommand.find(" "));
+                finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+                //Ако value е стринг с кавички и възможен интервал м/у тях се налага
+                //по-точна обработка
+                int index = 0;
+                value = removeParentheses(getFirstValue(trim(finalCommand), &index));
+                tableName = trim(finalCommand.substr(index+1));
+            }catch(std::exception& e){
+                throw std::invalid_argument("The command you entered is not a valid command!");
+            }
+            command = new SelectCommand(tableManager, tableName, fieldName, value);
+        }
+        else if(toLower(finalCommand.substr(0, 7)) == "export "){
+            std::string tableName;
+            std::string fileAddress;
+            try{
+                finalCommand = trim(finalCommand.substr(7));
+                tableName = finalCommand.substr(0, finalCommand.find(" "));
+                fileAddress = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
+            }catch(std::exception& e){
+                throw std::invalid_argument("The command you entered is not a valid command!");
+            }
+            command = new ExportCommand(tableManager, tableName, fileAddress);
+        }
+        else if(toLower(finalCommand.substr(0, 5)) == "save "){
+            try{
+                finalCommand = trim(finalCommand.substr(5));
+            }catch(std::exception& e){
+                throw std::invalid_argument("The command you entered is not a valid command!");
+            }
+            command = new SaveCommand(tableManager, finalCommand);
+        }
+        else if(toLower(finalCommand.substr(0, 7)) == "saveas "){
+            std::string tableName;
+            std::string fileAddress;
+            try{
+                finalCommand = trim(finalCommand.substr(7));
+                tableName = finalCommand.substr(0, finalCommand.find(" "));
+                fileAddress = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
+            }catch(std::exception& e){
+                throw std::invalid_argument("The command you entered is not a valid command!");
+            }
+            command = new SaveAsCommand(tableManager, tableName, fileAddress);
+        }
+        else if(toLower(finalCommand.substr(0, 7)) == "import "){
+            std::string tableName;
+            std::string fileAddress;
+            try{
+                finalCommand = trim(finalCommand.substr(7));
+                std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
+                std::string fileAddress = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
+            }catch(std::exception& e){
+                throw std::invalid_argument("The command you entered is not a valid command!");
+            }
+            command = new ImportCommand(tableManager, tableName, fileAddress);
+        }
+        else if(toLower(finalCommand.substr(0, 7)) == "delete "){
+            std::string tableName;
+            std::string searchField;
+            std::string value;
+            try{
+                finalCommand = trim(finalCommand.substr(7));
+                tableName = finalCommand.substr(0, finalCommand.find(" "));
+                finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+                searchField = finalCommand.substr(0, finalCommand.find(" "));
+                value = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
+            }catch(std::exception& e){
+                throw std::invalid_argument("The command you entered is not a valid command!");
+            }
+            command = new DeleteCommand(tableManager, tableName, searchField, value);
+        }
+        else if(toLower(finalCommand.substr(0, 6)) == "count "){
+            std::string tableName;
+            std::string searchField;
+            std::string value;
+            try{
+                finalCommand = trim(finalCommand.substr(6));
+                tableName = finalCommand.substr(0, finalCommand.find(" "));
+                finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+                searchField = finalCommand.substr(0, finalCommand.find(" "));
+                value = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
+            }catch(std::exception& e){
+                throw std::invalid_argument("The command you entered is not a valid command!");
+            }
+            command = new CountCommand(tableManager, tableName, searchField, value);
+        }
+        else if(toLower(finalCommand.substr(0, 7)) == "update "){
+            std::string tableName;
+            std::string searchField;
+            std::string searchValue;
+            std::string targetField;
+            std::string targetValue;
+            try{
+                finalCommand = trim(finalCommand.substr(7));
+                tableName = finalCommand.substr(0, finalCommand.find(" "));
+                finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+                searchField = finalCommand.substr(0, finalCommand.find(" "));
+                finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+                int ind = 0;
+                searchValue = removeParentheses(getFirstValue(trim(finalCommand), &ind));
+                finalCommand = trim(finalCommand.substr(ind+1));  
+                targetField = finalCommand.substr(0, finalCommand.find(" "));
+                finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+                targetValue = finalCommand;
+            }catch(std::exception& e){
+                throw std::invalid_argument("The command you entered is not a valid command!");
+            }
+            command = new UpdateCommand(tableManager, tableName, searchField, searchValue, targetField, targetValue);
+        }
+        else if(toLower(finalCommand.substr(0, 11)) == "inner join "){
+            std::string table1;
+            std::string field1;
+            std::string table2;
+            std::string field2;
+            std::string newTableName;
+            try{
+                finalCommand = trim(finalCommand.substr(11));
+                table1 = finalCommand.substr(0, finalCommand.find(" "));
+                finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+                field1 = finalCommand.substr(0, finalCommand.find(" "));
+                finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+                table2 = finalCommand.substr(0, finalCommand.find(" "));
+                finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+                field2 = finalCommand.substr(0, finalCommand.find(" "));
+                finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+                newTableName = finalCommand;
+            }catch(std::exception& e){
+                throw std::invalid_argument("The command you entered is not a valid command!");
+            }
+            command = new InnerJoinCommand(tableManager, table1, field1, table2, field2, newTableName);
+        }
+        else if(toLower(finalCommand.substr(0, 9)) == "agregate "){
+            std::string tableName;
+            std::string searchField;
+            std::string searchValue;
+            std::string targetField;
+            std::string operation;
+            try{
+                finalCommand = trim(finalCommand.substr(9));
+                tableName = finalCommand.substr(0, finalCommand.find(" "));
+                finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+                searchField = finalCommand.substr(0, finalCommand.find(" "));
+                finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+                int ind = 0;
+                searchValue = removeParentheses(getFirstValue(trim(finalCommand), &ind));
+                finalCommand = trim(finalCommand.substr(ind+1));  
+                targetField = finalCommand.substr(0, finalCommand.find(" "));
+                finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+                operation = finalCommand;
+            }catch(std::exception& e){
+                throw std::invalid_argument("The command you entered is not a valid command!");
+            }
+            command = new AgregateCommand(tableManager, tableName, searchField, searchValue, targetField, operation);
+        }
 
-    else throw std::invalid_argument("The command you entered is not a valid command!");
+        else throw std::invalid_argument("The command you entered is not a valid command!");
 
+    commandSuccess = true;
     return command;
 }
 
