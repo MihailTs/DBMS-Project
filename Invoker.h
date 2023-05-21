@@ -21,6 +21,8 @@
 #include "CountCommand.h"
 #include "UpdateCommand.h"
 #include "InnerJoinCommand.h"
+#include "AgregateCommand.h"
+
 
 class Invoker{
 

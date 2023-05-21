@@ -29,21 +29,6 @@ void Integer::setValue(int newVal){
     setStringValue(std::to_string(newVal));
 }
 
-std::ostream& operator<<(std::ostream& out, const Integer& number){
-    out << number.getValue();
-    return out;
-}
-
-std::fstream& operator<<(std::fstream& out, const Integer& number){
-    out << number.getStringValue().c_str();
-    return out;
-}
-
-Integer& Integer::operator=(const Integer& other){
-    setValue(other.getValue());
-    return *this;
-}
-
 bool Integer::isValid(const std::string& _strValue){
     unsigned size = _strValue.size();
     char firstChar = _strValue[0];

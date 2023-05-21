@@ -3,6 +3,7 @@
 #include <algorithm>
 
 TableManager::TableManager(const std::string& _archive){
+
     setArchiveName(_archive);
     
     //зареждане на информацията от архива
@@ -11,6 +12,7 @@ TableManager::TableManager(const std::string& _archive){
 
     std::string line;
     if(readArchive.good()){
+
         //Потенциална възможност за грашка при неправилно въведени данни в архива
         while(std::getline(readArchive, line)){
             if(line == "") continue;

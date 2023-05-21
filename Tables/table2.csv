@@ -1,5 +1,0 @@
-int,string,int,int,string,int,int,string,int,int,string
-id,name,goals,assists,team,rating,id,name,goals,assists,team
-2,"Eden Hazard",2,3,"Real Madrid",,2,"Eden Hazard",2,3,"Real Madrid"
-4,"Harry Maguire",1,1,"Manchester United",,1,"Cristiano Ronaldo",17,6,"Al Nassr"
-8,"Toni Kroos",2,9,"Real Madrid",,2,"Eden Hazard",2,3,"Real Madrid"

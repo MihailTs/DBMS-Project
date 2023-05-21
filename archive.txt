@@ -1,4 +1,2 @@
 table1 Tables/ExampleTable.csv
 table333 Tables/InsertBooks.csv
-table2 Tables/table2.csv
-table2 Tables/table2.csv

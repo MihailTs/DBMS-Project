@@ -2,7 +2,8 @@
 
 Invoker::Invoker(TableManager* _tableManager){
     tableManager = _tableManager;
-    setCommand("exit");
+
+    command = new ExitCommand(tableManager);
 }
 
 Invoker::Invoker(TableManager* _tableManager, const std::string& strCommand){
@@ -127,7 +128,7 @@ ICommand* Invoker::factory(std::string& finalCommand){
         finalCommand = trim(finalCommand.substr(ind+1));  
         std::string targetField = finalCommand.substr(0, finalCommand.find(" "));
         finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
-        std::string targetValue = removeParentheses(finalCommand);
+        std::string targetValue = finalCommand;
         command = new UpdateCommand(tableManager, tableName, searchField, searchValue, targetField, targetValue);
     }
     else if(toLower(finalCommand.substr(0, 11)) == "inner join "){
@@ -142,6 +143,20 @@ ICommand* Invoker::factory(std::string& finalCommand){
         finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
         std::string newTableName = finalCommand;
         command = new InnerJoinCommand(tableManager, table1, field1, table2, field2, newTableName);
+    }
+    else if(toLower(finalCommand.substr(0, 9)) == "agregate "){
+        finalCommand = trim(finalCommand.substr(9));
+        std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
+        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+        std::string searchField = finalCommand.substr(0, finalCommand.find(" "));
+        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+        int ind = 0;
+        std::string searchValue = removeParentheses(getFirstValue(trim(finalCommand), &ind));
+        finalCommand = trim(finalCommand.substr(ind+1));  
+        std::string targetField = finalCommand.substr(0, finalCommand.find(" "));
+        finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
+        std::string operation = finalCommand;
+        command = new AgregateCommand(tableManager, tableName, searchField, searchValue, targetField, operation);
     }
 
     else throw std::invalid_argument("The command you entered is not a valid command!");

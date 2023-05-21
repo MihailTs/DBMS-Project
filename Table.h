@@ -92,7 +92,17 @@ class Table{
 
         void update(const std::string&, const std::string&, const std::string&, const std::string&);
 
+        void agregate(const std::string&, const std::string&, const std::string&, const std::string&);
+
         unsigned findFieldIndex(const std::string&);
+
+        DataType* sum(DataType*, DataType*);
+
+        DataType* product(DataType*, DataType*);
+
+        DataType* maximum(DataType*, DataType*);
+
+        DataType* minimum(DataType*, DataType*);
 
         ~Table();
 };

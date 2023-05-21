@@ -14,5 +14,5 @@ std::string Null::getTypeName(){
 }
 
 bool Null::equals(const std::string& _value){
-    return _value == "";
+    return _value == "" || _value == "NULL";
 }

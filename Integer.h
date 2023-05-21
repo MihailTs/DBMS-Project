@@ -24,8 +24,6 @@ class Integer : public DataType{
 
         void setValue(int);
 
-        Integer& operator=(const Integer&);
-
         bool equals(const std::string&);
 
 };

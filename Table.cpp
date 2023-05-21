@@ -1,5 +1,6 @@
 #include "Table.h"
 #include <stdexcept>
+#include <algorithm>
 
 Table::Table(const std::string& _tableName){
     setFieldsCount(0);
@@ -228,7 +229,7 @@ void Table::insertRecord(const std::vector<std::string>& values){
 DataType* Table::factory(const std::string& value, const std::string& type){
     DataType* product;
     
-    if(value == "") product = new Null(type);
+    if(value == "" || value == "NULL") product = new Null(type);
     else if(type == "int")
         product = new Integer(value);
     else if(type == "double")
@@ -349,7 +350,7 @@ void Table::deleteValues(const std::string& searchField, const std::string& valu
 
     for(int i = 0; i < getRowsCount(); i++){
         if(i >= getTableFields().at(fieldIndex)->getValuesCount()) break;
-        if(getTableFields().at(fieldIndex)->getValues().at(i)->getStringValue() == newValue){
+        if(getTableFields().at(fieldIndex)->getValues().at(i)->equals(newValue)){
             for(TableField* tf : getTableFields()){
                 tf->getValues().erase(tf->getValues().begin()+i);
     	        tf->setValuesCount(tf->getValuesCount()-1);
@@ -381,12 +382,51 @@ void Table::update(const std::string& searchField, const std::string& searchValu
 
 
     for(int i = 0; i < getRowsCount(); i++){
-        if(getTableFields().at(searchIndex)->getValues().at(i)->getStringValue() == removeParentheses(searchValue)){
+        if(getTableFields().at(searchIndex)->getValues().at(i)->equals(searchValue)){
             getTableFields().at(targetIndex)->getValues().at(i) = factory(targetValue, getTableFields().at(targetIndex)->getType());
         }
     }
 
 }
+
+//Ако стойността в targetField е NULL, на това поле се просвоява searchValue
+void Table::agregate(const std::string& searchField, const std::string& searchValue, const std::string& targetField, const std::string& operation){
+    if(operation != "sum" && operation != "product" && operation != "maximum" && operation != "minimum")
+        throw std::invalid_argument("The operation has to be one of the following: sum, proguct, maximum, minimum");
+
+    unsigned searchIndex = findFieldIndex(searchField);
+    if(searchIndex >= getFieldsCount()) throw std::invalid_argument("No field called " + searchField + " found in the table!");
+
+    unsigned targetIndex = findFieldIndex(targetField);
+    if(targetIndex >= getFieldsCount()) throw std::invalid_argument("No field called " + targetField + " found in the table!");
+
+    if(getTableFields().at(searchIndex)->getType() == "string" || getTableFields().at(targetIndex)->getType() == "string")
+            throw std::invalid_argument("Can not agregate fields of type string!");
+
+    if(getTableFields().at(searchIndex)->getType() != getTableFields().at(targetIndex)->getType())
+            throw std::invalid_argument("Can not agregate fields of different types!");
+
+
+    for(int i = 0; i < getRowsCount(); i++){
+        if(getTableFields().at(searchIndex)->getValues().at(i)->equals(searchValue)){
+            if(operation == "sum") {
+                getTableFields().at(targetIndex)->getValues().at(i) = sum(getTableFields().at(searchIndex)->getValues().at(i), getTableFields().at(targetIndex)->getValues().at(i));
+            }
+            if(operation == "product"){
+                getTableFields().at(targetIndex)->getValues().at(i) = product(getTableFields().at(searchIndex)->getValues().at(i), getTableFields().at(targetIndex)->getValues().at(i));
+            }
+            if(operation == "maximum"){
+                getTableFields().at(targetIndex)->getValues().at(i) = maximum(getTableFields().at(searchIndex)->getValues().at(i), getTableFields().at(targetIndex)->getValues().at(i));
+            }
+            if(operation == "minimum"){
+                getTableFields().at(targetIndex)->getValues().at(i) = minimum(getTableFields().at(searchIndex)->getValues().at(i), getTableFields().at(targetIndex)->getValues().at(i));
+            }
+        }
+    }
+
+}
+
+
 
 unsigned Table::findFieldIndex(const std::string& fieldName){
     unsigned fieldIndex = 0;
@@ -426,6 +466,66 @@ std::string Table::trim(const std::string& str){
 
     trim = str.substr(leftSpaces, rightSpaces-leftSpaces+1);
     return trim;
+}
+
+//Нпвата стойност ще се присвоява на value2, затова изтриваме старата
+DataType* Table::sum(DataType* value1, DataType* value2){
+    DataType* newValue;
+
+    if(value1->getTypeName() == "double" && value2->getTypeName() == "double") newValue = new Double(std::to_string(std::stod(value1->getStringValue())+std::stod(value2->getStringValue())));
+    else if(value1->getTypeName() == "int" && value2->getTypeName() == "int") newValue = new Integer(std::to_string(std::stoi(value1->getStringValue())+std::stoi(value2->getStringValue())));
+    else if(value1->getTypeName() == "null" && value2->getTypeName() == "int") newValue = new Integer(value2->getStringValue());
+    else if(value1->getTypeName() == "int" && value2->getTypeName() == "null") newValue = new Integer(value1->getStringValue());
+    else if(value1->getTypeName() == "null" && value2->getTypeName() == "double") newValue = new Double(value2->getStringValue());
+    else if(value1->getTypeName() == "double" && value2->getTypeName() == "null") newValue = new Double(value2->getStringValue());
+
+    delete value2;
+    return newValue;
+}
+
+//Нпвата стойност ще се присвоява на value2, затова изтриваме старата 
+DataType* Table::product(DataType* value1, DataType* value2){
+    DataType* newValue;
+
+    if(value1->getTypeName() == "double" && value2->getTypeName() == "double") newValue = new Double(std::to_string(std::stod(value1->getStringValue())*std::stod(value2->getStringValue())));
+    else if(value1->getTypeName() == "int" && value2->getTypeName() == "int") newValue = new Integer(std::to_string(std::stoi(value1->getStringValue())*std::stoi(value2->getStringValue())));
+    else if(value1->getTypeName() == "null" && value2->getTypeName() == "int") newValue = new Integer(value2->getStringValue());
+    else if(value1->getTypeName() == "int" && value2->getTypeName() == "null") newValue = new Integer(value1->getStringValue());
+    else if(value1->getTypeName() == "null" && value2->getTypeName() == "double") newValue = new Double(value2->getStringValue());
+    else if(value1->getTypeName() == "double" && value2->getTypeName() == "null") newValue = new Double(value2->getStringValue());
+
+    delete value2;
+    return newValue;
+}
+
+//Нпвата стойност ще се присвоява на value2, затова изтриваме старата 
+DataType* Table::maximum(DataType* value1, DataType* value2){
+    DataType* newValue;
+
+    if(value1->getTypeName() == "double" && value2->getTypeName() == "double") newValue = new Double(std::to_string(std::max(std::stod(value1->getStringValue()), std::stod(value2->getStringValue()))));
+    else if(value1->getTypeName() == "int" && value2->getTypeName() == "int") newValue = new Integer(std::to_string(std::max(std::stoi(value1->getStringValue()), std::stoi(value2->getStringValue()))));
+    else if(value1->getTypeName() == "null" && value2->getTypeName() == "int") newValue = new Integer(value2->getStringValue());
+    else if(value1->getTypeName() == "int" && value2->getTypeName() == "null") newValue = new Integer(value1->getStringValue());
+    else if(value1->getTypeName() == "null" && value2->getTypeName() == "double") newValue = new Double(value2->getStringValue());
+    else if(value1->getTypeName() == "double" && value2->getTypeName() == "null") newValue = new Double(value2->getStringValue());
+
+    delete value2;
+    return newValue;
+}
+
+//Нпвата стойност ще се присвоява на value2, затова изтриваме старата 
+DataType* Table::minimum(DataType* value1, DataType* value2){
+    DataType* newValue;
+
+    if(value1->getTypeName() == "double" && value2->getTypeName() == "double") newValue = new Double(std::to_string(std::min(std::stod(value1->getStringValue()), std::stod(value2->getStringValue()))));
+    else if(value1->getTypeName() == "int" && value2->getTypeName() == "int") newValue = new Integer(std::to_string(std::min(std::stoi(value1->getStringValue()), std::stoi(value2->getStringValue()))));
+    else if(value1->getTypeName() == "null" && value2->getTypeName() == "int") newValue = new Integer(value2->getStringValue());
+    else if(value1->getTypeName() == "int" && value2->getTypeName() == "null") newValue = new Integer(value1->getStringValue());
+    else if(value1->getTypeName() == "null" && value2->getTypeName() == "double") newValue = new Double(value2->getStringValue());
+    else if(value1->getTypeName() == "double" && value2->getTypeName() == "null") newValue = new Double(value2->getStringValue());
+
+    delete value2;
+    return newValue;
 }
 
 Table::~Table(){
