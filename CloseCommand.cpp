@@ -9,7 +9,7 @@ void CloseCommand::execute(){
 
     if(!tableManager->contains(tableName)) throw std::invalid_argument("No table with such name!");
     if(!tableManager->isOpened(tableName)) {
-        std::cout << "table closed successfully" << "\n";
+        std::cout << "Table closed successfully" << "\n";
         return;
     }
 
@@ -24,12 +24,12 @@ void CloseCommand::execute(){
     answer = toLower(answer);
     if(answer == "yes" || answer == "y") {
         tableManager->saveTable(tableName); 
-        std::cout << "changes saved successfully";
+        std::cout << "Changes saved successfully";
     }
 
 
     tableManager->closeTable(tableName);
-    std::cout << "table closed successfully" << "\n";
+    std::cout << "Table closed successfully" << "\n";
 }
 
 std::string CloseCommand::toLower(const std::string& str){

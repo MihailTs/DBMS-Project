@@ -9,4 +9,5 @@ SaveCommand::SaveCommand(TableManager* _tableManager, const std::string& _tableN
 void SaveCommand::execute(){
     if(!tableManager->contains(tableName)) throw std::invalid_argument("No table with such name!");
     tableManager->saveTable(tableName);
+    std::cout << "Table saved!\n"; 
 }

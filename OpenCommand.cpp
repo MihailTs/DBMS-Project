@@ -8,5 +8,5 @@ OpenCommand::OpenCommand(TableManager* _tableManager, const std::string& _tableN
 void OpenCommand::execute(){
     if(!tableManager->contains(tableName)) throw std::invalid_argument("No table with such name!");
     tableManager->openTable(tableName);
-    std::cout << "table opened successfully" << "\n";
+    std::cout << "Table opened successfully" << "\n";
 }
