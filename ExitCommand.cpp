@@ -6,6 +6,6 @@ ExitCommand::ExitCommand(TableManager* _tableManager){
 
 void ExitCommand::execute(){
     delete tableManager;
-    std::cout << "Goodbye!";
+    std::cout << "Goodbye!\n";
     exit(0);
 }

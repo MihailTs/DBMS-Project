@@ -344,11 +344,11 @@ void TableManager::innerJoin(const std::string& table1, const std::string& field
     //Не е решен проблемът двусмислието на имената на полетата
     //(две полета в joinedTable може да имат еднакви имена)
     for(TableField* tf : t1->getTableFields())
-        joinedTable->addField(tf->getName(), tf->getType());
+        joinedTable->addField(t1->getTableName() + "." + tf->getName(), tf->getType());
 
 
     for(TableField* tf : t2->getTableFields())
-        joinedTable->addField(tf->getName(), tf->getType());
+        joinedTable->addField(t2->getTableName() + "." + tf->getName(), tf->getType());
 
 
     //Проверява всяка двойка редове, дали да бъде добавена в joinedTable

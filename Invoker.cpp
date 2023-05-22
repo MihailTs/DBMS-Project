@@ -22,7 +22,6 @@ void Invoker::setCommand(const std::string& strCommand){
 
 ICommand* Invoker::factory(std::string& finalCommand){
         ICommand* command;
-        std::cout << finalCommand << "\n";
         if(toLower(finalCommand).substr(0, 5) == "open "){
             std::string tableName;
             try{

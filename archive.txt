@@ -1,2 +1,5 @@
 table1 Tables/ExampleTable.csv
 table333 Tables/InsertBooks.csv
+joinedTable Tables/joinedTable.csv
+joinedTable1 Tables/joinedTable1.csv
+joinedTable1 Tables/joinedTable1.csv

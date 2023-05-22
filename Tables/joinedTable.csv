@@ -1,0 +1,4 @@
+int,string,int,int,string,int,int,string,int,int,string
+table1.id,table1.name,table1.goals,table1.assists,table1.team,table1.rating,table333.id,table333.name,table333.goals,table333.assists,table333.team
+2,"Eden Hazard",2,3,"Real Madrid",2,2,"Eden Hazard",2,3,"Real Madrid"
+8,"Toni Kroos",2,9,"Real Madrid",2,2,"Eden Hazard",2,3,"Real Madrid"

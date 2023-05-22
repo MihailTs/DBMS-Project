@@ -29,7 +29,7 @@ int main(){
             invoker.setCommand(command);
             invoker.getCommand()->execute();
         }catch(std::exception& e){
-            std::cout << e.what() << " Check the manual for the right syntax for your command.";
+            std::cout << e.what() << " Check the manual for the right syntax for your command.\n";
         }
 
 

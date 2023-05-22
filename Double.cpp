@@ -72,5 +72,6 @@ std::string Double::trimRight(const std::string& _strValue){
 }
 
 bool Double::equals(const std::string& _value){
+    if(_value == "NULL") return getStringValue() == _value;
     return std::stod(_value) == getValue();
 }

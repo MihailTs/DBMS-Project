@@ -55,5 +55,6 @@ bool Integer::isValid(const std::string& _strValue){
 }
 
 bool Integer::equals(const std::string& _value){
+    if(_value == "NULL") return getStringValue() == "NULL";
     return std::stoi(_value) == getValue();
 }
