@@ -422,7 +422,10 @@ void TableManager::dropTable(const std::string& _tableName){
     //Премахва таблицата от списъка с отворените
     int i = 0;
     for(Table* t : getOpenedTables()){
-        if(t->getTableName() == _tableName) getOpenedTables().erase(getOpenedTables().begin() + i);
+        if(t->getTableName() == _tableName) {
+            getOpenedTables().erase(getOpenedTables().begin() + i);
+            delete t;
+        }
         i++;
     }
 
