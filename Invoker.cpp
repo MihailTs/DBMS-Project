@@ -15,6 +15,8 @@ void Invoker::setCommand(const std::string& strCommand){
     if(commandSuccess)
         delete getCommand();
 
+    commandSuccess = false;
+
     std::string finalCommand = trim(strCommand);
 
     command = factory(finalCommand);
@@ -163,8 +165,8 @@ ICommand* Invoker::factory(std::string& finalCommand){
             std::string fileAddress;
             try{
                 finalCommand = trim(finalCommand.substr(7));
-                std::string tableName = finalCommand.substr(0, finalCommand.find(" "));
-                std::string fileAddress = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
+                tableName = finalCommand.substr(0, finalCommand.find(" "));
+                fileAddress = removeParentheses(trim(finalCommand.substr(finalCommand.find(" "))));
             }catch(std::exception& e){
                 throw std::invalid_argument("The command you entered is not a valid command!");
             }
@@ -267,6 +269,15 @@ ICommand* Invoker::factory(std::string& finalCommand){
                 throw std::invalid_argument("The command you entered is not a valid command!");
             }
             command = new AgregateCommand(tableManager, tableName, searchField, searchValue, targetField, operation);
+        }
+        else if(toLower(finalCommand.substr(0, 5)) == "drop "){
+            std::string tableName;
+            try{
+                tableName = trim(finalCommand.substr(finalCommand.find(" ")));
+                command = new DropTableCommand(tableManager, tableName);
+            }catch(std::exception& e){
+                throw std::invalid_argument("The command you entered is not a valid command!");
+            }
         }
 
         else throw std::invalid_argument("The command you entered is not a valid command!");

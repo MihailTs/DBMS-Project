@@ -17,12 +17,16 @@ class TableManager{
         std::string archive = "archive.txt";
         std::vector<Table*> openedTables;
 
+        std::string tablesFolder = "Tables/";
+
         //Съхраняваме данните от архива, за да не се налага многократно четене
         std::vector<Touple> tablesInfo;
 
         void removeTableInfo(const std::string&);
 
         void setArchiveName(const std::string&);
+
+        std::string getTablesFolder();
 
         std::string getArchiveName() const;
 
@@ -73,6 +77,8 @@ class TableManager{
         bool isOpened(const std::string&);
 
         void innerJoin(const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
+
+        void dropTable(const std::string&);
 
         ~TableManager();
 

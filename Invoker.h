@@ -22,6 +22,7 @@
 #include "UpdateCommand.h"
 #include "InnerJoinCommand.h"
 #include "AgregateCommand.h"
+#include "DropTableCommand.h"
 
 
 class Invoker{

@@ -1,6 +1,7 @@
 #include "TableManager.h"
 #include <fstream>
 #include <algorithm>
+#include <cstdio>
 
 TableManager::TableManager(const std::string& _archive){
 
@@ -59,6 +60,10 @@ void TableManager::setArchiveName(const std::string& _archive){
 
 std::string TableManager::getArchiveName() const{
     return archive;
+}
+
+std::string TableManager::getTablesFolder(){
+    return tablesFolder;
 }
 
 void TableManager::showTables(){
@@ -122,8 +127,8 @@ void TableManager::removeTableInfo(const std::string& _name){
 
     for(Touple t : getTablesInfo()){
         if(t.tableName == _name){
-            getTablesInfo().at(i).tableName = getTablesInfo().at(size).tableName;
-            getTablesInfo().at(i).tableAddress = getTablesInfo().at(size).tableAddress;
+            getTablesInfo().at(i).tableName = getTablesInfo().at(size-1).tableName;
+            getTablesInfo().at(i).tableAddress = getTablesInfo().at(size-1).tableAddress;
             getTablesInfo().pop_back();
             return;
         }
@@ -251,11 +256,10 @@ void TableManager::importTable(const std::string& _tableName, const std::string&
     std::ifstream readFile(_tableAddress);
 
     std::string fileName = extractName(_tableAddress);
-    fileName = "Tables/" + fileName;
+    fileName = getTablesFolder() + fileName;
     //Ако това име за файл вече е заето се генерира ново
 
     fileName = generateUniqueFileName(fileName);
-
     addTableToArchive(_tableName, fileName);
     addTableInfo(_tableName, fileName);
 
@@ -329,6 +333,7 @@ bool TableManager::isOpened(const std::string& _tableName){
 }
 
 void TableManager::innerJoin(const std::string& table1, const std::string& field1, const std::string& table2, const std::string& field2, const std::string& newTableName){
+
     Table* t1 = getTable(table1);
     Table* t2 = getTable(table2);
     
@@ -341,8 +346,8 @@ void TableManager::innerJoin(const std::string& table1, const std::string& field
     Table* joinedTable = new Table(newTableName);
 
 
-    //Не е решен проблемът двусмислието на имената на полетата
-    //(две полета в joinedTable може да имат еднакви имена)
+    //Решен е проблемът с двусмислието на имената на полетата
+    //(две полета в joinedTable може да имат еднакви имена), освен ако таблиците не са една и съща таблица
     for(TableField* tf : t1->getTableFields())
         joinedTable->addField(t1->getTableName() + "." + tf->getName(), tf->getType());
 
@@ -384,11 +389,42 @@ void TableManager::innerJoin(const std::string& table1, const std::string& field
     
     //Записва информацията за таблицата в архива и в нов файл
     //Отваря таблицата за ползване
-    std::string fileAddress = "Tables/" + generateUniqueFileName(newTableName);
+    std::string fileAddress = getTablesFolder() + generateUniqueFileName(newTableName);
     addTableInfo(newTableName, fileAddress);
     addTableToArchive(newTableName, fileAddress);
     openedTables.push_back(joinedTable);
     joinedTable->writeToFile(fileAddress);
+
+}
+
+void TableManager::dropTable(const std::string& _tableName){
+    //Изтрива файлът, съдържащ таблицата
+    //Премахва реда съдържащ информация за таблицата в архива
+    //Премахва информацията за таблицата в tablesInfo
+    std::string address = "";
+    for(Touple t : getTablesInfo()){
+        if(t.tableName == _tableName) address = t.tableAddress;
+    }
+    if(address == "") 
+        throw std::runtime_error("No table called \"" + _tableName + "\" found!");
+
+    std::remove(address.c_str());
+
+    std::ofstream newArchive(getArchiveName());
+
+    for(Touple t : getTablesInfo()){
+        if(t.tableName == _tableName) continue;
+            newArchive << t.tableName << " " << t.tableAddress << "\n";
+    }
+
+    removeTableInfo(_tableName);
+
+    //Премахва таблицата от списъка с отворените
+    int i = 0;
+    for(Table* t : getOpenedTables()){
+        if(t->getTableName() == _tableName) getOpenedTables().erase(getOpenedTables().begin() + i);
+        i++;
+    }
 
 }
 
