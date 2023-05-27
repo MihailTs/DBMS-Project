@@ -217,11 +217,11 @@ bool TableManager::contains(const std::string& _tableName){
 void TableManager::saveTable(const std::string& _tableName){
     //Ако таблицата не е отворена, значи по нея не са правени промени,
     //тоест не правим нищо
-    bool opened = false;
-    for(Table* t : getOpenedTables()){
-        if(t->getTableName() == _tableName) opened = true;
+    bool found = false;
+    for(Touple t : getTablesInfo()){
+        if(t.tableName == _tableName) found = true;
     }
-    if(!opened) return;
+    if(!found) throw std::invalid_argument("Table " + _tableName + " not found.");
 
 
     std::string tableAddress;

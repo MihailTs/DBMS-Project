@@ -385,6 +385,8 @@ void Table::update(const std::string& searchField, const std::string& searchValu
     for(int i = 0; i < getRecordsCount(); i++){
         if(getTableFields().at(searchIndex)->getValues().at(i)->equals(searchValue)){
             getTableFields().at(targetIndex)->getValues().at(i) = factory(targetValue, getTableFields().at(targetIndex)->getType());
+            if(getTableFields().at(targetIndex)->getValues().at(i)->getStringValue().size() > fieldLongest.at(targetIndex))
+                fieldLongest.at(targetIndex) = getTableFields().at(targetIndex)->getValues().at(i)->getStringValue().size();
         }
     }
 
