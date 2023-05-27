@@ -22,6 +22,7 @@ void Invoker::setCommand(const std::string& strCommand){
     command = factory(finalCommand);
 }
 
+//Превръща текстовата команда в обект
 ICommand* Invoker::factory(std::string& finalCommand){
         ICommand* command;
         if(toLower(finalCommand).substr(0, 5) == "open "){
@@ -73,7 +74,6 @@ ICommand* Invoker::factory(std::string& finalCommand){
             try{
                 finalCommand = trim(finalCommand.substr(7));
                 tableName = finalCommand.substr(0, finalCommand.find(' '));
-
                 data = splitLine(trim(finalCommand.substr(finalCommand.find(' ')+1)));
             }catch(std::exception& e){
                 throw std::invalid_argument("The command you entered is not a valid command!");

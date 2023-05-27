@@ -11,5 +11,4 @@ class DropTableCommand : public ICommand{
         DropTableCommand(TableManager*, const std::string&);
 
         void execute();
-
 };

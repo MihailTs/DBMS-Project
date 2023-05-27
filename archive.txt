@@ -1,1 +1,2 @@
-table1 Tables/ExampleTable.csv
+footballers Tables/ExampleTable.csv
+books Tables/Books.csv

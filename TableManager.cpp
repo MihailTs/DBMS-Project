@@ -48,7 +48,7 @@ void TableManager::openTable(const std::string& tableName){
     }
     if(fileIndex == -1)  throw std::runtime_error("No table called \"" + tableName + "\" found!");
 
-    //Ако не - я зарежда и я добавя в списъка с отворените
+    //Ако не е отворена, я зарежда и я добавя в списъка с отворените
     Table* table = new Table(tableName, getTablesInfo().at(fileIndex).tableAddress);
     openedTables.push_back(table);
 
@@ -255,6 +255,7 @@ void TableManager::importTable(const std::string& _tableName, const std::string&
 
     std::ifstream readFile(_tableAddress);
 
+
     std::string fileName = extractName(_tableAddress);
     fileName = getTablesFolder() + fileName;
     //Ако това име за файл вече е заето се генерира ново
@@ -273,10 +274,15 @@ void TableManager::importTable(const std::string& _tableName, const std::string&
     writeFile.close();
     readFile.close();
 
-
     //Това служи за проверка в случай, че файлът на таблицата име невалидни данни, типове или синтаксис
-    openTable(_tableName);
-    closeTable(_tableName);
+    try{
+        openTable(_tableName);
+        closeTable(_tableName);
+    }catch(std::exception& e){
+        std::remove(fileName.c_str());
+        removeTableInfo(_tableName);
+        throw std::runtime_error("Could not read table data.");
+    }
 }
 
 std::string TableManager::generateUniqueFileName(const std::string& fileNamePref){
@@ -357,8 +363,8 @@ void TableManager::innerJoin(const std::string& table1, const std::string& field
 
 
     //Проверява всяка двойка редове, дали да бъде добавена в joinedTable
-    for(int i = 0; i < t1->getRowsCount(); i++){
-        for(int j = 0; j < t2->getRowsCount(); j++){
+    for(int i = 0; i < t1->getRecordsCount(); i++){
+        for(int j = 0; j < t2->getRecordsCount(); j++){
             if(t1->getTableFields().at(fieldIndex1)->getValues().at(i)->getStringValue() == 
                         t2->getTableFields().at(fieldIndex2)->getValues().at(j)->getStringValue()){
                 

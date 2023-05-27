@@ -57,13 +57,9 @@ class Table{
         //Таблица по име и адрес на файл
         Table(const std::string&, const std::string&);
 
-        std::vector<std::string>& getFieldsNames();
-
-        std::vector<std::string>& getFieldsTypes();
-
         unsigned getFieldsCount();
 
-        unsigned getRowsCount();
+        unsigned getRecordsCount();
 
         std::vector<TableField*>& getTableFields();
 

@@ -46,38 +46,46 @@ class TableManager{
         //Приема името на архивния файл
         TableManager(const std::string&);
 
-        //име на таблица
+        //По име на таблица
         void openTable(const std::string&);
 
         void showTables();
 
-        //Име на таблица
+        //По име на таблица
         bool contains(const std::string&);
 
+        //По име на таблица
         Table* getTable(const std::string&);
 
         std::vector<Table*>& getOpenedTables();
 
         std::vector<Touple>& getTablesInfo();
 
-        //ново име, старо име
+        //Ново име, старо име
         void renameTable(const std::string&, const std::string&);
 
-        //име на таблицата
+        //По име на таблица
         void saveTable(const std::string&);
 
+        //Име и адрес
         void addTableInfo(const std::string&, const std::string&);
 
+        //Име и адрес
         void addTableToArchive(const std::string&, const std::string&);
-
+        
+        //Име и адрес
         void importTable(const std::string&, const std::string&);
 
+        //По име на таблица
         void closeTable(const std::string&);
 
+        //По име на таблица
         bool isOpened(const std::string&);
 
+        //Таблица1, поле1, таблица2, поле2, име на новата таблица
         void innerJoin(const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
 
+        //По име на таблица
         void dropTable(const std::string&);
 
         ~TableManager();

@@ -8,7 +8,6 @@ Table::Table(const std::string& _tableName){
 }
 
 Table::Table(const std::string& _tableName, const std::string& fileAddres){
-
     setTableName(_tableName);
 
     //отвряне на файла
@@ -33,7 +32,6 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
         if(tempFieldsCount != types.size())
             throw std::invalid_argument("Error! Number of types and field names does not match!");
 
-
         setFieldsCount(tempFieldsCount);
 
         //Добавяне на колоните и добавяне на дължините на имената на колоните
@@ -47,9 +45,12 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
         }
 
         //Добавяне на стойностите към колоните
+        int i = 0;
         while(std::getline(file, line)){
             std::vector<std::string> rowValues = splitLine(line);
-            insertRecord(rowValues);    
+            if(rowValues.size() != getFieldsCount()) throw std::runtime_error("Invalid number of values in value row of " + fileAddres);
+            insertRecord(rowValues);
+            i++;    
         }   
     }
 
@@ -84,7 +85,7 @@ unsigned Table::getFieldsCount(){
     return fieldsCount;
 }
 
-unsigned Table::getRowsCount(){
+unsigned Table::getRecordsCount(){
     return getTableFields().at(0)->getValuesCount();
 }
 
@@ -174,7 +175,7 @@ void Table::printTable(){
 
     std::cout << "\n" << lineSeparator << "\n";
 
-    for(int j = 0; j < getRowsCount(); j++){
+    for(int j = 0; j < getRecordsCount(); j++){
         for(int k = 0; k < getFieldsCount(); k++){
             std::cout << align(getTableFields().at(k)->getValues().at(j)->getStringValue(), fieldLongest.at(k));
         }
@@ -250,7 +251,7 @@ void Table::addField(const std::string& _name, const std::string& _type){
     getTableFields().push_back(newField);
 
     DataType* value;
-    for(int i = 0; i < getRowsCount(); i++){
+    for(int i = 0; i < getRecordsCount(); i++){
         value = factory("", _type);
         newField->addValue(value);
         if(value->getStringValue().size() > fieldLongest.at(getFieldsCount())) fieldLongest.at(getFieldsCount()) = value->getStringValue().size();
@@ -283,7 +284,7 @@ void Table::select(const std::string& fieldName, const std::string& value){
 
     std::cout << "\n" << lineSeparator << "\n";
 
-    for(int i = 0; i < getRowsCount(); i++){
+    for(int i = 0; i < getRecordsCount(); i++){
         //Проверява за равнство на полетата и отпечатва реда
         if(getTableFields().at(fNum)->getValues().at(i)->equals(value)){
             int fieldN = 0;
@@ -309,7 +310,7 @@ void Table::writeToFile(const std::string& fileAddress){
 
     file << "\n";
 
-    for(int i = 0; i < getRowsCount(); i++){
+    for(int i = 0; i < getRecordsCount(); i++){
         for(int j = 0; j < getFieldsCount(); j++){
             if(getTableFields().at(j)->getValues().at(i)->getTypeName() == "string") 
                 file << toWritable(getTableFields().at(j)->getValues().at(i)->getStringValue());
@@ -348,7 +349,7 @@ void Table::deleteValues(const std::string& searchField, const std::string& valu
     if(getTableFields().at(fieldIndex)->getType() == "string") newValue = removeParentheses(value);
     
 
-    for(int i = 0; i < getRowsCount(); i++){
+    for(int i = 0; i < getRecordsCount(); i++){
         if(i >= getTableFields().at(fieldIndex)->getValuesCount()) break;
         if(getTableFields().at(fieldIndex)->getValues().at(i)->equals(newValue)){
             for(TableField* tf : getTableFields()){
@@ -365,7 +366,7 @@ unsigned Table::countValues(const std::string& searchField, const std::string& v
     if(fieldIndex >= getFieldsCount()) throw std::invalid_argument("No field called " + searchField + " found in the table!");
 
     unsigned count = 0;
-    for(int i = 0; i < getRowsCount(); i++){
+    for(int i = 0; i < getRecordsCount(); i++){
         if(getTableFields().at(fieldIndex)->getValues().at(i)->getStringValue() == removeParentheses(value))
             count++;
     }
@@ -381,7 +382,7 @@ void Table::update(const std::string& searchField, const std::string& searchValu
     if(targetIndex >= getFieldsCount()) throw std::invalid_argument("No field called " + targetField + " found in the table!");
 
 
-    for(int i = 0; i < getRowsCount(); i++){
+    for(int i = 0; i < getRecordsCount(); i++){
         if(getTableFields().at(searchIndex)->getValues().at(i)->equals(searchValue)){
             getTableFields().at(targetIndex)->getValues().at(i) = factory(targetValue, getTableFields().at(targetIndex)->getType());
         }
@@ -407,7 +408,7 @@ void Table::agregate(const std::string& searchField, const std::string& searchVa
             throw std::invalid_argument("Can not agregate fields of different types!");
 
 
-    for(int i = 0; i < getRowsCount(); i++){
+    for(int i = 0; i < getRecordsCount(); i++){
         if(getTableFields().at(searchIndex)->getValues().at(i)->equals(searchValue)){
             if(getTableFields().at(searchIndex)->getValues().at(i)->getStringValue() == "NULL" && getTableFields().at(targetIndex)->getValues().at(i)->getStringValue() == "NULL"){}
             else if(operation == "sum") {

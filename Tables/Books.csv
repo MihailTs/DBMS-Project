@@ -1,0 +1,2 @@
+int,string,string,double,double 
+bookID,authorName,bookName,price,rating

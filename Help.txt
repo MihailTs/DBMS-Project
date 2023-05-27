@@ -26,13 +26,13 @@ select <column-n> <value> <table name>  -  Shows all the touples containing <val
 addcolumn <table name> <column name> <column type>  -  Adds a new attribute with the given name and type;
 
 update <table name> <search column n> <searct value> <target column n> <target value>  - 
-All rows in the table whose n-th attribute <search column n> contains the value <search column value> 
+All records in the table whose n-th attribute <search column n> contains the value <search column value> 
 are changed so that their n-th attribute <target column n> is given the value <target value>;
 
 delete <table name> <search column n> <search value>   -   
-Deletes all rows in the table whose n-th attribute contains the given value;
+Deletes all records in the table whose n-th attribute contains the given value;
 
-insert into <table name> <column 1> ... <column n>  -  Adds a new row with the given attribute values to the table;
+insert <table name> <column 1> ... <column n>  -  Adds a new record with the given attribute values to the table;
 
 innerjoin <table 1> <column n1> <table 2> <column n2> <join table name> -  
 Performs an Inner Join to the tables according to the attribute of the first and second table and creates a new table with the given name;
@@ -40,8 +40,10 @@ Performs an Inner Join to the tables according to the attribute of the first and
 rename <old name> <new name>  -  Renames a table with the new name given;
 
 count <table name> <search column n> <search value>  -  
-Finds the number of rows whose attributes contain the given value;
+Finds the number of records whose attributes contain the given value;
 
 aggregate <table name> <search column n> <search value> <target column n> <operation>   -  
-Performs a given operation on the attribute values <target column n> on all rows whose 
+Performs a given operation on the attribute values <target column n> on all records whose 
 attributes numbered <search column n> contain the value <search value>. Possible operations are sum, product, maximum, minimum;
+
+drop <table name> - Removes the specified table from the database
