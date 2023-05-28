@@ -16,5 +16,6 @@ class DataType{
 
         void setStringValue(const std::string&);
 
+        //проверява дали две стойности са равни
         virtual bool equals(const std::string&)=0;
 };

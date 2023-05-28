@@ -39,6 +39,8 @@ class TableManager{
         //Пример - "D:\Data\Table.csv" -> "Table"
         std::string extractName(const std::string&);
 
+        //При създаване на файл, който да съдържа данните за таблица
+        //може да се окаже, че подаденото име вече е заето и се налага 
         std::string generateUniqueFileName(const std::string&);
 
     public:
@@ -49,6 +51,7 @@ class TableManager{
         //По име на таблица
         void openTable(const std::string&);
 
+        //извършва операцията showtables
         void showTables();
 
         //По име на таблица

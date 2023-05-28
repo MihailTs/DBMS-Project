@@ -43,10 +43,14 @@ class Invoker{
         //Някои функциии за обработка на командите, представени като низ
         std::string trim(const std::string&);
 
+        //променя главните в малки букви
         std::string toLower(const std::string&);
 
+        //разделя подадения низ на низове, като използва интервалът за разделител
         std::vector<std::string> splitLine(const std::string&);
 
+        //връща първата стойност в низа, като използва интервалът за разделител
+        //това се налага, защото стойността може да е стринг ограден в кавички
         std::string getFirstValue(const std::string&, int*);
 
         std::string removeParentheses(const std::string&);
@@ -59,6 +63,7 @@ class Invoker{
 
         void setCommand(const std::string&);
         
+        //Превръща текстовата команда в обект
         ICommand* factory(std::string&);
 
         ICommand* getCommand();
