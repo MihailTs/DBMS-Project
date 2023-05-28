@@ -340,6 +340,9 @@ bool TableManager::isOpened(const std::string& _tableName){
 
 void TableManager::innerJoin(const std::string& table1, const std::string& field1, const std::string& table2, const std::string& field2, const std::string& newTableName){
 
+    if(contains(newTableName))
+           throw std::invalid_argument("Table names have to be unique!");
+
     Table* t1 = getTable(table1);
     Table* t2 = getTable(table2);
     
@@ -420,7 +423,7 @@ void TableManager::dropTable(const std::string& _tableName){
 
     for(Touple t : getTablesInfo()){
         if(t.tableName == _tableName) continue;
-            newArchive << t.tableName << " " << t.tableAddress << "\n";
+        newArchive << t.tableName << " " << t.tableAddress << "\n";
     }
 
     removeTableInfo(_tableName);
