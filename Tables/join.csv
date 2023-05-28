@@ -1,0 +1,5 @@
+int,string,int,int,string,string,int,string,string,double,double
+footballers.id,footballers.name,footballers.goals,footballers.assists,footballers.team,footballers.favouriteBook,books.bookID,books.authorName,books.bookName,books.price,books.rating
+9,"Karim Benzema",24,16,"Real Madrid","Pod igoto",2,"Ivan Vazov","Pod igoto",18.0,9.5
+11,"John Stones",2,6,"Manchester city","The Witcher - Baptism of fire",1,"Andzhey Sapkovski","The Witcher - Baptism of fire",22.5,8.5
+13,"Yoan Yordanov",12,15,"Beroe","Pod igoto",2,"Ivan Vazov","Pod igoto",18.0,9.5

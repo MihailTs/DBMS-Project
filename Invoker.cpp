@@ -49,9 +49,9 @@ ICommand* Invoker::factory(std::string& finalCommand){
         else if(toLower(finalCommand) == "help") {
             command = new HelpCommand;
         }
-        else if(toLower(finalCommand.substr(0, 8)) == "describe "){
+        else if(toLower(finalCommand.substr(0, 9)) == "describe "){
             try{
-                finalCommand = trim(finalCommand.substr(9));
+                finalCommand = trim(finalCommand.substr(8));
             }catch(std::exception& e){
                 throw std::invalid_argument("The command you entered is not a valid command!");
             }
@@ -104,7 +104,12 @@ ICommand* Invoker::factory(std::string& finalCommand){
                 finalCommand = trim(finalCommand.substr(finalCommand.find(" ")));
                 fieldName = finalCommand.substr(0, finalCommand.find(" "));
                 fieldType = trim(finalCommand.substr(finalCommand.find(" ")));
-            }catch(std::exception& e){
+                if(fieldType != "int" && fieldType != "string" && fieldType != "double") 
+                    throw std::invalid_argument(fieldType + " is not a valid data type!");
+            }catch(std::invalid_argument& ia){
+                throw std::invalid_argument(ia.what());
+            }
+            catch(std::exception& e){
                 throw std::invalid_argument("The command you entered is not a valid command!");
             }
             command = new AddColumnCommand(tableManager, tableName, fieldName, fieldType);
@@ -364,5 +369,5 @@ std::string Invoker::removeParentheses(const std::string& str){
 }
 
 Invoker::~Invoker(){
-    delete []getCommand();
+    delete getCommand();
 }

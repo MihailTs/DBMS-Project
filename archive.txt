@@ -1,2 +1,4 @@
-footballers Tables/ExampleTable.csv
+footballers Tables/Footballers.csv
 books Tables/Books.csv
+join Tables/join.csv
+join Tables/join.csv

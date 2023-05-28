@@ -1,3 +1,4 @@
 int,string,string,double,double
 bookID,authorName,bookName,price,rating
 1,"Andzhey Sapkovski","The Witcher - Baptism of fire",22.5,8.5
+2,"Ivan Vazov","Pod igoto",18.0,9.5

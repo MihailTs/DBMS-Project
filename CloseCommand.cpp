@@ -24,7 +24,7 @@ void CloseCommand::execute(){
     answer = toLower(answer);
     if(answer == "yes" || answer == "y") {
         tableManager->saveTable(tableName); 
-        std::cout << "Changes saved successfully";
+        std::cout << "Changes saved successfully\n";
     }
 
 
