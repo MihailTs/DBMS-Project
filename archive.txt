@@ -1,2 +1,1 @@
-footballers Tables/Footballers.csv
-books Tables/Books.csv
+footballers Tables/Books.csv

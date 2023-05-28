@@ -255,16 +255,18 @@ void TableManager::importTable(const std::string& _tableName, const std::string&
 
     std::ifstream readFile(_tableAddress);
 
-
     std::string fileName = extractName(_tableAddress);
     fileName = getTablesFolder() + fileName;
     //Ако това име за файл вече е заето се генерира ново
 
+    std::cout << fileName;
     fileName = generateUniqueFileName(fileName);
+    std::cout << "BBB";
     addTableToArchive(_tableName, fileName);
     addTableInfo(_tableName, fileName);
 
     std::ofstream writeFile(fileName); 
+
 
     std::string line;
     while(std::getline(readFile, line)){
@@ -300,9 +302,9 @@ std::string TableManager::generateUniqueFileName(const std::string& fileNamePref
             if(extra == 0)
                 if((fileNamePref + extension) == t.tableAddress) break;
             else if((fileNamePref + "(" + std::to_string(extra) + ")" + extension) == t.tableAddress) break;
-            if(i == getTablesInfo().size()-1) uniqueName = true;
             i++;
         }
+        if(i == getTablesInfo().size()) uniqueName = true;
     }
 
     fileName = fileNamePref + ((extra==0)? "":("(" + std::to_string(extra) + ")")) + extension;

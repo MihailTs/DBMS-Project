@@ -7,6 +7,7 @@ SaveAsCommand::SaveAsCommand(TableManager* _tableManager, const std::string& _ta
 }
 
 void SaveAsCommand::execute(){
+    tableManager->saveTable(tableName);
     tableManager->getTable(tableName)->writeToFile(saveAddress);
     std::cout << "Table saved successfully!\n"; 
 }

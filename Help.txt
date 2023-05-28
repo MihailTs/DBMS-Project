@@ -1,11 +1,11 @@
 List of all client commands:
 open <table name>  -  Opens a table for modification;
 
-close <table name>    -     Closes the opened table;
+close <table name>    -     Closes the table;
 
-save <table name>    -     Saves changes made to the currently opened table;
+save <table name>    -     Saves changes made to the table;
 
-saveas <table name> <file> - Saves changes made to the currently opened table at the specified location;
+saveas <table name> <file> - Saves changes made to the table at the specified location;
 
 help      -     Display this help;
 
