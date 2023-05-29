@@ -232,7 +232,10 @@ void TableManager::saveTable(const std::string& _tableName){
     }
 
     for(Table* table : getOpenedTables()){
-        if(table->getTableName() == _tableName) table->writeToFile(tableAddress);
+        if(table->getTableName() == _tableName) {
+            table->writeToFile(tableAddress);
+            table->modify(false);
+        }
     }
 
 }
@@ -259,9 +262,7 @@ void TableManager::importTable(const std::string& _tableName, const std::string&
     fileName = getTablesFolder() + fileName;
     //Ако това име за файл вече е заето се генерира ново
 
-    std::cout << fileName;
     fileName = generateUniqueFileName(fileName);
-    std::cout << "BBB";
     addTableToArchive(_tableName, fileName);
     addTableInfo(_tableName, fileName);
 
@@ -431,14 +432,7 @@ void TableManager::dropTable(const std::string& _tableName){
     removeTableInfo(_tableName);
 
     //Премахва таблицата от списъка с отворените
-    int i = 0;
-    for(Table* t : getOpenedTables()){
-        if(t->getTableName() == _tableName) {
-            getOpenedTables().erase(getOpenedTables().begin() + i);
-            delete t;
-        }
-        i++;
-    }
+    closeTable(_tableName);
 
 }
 

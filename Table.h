@@ -16,6 +16,8 @@ class Table{
 
     private:    
 
+        bool modified = false;
+
         std::string tableName;
 
         unsigned fieldsCount;
@@ -114,6 +116,12 @@ class Table{
         DataType* maximum(DataType*, DataType*);
 
         DataType* minimum(DataType*, DataType*);
+
+        //Отбелязва таблицата като модифицирана
+        void modify(bool);
+
+        //Отбелязва таблицата като модифицирана
+        bool isModified();
 
         ~Table();
 };

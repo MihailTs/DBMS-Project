@@ -216,15 +216,15 @@ std::string Table::align(const std::string& str, unsigned maxLength){
 void Table::insertRecord(const std::vector<std::string>& values){
     if(values.size() != getFieldsCount()) throw std::invalid_argument("Invalid number of arguments!");
 
-    //ТОЗИ МЕТОД ДА НЕ СЕ ПРОМЕНЯ!!!
     int i = 0;
     for(std::string value : values){
         DataType* temp = factory(value, getTableFields().at(i)->getType());
         getTableFields().at(i)->addValue(temp); 
-        //ТУК Е ВАЖНО ДА Е ТОЧНО temp->getStringValue().size(), а не value.size()!       
         if(temp->getStringValue().size() > fieldLongest.at(i)) fieldLongest.at(i) = temp->getStringValue().size();
         i++;
     }
+    modify(true);
+
 }
 
 DataType* Table::factory(const std::string& value, const std::string& type){
@@ -256,6 +256,8 @@ void Table::addField(const std::string& _name, const std::string& _type){
         newField->addValue(value);
         if(value->getStringValue().size() > fieldLongest.at(getFieldsCount())) fieldLongest.at(getFieldsCount()) = value->getStringValue().size();
     }
+
+    modify(true);
 
     fieldsCount++;
 }
@@ -357,6 +359,7 @@ void Table::deleteValues(const std::string& searchField, const std::string& valu
     	        tf->setValuesCount(tf->getValuesCount()-1);
             }
             i--;
+            modify(true);
         }
     }
 }
@@ -387,6 +390,7 @@ void Table::update(const std::string& searchField, const std::string& searchValu
             getTableFields().at(targetIndex)->getValues().at(i) = factory(targetValue, getTableFields().at(targetIndex)->getType());
             if(getTableFields().at(targetIndex)->getValues().at(i)->getStringValue().size() > fieldLongest.at(targetIndex))
                 fieldLongest.at(targetIndex) = getTableFields().at(targetIndex)->getValues().at(i)->getStringValue().size();
+            modify(true);
         }
     }
 
@@ -425,6 +429,7 @@ void Table::agregate(const std::string& searchField, const std::string& searchVa
             else if(operation == "minimum"){
                 getTableFields().at(targetIndex)->getValues().at(i) = minimum(getTableFields().at(searchIndex)->getValues().at(i), getTableFields().at(targetIndex)->getValues().at(i));
             }
+            modify(true);
         }
     }
 }
@@ -529,6 +534,14 @@ DataType* Table::minimum(DataType* value1, DataType* value2){
     
     delete value2;
     return newValue;
+}
+
+void Table::modify(bool val){
+    modified = val;
+}
+
+bool Table::isModified(){
+    return modified;
 }
 
 Table::~Table(){
