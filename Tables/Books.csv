@@ -2,3 +2,10 @@ int,string,string,double,double
 bookID,authorName,bookName,price,rating
 1,"Andzhey Sapkovski","The Witcher - Baptism of fire",22.5,8.5
 2,"Ivan Vazov","Pod igoto",18.0,9.5
+3,"Georgi Gospodinov","Time shelter",12.0,9.3
+4,"Aizak Azimov","The Foundation Part 1",35.0,9.5
+5,"Ivo Siromahov","U maikini",17.0,7.7
+6,"Adolf Hitler","Mein kampf",22.0,6.8
+7,"Dzhek London","The white tooth",16.0,8.6
+8,"Hristo Botev","Poems",11.0,8.7
+9,"Gilbert Strang","Introduction to linear algebra",42.0,7.0

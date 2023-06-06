@@ -357,15 +357,15 @@ void TableManager::innerJoin(const std::string& table1, const std::string& field
 
     Table* joinedTable = new Table(newTableName);
 
-
-    //Решен е проблемът с двусмислието на имената на полетата
-    //(две полета в joinedTable може да имат еднакви имена), освен ако таблиците не са една и съща таблица
+    //Добавяне на колоните
     for(TableField* tf : t1->getTableFields())
         joinedTable->addField(t1->getTableName() + "." + tf->getName(), tf->getType());
 
 
-    for(TableField* tf : t2->getTableFields())
+    for(TableField* tf : t2->getTableFields()){
+        if(tf->getName() == field2) continue;
         joinedTable->addField(t2->getTableName() + "." + tf->getName(), tf->getType());
+    }
 
 
     //Проверява всяка двойка редове, дали да бъде добавена в joinedTable
@@ -375,17 +375,18 @@ void TableManager::innerJoin(const std::string& table1, const std::string& field
                         t2->getTableFields().at(fieldIndex2)->getValues().at(j)->getStringValue()){
                 
                 std::vector<std::string> values;
-                for(TableField* tf : t1->getTableFields())
-                if(tf->getType()=="string") {
-                    values.push_back("\"" + tf->getValues().at(i)->getStringValue() + "\"");
-
-                }else if(tf->getValues().at(i)->getStringValue() == "NULL") {
-                    values.push_back("");
-                }else {
-                    values.push_back(tf->getValues().at(i)->getStringValue());
+                for(TableField* tf : t1->getTableFields()){
+                    if(tf->getType()=="string") {
+                        values.push_back("\"" + tf->getValues().at(i)->getStringValue() + "\"");
+                    }else if(tf->getValues().at(i)->getStringValue() == "NULL") {
+                        values.push_back("");
+                    }else {
+                        values.push_back(tf->getValues().at(i)->getStringValue());
+                    }
                 }
 
-                for(TableField* tf : t2->getTableFields())
+                for(TableField* tf : t2->getTableFields()){
+                    if(tf->getName() == field2) continue;
                     if(tf->getType()=="string") {
                         values.push_back("\"" + tf->getValues().at(j)->getStringValue() + "\"");
                     }else if(tf->getValues().at(j)->getStringValue() == "NULL") {
@@ -393,6 +394,7 @@ void TableManager::innerJoin(const std::string& table1, const std::string& field
                     }else{
                         values.push_back(tf->getValues().at(j)->getStringValue());
                     }  
+                }
 
                 joinedTable->insertRecord(values);
             }
@@ -402,8 +404,8 @@ void TableManager::innerJoin(const std::string& table1, const std::string& field
     //Записва информацията за таблицата в архива и в нов файл
     //Отваря таблицата за ползване
     std::string fileAddress = getTablesFolder() + generateUniqueFileName(newTableName);
-    addTableInfo(newTableName, fileAddress);
     addTableToArchive(newTableName, fileAddress);
+    addTableInfo(newTableName, fileAddress);
     openedTables.push_back(joinedTable);
     joinedTable->writeToFile(fileAddress);
 

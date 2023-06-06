@@ -295,10 +295,11 @@ void Table::select(const std::string& fieldName, const std::string& value){
                 std::cout << align(tc->getValues().at(i)->getStringValue(), fieldLongest.at(fieldN));    
                 fieldN++;
             }
+            std::cout << "|\n";
         }
     }
 
-    std::cout << "|\n" << lineSeparator << "\n";
+    std::cout << lineSeparator << "\n";
 
 }
 
