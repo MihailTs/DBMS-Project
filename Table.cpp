@@ -4,12 +4,12 @@
 
 Table::Table(const std::string& _tableName){
     setFieldsCount(0);
+    modify(false);
     setTableName(_tableName);
 }
 
 Table::Table(const std::string& _tableName, const std::string& fileAddres){
     setTableName(_tableName);
-
     //отвряне на файла
     std::ifstream file(fileAddres);
     if(!file.is_open()) throw std::runtime_error("Could not open the table!");
@@ -55,6 +55,7 @@ Table::Table(const std::string& _tableName, const std::string& fileAddres){
     }
 
     file.close();
+    modify(false);
 }
 
 void Table::setTableName(const std::string& _tableName){
@@ -294,9 +295,10 @@ void Table::select(const std::string& fieldName, const std::string& value){
                 std::cout << align(tc->getValues().at(i)->getStringValue(), fieldLongest.at(fieldN));    
                 fieldN++;
             }
-            std::cout << "|\n" << lineSeparator << "\n";
         }
     }
+
+    std::cout << "|\n" << lineSeparator << "\n";
 
 }
 

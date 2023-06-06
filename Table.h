@@ -16,7 +16,7 @@ class Table{
 
     private:    
 
-        bool modified = false;
+        bool modified;
 
         std::string tableName;
 
