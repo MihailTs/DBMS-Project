@@ -305,6 +305,9 @@ void Table::select(const std::string& fieldName, const std::string& value){
 
 void Table::writeToFile(const std::string& fileAddress){
     std::ofstream file(fileAddress);
+
+    if(!file.is_open()) throw std::runtime_error("Could not open the file specified!");
+    
     for(int i = 0; i < getFieldsCount(); i++)
         file << getTableFields().at(i)->getType() << ((i != getFieldsCount()-1)? ",":"");
 
